@@ -43,8 +43,7 @@ public class SaveDataHandler : MonoBehaviour, IInjectable
     private PlayerBagHandler _playerBagHandler;
     private GameSettingsHandler _gameSettingsHandler;
     private TestingEnvironmentHandler _testingHandler;
-    private ServiceContainer _container;
-
+    
     public void Inject(ServiceContainer container)
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
@@ -58,7 +57,7 @@ public class SaveDataHandler : MonoBehaviour, IInjectable
         _playerBagHandler = container.Resolve<PlayerBagHandler>();
         _gameSettingsHandler = container.Resolve<GameSettingsHandler>();
         _testingHandler = container.Resolve<TestingEnvironmentHandler>();
-        _container = container;
+      
         gameObject.SetActive(true);
     }
 
@@ -264,16 +263,14 @@ public class SaveDataHandler : MonoBehaviour, IInjectable
         _pokemonStorageHandler.totalPokemonCount += partyPokemonList.Count;
 
         var unsortedPokemon = new List<(int index,Pokemon pokemon)>();
-        
-        foreach (var pokemonJson in partyPokemonList)
+        var pokemonDirectory = DirectoryHandler.GetDirectory(AssetDirectory.Pokemon);
+        foreach (var jsonpath in partyPokemonList)
         {
-            var pokemon = LoadObjectFromJson<Pokemon>(pokemonJson);
-            pokemon.LoadDataAndDependencies(_container);
-            LoadHeldItem(pokemon);
-            var fileName = Path.GetFileName(pokemonJson);
+            var savedPokemon = LoadSavedPokemon(jsonpath);
+            var fileName = Path.GetFileName(jsonpath);
             //Format -> partyPosition[1-6] : ID
             var oderIndex = int.Parse(fileName.Substring(0,1));
-            unsortedPokemon.Add((oderIndex,pokemon));
+            unsortedPokemon.Add((oderIndex,savedPokemon));
         }
 
         var sortedPartyPokemon = unsortedPokemon
@@ -288,47 +285,48 @@ public class SaveDataHandler : MonoBehaviour, IInjectable
         _pokemonStorageHandler.nonPartyPokemon.Clear();
         var storagePokemonList =
             GetJsonFilesFromPath(_saveDataPath + DirectoryHandler.GetSaveDirectory(SaveDataDirectory.StoragePokemon));
-        foreach (var file in storagePokemonList)
+        foreach (var jsonpath in storagePokemonList)
         {
-            var fileName = Path.GetFileName(file); //filename is the pokemon id
-
-            var nonPartyPokemon = LoadObjectFromJson<Pokemon>(_saveDataPath +
-                                                              DirectoryHandler.GetSaveDirectory(SaveDataDirectory
-                                                                  .StoragePokemon) + fileName);
-            nonPartyPokemon.LoadDataAndDependencies(_container);
-            LoadHeldItem(nonPartyPokemon);
-            _pokemonStorageHandler.nonPartyPokemon.Add(nonPartyPokemon);
+            var savedPokemon = LoadSavedPokemon(jsonpath);
+            _pokemonStorageHandler.nonPartyPokemon.Add(savedPokemon);
             _pokemonStorageHandler.numNonPartyPokemon++;
             _pokemonStorageHandler.totalPokemonCount++;
         }
-
         return;
-
-        void LoadHeldItem(Pokemon pokemon)
+        Pokemon LoadSavedPokemon(string jsonpath)
         {
-            if (!pokemon.hasItem) return;
-            if (heldItemList.Count > 0)
+            var json = File.ReadAllText(jsonpath);
+            PokemonSaveData save = new PokemonSaveData();
+            JsonUtility.FromJsonOverwrite(json, save);
+            
+            var pokemonAssetCopy = InstanceFactory.CreatePokemon(Resources.Load<Pokemon>
+                ($"{pokemonDirectory}{save.basePokemonName}/{save.basePokemonName}"));
+            
+            save.LoadUniqueData(pokemonAssetCopy);
+            
+            if (heldItemList.Count == 0) return pokemonAssetCopy;
+            
+            if (pokemonAssetCopy.hasItem)
             {
                 var heldItemPath = heldItemList
                     .FirstOrDefault(path =>
                         RemoveFileExtension(Path.GetFileName(path))
-                        == pokemon.pokemonID.ToString());
+                        == pokemonAssetCopy.pokemonID.ToString());
 
-                if (string.IsNullOrEmpty(heldItemPath)) return;
+                if (!string.IsNullOrEmpty(heldItemPath))
+                {
+                    var heldItem = LoadObjectFromJson<Item>(heldItemPath);
+                    heldItem.LoadData();
+                    pokemonAssetCopy.GiveItem(heldItem);
 
-                var heldItem = LoadObjectFromJson<Item>(heldItemPath);
-                heldItem.LoadData();
-                pokemon.GiveItem(heldItem);
-
-                heldItemList.Remove(heldItemPath);
+                    heldItemList.Remove(heldItemPath);
+                }
             }
-
-            return;
-
-            string RemoveFileExtension(string filename)
-            {
-                return filename.Split('.')[0];
-            }
+            return pokemonAssetCopy;
+        }
+        string RemoveFileExtension(string filename)
+        {
+            return filename.Split('.')[0];
         }
     }
 
@@ -350,7 +348,6 @@ public class SaveDataHandler : MonoBehaviour, IInjectable
             JsonUtility.FromJsonOverwrite(json, configData);
             savedSettingConfigs.Add(configData);
         }
-
         return savedSettingConfigs;
     }
 
@@ -457,15 +454,16 @@ public class SaveDataHandler : MonoBehaviour, IInjectable
             {
                 var pokemon = _pokemonPartyHandler.Party[i];
                 if (pokemon is null) throw new Exception("pokemon is null! ");
-
-                pokemon.SaveUnserializableData();
+                
+                var newPokemonSave = new PokemonSaveData();
+                newPokemonSave.SetupSave(pokemon);
                 if (pokemon.hasItem)
                 {
                     if (pokemon.heldItem is null)
                         throw new Exception("held Item is null! , for pokemon: " + pokemon.pokemonDisplayName);
                     SaveDataAsJson(pokemon.heldItem, pokemon.pokemonID.ToString(), SaveDataDirectory.HeldItems);
                 }
-                SaveDataAsJson(pokemon, $"{i + 1}_{pokemon.pokemonID}", SaveDataDirectory.PartyPokemon);
+                SaveDataAsJson(newPokemonSave, $"{i + 1}_{pokemon.pokemonID}", SaveDataDirectory.PartyPokemon);
             }
             catch (Exception e)
             {
@@ -481,7 +479,9 @@ public class SaveDataHandler : MonoBehaviour, IInjectable
                 var pokemon = _pokemonStorageHandler.nonPartyPokemon[i];
                 if (pokemon is null) throw new Exception("pokemon is null! ");
 
-                pokemon.SaveUnserializableData();
+                var newPokemonSave = new PokemonSaveData();
+                newPokemonSave.SetupSave(pokemon);
+                
                 if (pokemon.hasItem)
                 {
                     if (pokemon.heldItem is null)
@@ -489,7 +489,7 @@ public class SaveDataHandler : MonoBehaviour, IInjectable
                     SaveDataAsJson(pokemon.heldItem, pokemon.pokemonID.ToString(), SaveDataDirectory.HeldItems);
                 }
 
-                SaveDataAsJson(pokemon, pokemon.pokemonID.ToString(), SaveDataDirectory.StoragePokemon);
+                SaveDataAsJson(newPokemonSave, pokemon.pokemonID.ToString(), SaveDataDirectory.StoragePokemon);
             }
             catch (Exception e)
             {

@@ -37,7 +37,7 @@ public class ChoiceBandTest : BattleBasedTest
         {
             HijackEnemyForFreeSwitch();
             var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-            player.pokemon.RemoveHeldItem();
+            player.Pokemon.RemoveHeldItem();
         });
         _sequencer.AddAction(HijackEnemyForFreeSwitch);
         
@@ -69,14 +69,14 @@ public class ChoiceBandTest : BattleBasedTest
                                                        +NameDB.GetItem(ItemName.ChoiceBand));
             EndTest(false);
         }
-        enemy.pokemon.GiveItem(InstanceFactory.CreateItem(choiceBand));
+        enemy.Pokemon.GiveItem(InstanceFactory.CreateItem(choiceBand));
         enemy.heldItemHandler.SetHeldItemEffect();
         
         enemy.pokemonTrainerAI.AssignBehaviorAction(()=>
         {
             //for enemy to sure hit tackle to trigger choice band
-            enemy.pokemon.moveSet[0].isSureHit = true;
-            _battleHandler.UseMove(enemy.pokemon.moveSet[0], enemy, BattleParticipantKey.Player);
+            enemy.Pokemon.moveSet[0].isSureHit = true;
+            _battleHandler.UseMove(enemy.Pokemon.moveSet[0], enemy, BattleParticipantKey.Player);
         });
         _sequencer.UseMove();
     }
@@ -93,14 +93,14 @@ public class ChoiceBandTest : BattleBasedTest
     private void ImitatePlayerChoosingToAttack()
     {  
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        player.pokemon.moveSet[0].isSureHit = true;
+        player.Pokemon.moveSet[0].isSureHit = true;
         _battleHandler.LoadMoveInputAndText();
     }
     private void ActivateChoiceBandLockForPlayer()
     {
         //choice band activate after first successful move
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        player.pokemon.moveSet[0].priority = 100;
+        player.Pokemon.moveSet[0].priority = 100;
         _sequencer.UseMove();
     }
     public override IEnumerator BeginTest()
@@ -113,7 +113,7 @@ public class ChoiceBandTest : BattleBasedTest
            new("Check if player used tackle",()=>_moveUsageHistory[BattleParticipantKey.Player] == MoveName.Tackle),
            new("Choice band locked move",()=>player.currentMoveLock.moveLocked),
            new("Check if the locked move is tackle", () => NameDB.NameMatch(player.currentMoveLock.moveToLock,MoveName.Tackle)),
-           new("check if player got attack buff from choice band",()=>player.pokemon.attack > player.statData.attack)
+           new("check if player got attack buff from choice band",()=>player.Pokemon.attack > player.statData.attack)
         });
         
         _testCaseHandler.AddTestCase("Check Player used tackle because of lock",
@@ -124,13 +124,13 @@ public class ChoiceBandTest : BattleBasedTest
             () => !player.currentMoveLock.moveLocked);
         
         _testCaseHandler.AddTestCase("Choice band attack buff should be removed after switch",
-            () => player.pokemon.attack <= player.statData.attack);
+            () => player.Pokemon.attack <= player.statData.attack);
         
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
             new("Enemy should have a choice band",
-                ()=> enemy.pokemon.hasItem 
-                     && enemy.pokemon.heldItem.itemName == "Choice Band"),
+                ()=> enemy.Pokemon.hasItem 
+                     && enemy.Pokemon.heldItem.itemName == "Choice Band"),
             
             new("Choice band locked move", ()=> enemy.currentMoveLock.moveLocked),
             
@@ -138,7 +138,7 @@ public class ChoiceBandTest : BattleBasedTest
                 ()=> NameDB.NameMatch(enemy.currentMoveLock.moveToLock,MoveName.Tackle)),
             
             new("check if enemy got attack buff from choice band",
-                ()=> enemy.pokemon.attack > enemy.statData.attack)
+                ()=> enemy.Pokemon.attack > enemy.statData.attack)
         });
                
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
@@ -165,8 +165,8 @@ public class ChoiceBandTest : BattleBasedTest
         return;
         void CheckTestEnd()
         {
-            enemy.pokemon.hp = enemy.pokemon.maxHp;
-            player.pokemon.hp = player.pokemon.maxHp;
+            enemy.Pokemon.hp = enemy.Pokemon.maxHp;
+            player.Pokemon.hp = player.Pokemon.maxHp;
             _moveUsageHistory.Clear();
             if (_sequencer.SequenceComplete())
             {

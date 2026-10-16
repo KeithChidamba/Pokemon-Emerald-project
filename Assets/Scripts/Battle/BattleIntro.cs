@@ -166,7 +166,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
             
             participantIntroImages[i].gameObject.SetActive(true);
             participantIntroImages[i].sprite = participants[i].isPlayer?
-               playerSprite: participants[i].pokemon.frontPicture;
+               playerSprite: participants[i].Pokemon.frontPicture;
         }
 
         yield return MainIntroSequence();
@@ -188,7 +188,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
         StartCoroutine(PokemonIntroAnimationMovement(wildParticipant));
         yield return new WaitForSeconds(3f);
         
-        _dialogueHandler.DisplayBattleInfo( $"Go! {participants[0].pokemon.pokemonDisplayName}");
+        _dialogueHandler.DisplayBattleInfo( $"Go! {participants[0].Pokemon.pokemonDisplayName}");
         StartCoroutine(_battleVisualsHandler.DisplayPokemonRelease());
         yield return new WaitForSeconds(1.5f);
         
@@ -250,7 +250,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
             for (var i = 0; i < challengers.Count; i++)
             {
                 _dialogueHandler.DisplayBattleInfo(
-                    $"{challengers[i]} sent out {participants[i + 2].pokemon.pokemonDisplayName}!");
+                    $"{challengers[i]} sent out {participants[i + 2].Pokemon.pokemonDisplayName}!");
                 StartCoroutine(thrownPokeballs[i + 1].ThrowPokeball(true));
                 yield return new WaitForSeconds(1f);
                 SlideOutOfView(participantIntroImages[i + 2].rectTransform, 2000f);
@@ -264,7 +264,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
         else
         {
             _dialogueHandler.DisplayBattleInfo(
-                $"{challengers[0]} sent out {participants[2].pokemon.pokemonDisplayName} and {participants[3].pokemon.pokemonDisplayName}!");
+                $"{challengers[0]} sent out {participants[2].Pokemon.pokemonDisplayName} and {participants[3].Pokemon.pokemonDisplayName}!");
 
             StartCoroutine(thrownPokeballs[1].ThrowPokeball(true));
             StartCoroutine(thrownPokeballs[2].ThrowPokeball(true));
@@ -280,9 +280,9 @@ public class BattleIntro : MonoBehaviour,IInjectable
             yield return _dialogueHandler.AwaitAllDialogue();
         }
 
-        message = $"Go! {participants[0].pokemon.pokemonDisplayName}";
+        message = $"Go! {participants[0].Pokemon.pokemonDisplayName}";
         message += _battleHandler.isDoubleBattle && participants[1].isActive?
-                $" and {participants[1].pokemon.pokemonDisplayName}!":"!";
+                $" and {participants[1].Pokemon.pokemonDisplayName}!":"!";
 
         _dialogueHandler.DisplayBattleInfo(message);
 
@@ -371,7 +371,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
     
     private IEnumerator PokemonIntroAnimationMovement(BattleParticipant participant)
     {
-        if (participant.pokemon.statusEffect == StatusEffect.Sleep)
+        if (participant.Pokemon.statusEffect == StatusEffect.Sleep)
         {
             yield break;
         }
@@ -411,11 +411,11 @@ public class BattleIntro : MonoBehaviour,IInjectable
     }
     public IEnumerator PokemonIntroAnimation(BattleParticipant participant)
     {
-        if (participant.pokemon.statusEffect == StatusEffect.Sleep)
+        if (participant.Pokemon.statusEffect == StatusEffect.Sleep)
         {
             yield break;
         }
-        yield return Utility.PokemonIntroAnimation(participant.pokemonImage, participant.pokemon);
+        yield return Utility.PokemonIntroAnimation(participant.pokemonImage, participant.Pokemon);
     }
     
     private IEnumerator MovePanelsApart()

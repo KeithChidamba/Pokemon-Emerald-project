@@ -28,7 +28,7 @@ public class ConsumableHeldItemUsageTest : BattleBasedTest
         _sequencer.AddAction(()=>
         {
             var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-            player.pokemon.moveSet[0].powerpoints = 0;
+            player.Pokemon.moveSet[0].powerpoints = 0;
             SetupEnemyMoveAndBerry(NameDB.GetItem(ItemName.LeppaBerry), 2);
         });
     }
@@ -36,9 +36,9 @@ public class ConsumableHeldItemUsageTest : BattleBasedTest
     private void ForceSpecificMove(int moveIndex=0)
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemon.moveSet[moveIndex].isSureHit = true;
-        enemy.pokemon.moveSet[moveIndex].priority = 100;
-        _battleHandler.UseMove(enemy.pokemon.moveSet[moveIndex], enemy, BattleParticipantKey.Player);
+        enemy.Pokemon.moveSet[moveIndex].isSureHit = true;
+        enemy.Pokemon.moveSet[moveIndex].priority = 100;
+        _battleHandler.UseMove(enemy.Pokemon.moveSet[moveIndex], enemy, BattleParticipantKey.Player);
     }
     private void SetupPlayerHealthAndAttack()
     {
@@ -49,8 +49,8 @@ public class ConsumableHeldItemUsageTest : BattleBasedTest
         
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         //The enemy will use sonic boom to take health from 30 to 10
-        player.pokemon.maxHp = 50f;
-        player.pokemon.hp = 30;
+        player.Pokemon.maxHp = 50f;
+        player.Pokemon.hp = 30;
         
         //tailwhip
         _sequencer.UseMove();
@@ -64,7 +64,7 @@ public class ConsumableHeldItemUsageTest : BattleBasedTest
         var assetDirectory = DirectoryHandler.GetDirectory(AssetDirectory.Items) + berryName;
         var berry = InstanceFactory.CreateItem(Resources.Load<Item>(assetDirectory));
         if (berry is null) throw new Exception("Berry asset not found");
-        player.pokemon.GiveItem(berry);
+        player.Pokemon.GiveItem(berry);
         
         //tailwhip
         _sequencer.UseMove();
@@ -74,16 +74,16 @@ public class ConsumableHeldItemUsageTest : BattleBasedTest
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
         _testCaseHandler.AddTestCase("Oran berry must heal player from damage", 
-            () => player.pokemon.hp > 10f);
+            () => player.Pokemon.hp > 10f);
         
         _testCaseHandler.AddTestCase("Cherri berry must heal player from paralysis", 
-            () => player.pokemon.statusEffect == StatusEffect.None);
+            () => player.Pokemon.statusEffect == StatusEffect.None);
         
         _testCaseHandler.AddTestCase( "Player should be healed from confusion", 
             () => !player.isConfused);
         
         _testCaseHandler.AddTestCase( "Player should have their first move powerpoints restored from leppa berry held item", 
-            () => player.pokemon.moveSet[0].powerpoints==9);
+            () => player.Pokemon.moveSet[0].powerpoints==9);
         
         yield return HandleBattleState();
         onTestResult.Invoke();
@@ -94,10 +94,10 @@ public class ConsumableHeldItemUsageTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
-                                  $"/{enemy.pokemon.maxHp}",TestLogType.Health);
-        testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
-                                  $"/{player.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of enemy: {enemy.Pokemon.hp}" +
+                                  $"/{enemy.Pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of player: {player.Pokemon.hp}" +
+                                  $"/{player.Pokemon.maxHp}",TestLogType.Health);
 
         _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
         return;

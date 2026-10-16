@@ -30,7 +30,7 @@ public class StatusEffectDamageBuffTest : BattleBasedTest
         _sequencer.AddAction(()=>    
         {
             var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-            player.pokemon.critChance = 0;
+            player.Pokemon.critChance = 0;
             _sequencer.UseMove();
         });
         //Tackle -> enemy use Tail whip
@@ -44,7 +44,7 @@ public class StatusEffectDamageBuffTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         
         _testCaseHandler.AddTestCase("enemy should be paralyzed",
-            () => enemy.pokemon.statusEffect == StatusEffect.Paralysis);
+            () => enemy.Pokemon.statusEffect == StatusEffect.Paralysis);
         
         _testCaseHandler.AddTestCase("paralysis combo should increase damage", () => _damageWasChanged);
         
@@ -61,7 +61,7 @@ public class StatusEffectDamageBuffTest : BattleBasedTest
             if(_damageWasChanged)
             {
                 var result = modifiedDamage > initialDamage? "increased":"decreased";
-                testingHandler.LogMessage($"{player.pokemon.ability.abilityName} {result} damage from {initialDamage} to {modifiedDamage}"
+                testingHandler.LogMessage($"{player.Pokemon.ability.abilityName} {result} damage from {initialDamage} to {modifiedDamage}"
                     ,  TestLogType.Information);
             }
         }
@@ -71,10 +71,10 @@ public class StatusEffectDamageBuffTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
-                                  $"/{enemy.pokemon.maxHp}",TestLogType.Health);
-        testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
-                                  $"/{player.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of enemy: {enemy.Pokemon.hp}" +
+                                  $"/{enemy.Pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of player: {player.Pokemon.hp}" +
+                                  $"/{player.Pokemon.maxHp}",TestLogType.Health);
 
         _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
         return;

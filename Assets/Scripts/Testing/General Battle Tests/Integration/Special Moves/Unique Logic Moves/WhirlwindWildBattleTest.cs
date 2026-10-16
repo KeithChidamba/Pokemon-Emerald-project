@@ -32,7 +32,7 @@ public class WhirlwindWildBattleTest : WildBattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         enemy.canEscape = false;
-        player.pokemon.moveSet[0].priority = 100;
+        player.Pokemon.moveSet[0].priority = 100;
         _sequencer.UseMove();
     }
     public override IEnumerator BeginTest()

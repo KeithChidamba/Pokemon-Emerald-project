@@ -15,7 +15,7 @@ public class EvolutionInBattleTest: EndToEndTest,IBattleTestable
         { 
             _battleHandler.OnBattleStarted -= SetupHp;
             var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-            enemy.pokemon.hp = 1;
+            enemy.Pokemon.hp = 1;
         }
         
         //This test is using a level 15 mudkip

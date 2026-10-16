@@ -33,26 +33,26 @@ public class StruggleTest : BattleBasedTest
     private void AttackNormally()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemon.moveSet[0].isSureHit = true;
+        enemy.Pokemon.moveSet[0].isSureHit = true;
         _sequencer.UseMove();
     }
     private void SetupEnemyStruggle()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Natural);
-        enemy.pokemon.moveSet[0].powerpoints = 0;
-        enemy.pokemon.moveSet[1].powerpoints = 0;
+        enemy.Pokemon.moveSet[0].powerpoints = 0;
+        enemy.Pokemon.moveSet[1].powerpoints = 0;
         
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         //tailwhip (to keep up test case)
-        player.pokemon.moveSet[1].powerpoints = 1;
+        player.Pokemon.moveSet[1].powerpoints = 1;
         _sequencer.UseMove(1);
     }
     private void SimulateAttackToUseStruggle()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        player.pokemon.moveSet[0].powerpoints = 0;
-        player.pokemon.moveSet[1].powerpoints = 0;
+        player.Pokemon.moveSet[0].powerpoints = 0;
+        player.Pokemon.moveSet[1].powerpoints = 0;
         
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
@@ -64,8 +64,8 @@ public class StruggleTest : BattleBasedTest
         void UseSpecificMove()
         {
             //tailwhip (to keep up test case)
-            enemy.pokemon.moveSet[1].isSureHit = true;
-            _battleHandler.UseMove(enemy.pokemon.moveSet[1], enemy, BattleParticipantKey.Player);
+            enemy.Pokemon.moveSet[1].isSureHit = true;
+            _battleHandler.UseMove(enemy.Pokemon.moveSet[1], enemy, BattleParticipantKey.Player);
         }
     }
     public override IEnumerator BeginTest()
@@ -76,23 +76,23 @@ public class StruggleTest : BattleBasedTest
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
             new("Player must be hurt",
-                ()=> player.pokemon.hp < player.pokemon.maxHp),
+                ()=> player.Pokemon.hp < player.Pokemon.maxHp),
             new("Enemy must be hurt",
-                ()=> enemy.pokemon.hp < enemy.pokemon.maxHp),
+                ()=> enemy.Pokemon.hp < enemy.Pokemon.maxHp),
         });
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
             new("Player must hurt enemy",
-                ()=> enemy.pokemon.hp < enemy.pokemon.maxHp),
+                ()=> enemy.Pokemon.hp < enemy.Pokemon.maxHp),
             new("Player must be hurt by recoil",
-                ()=> player.pokemon.hp < player.pokemon.maxHp)
+                ()=> player.Pokemon.hp < player.Pokemon.maxHp)
         });
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
             new("Enemy must hurt player",
-                ()=> player.pokemon.hp < player.pokemon.maxHp),
+                ()=> player.Pokemon.hp < player.Pokemon.maxHp),
             new("Enemy must be hurt by recoil",
-                ()=> enemy.pokemon.hp < enemy.pokemon.maxHp)
+                ()=> enemy.Pokemon.hp < enemy.Pokemon.maxHp)
         });
         
         yield return HandleBattleState();
@@ -104,10 +104,10 @@ public class StruggleTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
-                                  $"/{enemy.pokemon.maxHp}",TestLogType.Health);
-        testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
-                                  $"/{player.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of enemy: {enemy.Pokemon.hp}" +
+                                  $"/{enemy.Pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of player: {player.Pokemon.hp}" +
+                                  $"/{player.Pokemon.maxHp}",TestLogType.Health);
         
         var caseExists = _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
         if (!caseExists)
@@ -118,8 +118,8 @@ public class StruggleTest : BattleBasedTest
         void CheckTestEnd()
         {
             //for struggle test cases
-            enemy.pokemon.hp = enemy.pokemon.maxHp;
-            player.pokemon.hp = player.pokemon.maxHp;
+            enemy.Pokemon.hp = enemy.Pokemon.maxHp;
+            player.Pokemon.hp = player.Pokemon.maxHp;
             if (_sequencer.SequenceComplete())
             {
                 EndTest(true);

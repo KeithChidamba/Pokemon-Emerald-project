@@ -27,7 +27,7 @@ public class HyperBeamTest : BattleBasedTest
     private void AttackWithHyperBeam()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        player.pokemon.moveSet[0].priority = 100;
+        player.Pokemon.moveSet[0].priority = 100;
         _sequencer.UseMove();
     }
     public override IEnumerator BeginTest()
@@ -36,7 +36,7 @@ public class HyperBeamTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy); 
         
         _testCaseHandler.AddTestCase(0,"hyperBeam should hit enemy",
-            () => enemy.pokemon.hp < enemy.pokemon.maxHp);
+            () => enemy.Pokemon.hp < enemy.Pokemon.maxHp);
         
         _testCaseHandler.AddTestCase(2,"Player cooldown down should be over, and player should use tailwhip",
             () => NameDB.NameMatch(player.previousMoveData.move,MoveName.TailWhip));

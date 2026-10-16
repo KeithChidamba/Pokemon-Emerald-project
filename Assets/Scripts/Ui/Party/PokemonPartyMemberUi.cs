@@ -17,7 +17,9 @@ public class PokemonPartyMemberUi : MonoBehaviour,IInjectable
     public Image genderImage;
     public Slider pokemonHealthBarUI;
     public RawImage hpSliderImage;
-    public Pokemon pokemon;
+   
+    public PokemonStateHandler pokemonState;
+    
     public List<GameObject> mainUI;
     public GameObject memberSelectedImage;
     public GameObject memberNotSelectedImage;
@@ -39,6 +41,7 @@ public class PokemonPartyMemberUi : MonoBehaviour,IInjectable
     {
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
+        pokemonState = new PokemonStateHandler(container);
     }
 
     public void OnInject()
@@ -48,18 +51,20 @@ public class PokemonPartyMemberUi : MonoBehaviour,IInjectable
         
         _startPos = pokemonFrontImage.rectTransform.anchoredPosition;
         _targetPos = _startPos +Vector2.up * 10f;
+        
+       
     }
     private void MoveInLoop()
     {
         Vector2 target;
         if (_movingToTarget)
         {
-            pokemonFrontImage.sprite = pokemon.partyFrame1;
+            pokemonFrontImage.sprite = pokemonState.pokemon.partyFrame1;
             target = _targetPos;
         }
         else
         {
-            pokemonFrontImage.sprite = pokemon.partyFrame2;
+            pokemonFrontImage.sprite = pokemonState.pokemon.partyFrame2;
             target = _startPos;
         }
         pokemonFrontImage.rectTransform.anchoredPosition = Vector2.MoveTowards(
@@ -74,43 +79,45 @@ public class PokemonPartyMemberUi : MonoBehaviour,IInjectable
         }
         
     }
-    public void ActivateUI()
+    public void ActivateUI(Pokemon partyPokemon)
     {
         ChangeVisibility(false);
         _isViewingCard = true;
         _viewingParty = true;
         
-        pokemonFrontImage.sprite = pokemon.partyFrame1;
+        pokemonState.pokemon = partyPokemon;
         
-        _healthPhaseUpdateEvent = () => PokemonOperations.UpdateHealthPhase(pokemon, hpSliderImage);
+        pokemonFrontImage.sprite = pokemonState.pokemon.partyFrame1;
+        
+        _healthPhaseUpdateEvent = () => PokemonOperations.UpdateHealthPhase(pokemonState, hpSliderImage);
        
-        pokemon.OnHealthChanged += _healthPhaseUpdateEvent;
+        pokemonState.OnHealthChanged += _healthPhaseUpdateEvent;
         
         foreach (var ui in mainUI)
             ui.SetActive(true);
         isEmpty = false;
         emptySlotUI.SetActive(false);
-        heldItemImage.SetActive(pokemon.hasItem);
+        heldItemImage.SetActive(pokemonState.pokemon.hasItem);
        
-        genderImage.sprite = Utility.GetGenderSprite(pokemon.gender);
+        genderImage.sprite = Utility.GetGenderSprite(pokemonState.pokemon.gender);
         
-        if (pokemon.statusEffect == StatusEffect.None)
+        if (pokemonState.pokemon.statusEffect == StatusEffect.None)
             statusEffectImage.gameObject.SetActive(false);
         else
         {
             statusEffectImage.gameObject.SetActive(true);
             statusEffectImage.sprite = Resources.Load<Sprite>(
                 DirectoryHandler.GetDirectory(AssetDirectory.Status)
-                + pokemon.statusEffect.ToString().ToLower());
+                + pokemonState.pokemon.statusEffect.ToString().ToLower());
         }
         _inputStateHandler.OnSelectionIndexChanged += UpdateUi;
     }
     public void ResetUI()
     {
-        if(pokemon is not null)
+        if(pokemonState.pokemon is not null)
         {
-            pokemon.OnHealthChanged -= _healthPhaseUpdateEvent;
-            pokemon = null;
+            pokemonState.OnHealthChanged -= _healthPhaseUpdateEvent;
+            pokemonState.pokemon = null;
         }
         foreach (var ui in mainUI)
             ui.SetActive(false);
@@ -128,7 +135,7 @@ public class PokemonPartyMemberUi : MonoBehaviour,IInjectable
         
         if (currentState.stateGroup==InputStateGroup.PokemonParty)
         {
-            if(pokemon.hp<=0)
+            if(pokemonState.pokemon.hp<=0)
             {
                 statusEffectImage.gameObject.SetActive(true);
                 statusEffectImage.sprite = Resources.Load<Sprite>(
@@ -171,7 +178,7 @@ public class PokemonPartyMemberUi : MonoBehaviour,IInjectable
             ChangeVisibility(false);
             return;
         }
-        ChangeVisibility(_pokemonPartyHandler.Party[currentIndex] == pokemon);
+        ChangeVisibility(_pokemonPartyHandler.Party[currentIndex] == pokemonState.pokemon);
     }
     private void Update()
     {
@@ -179,12 +186,12 @@ public class PokemonPartyMemberUi : MonoBehaviour,IInjectable
         
         MoveInLoop();
         
-        pokemonHealthBarUI.value = pokemon.hp;
-        pokemonHealthBarUI.maxValue = pokemon.maxHp;
+        pokemonHealthBarUI.value = pokemonState.pokemon.hp;
+        pokemonHealthBarUI.maxValue = pokemonState.pokemon.maxHp;
         pokemonHealthBarUI.minValue = 0;
-        pokemonLevelText.text = "Lv" + pokemon.currentLevel;
-        pokemonNameText.text = pokemon.nickName;
-        pokemonFrontImage.color = ((pokemon.hp <= 0))? 
+        pokemonLevelText.text = "Lv" + pokemonState.pokemon.currentLevel;
+        pokemonNameText.text = pokemonState.pokemon.nickName;
+        pokemonFrontImage.color = ((pokemonState.pokemon.hp <= 0))? 
             Color.HSVToRGB(17, 96, 54)
             :Color.HSVToRGB(0,0,100);
     }

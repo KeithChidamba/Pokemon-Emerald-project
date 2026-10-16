@@ -92,10 +92,10 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         {
             if (!victim.canBeDamaged)
             {
-                _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName+" protected itself");
+                _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName+" protected itself");
                 break;
             }
-            if (victim.pokemon.hp <= 0) break;
+            if (victim.Pokemon.hp <= 0) break;
             
             _dialogueHandler.DisplayBattleInfo("Hit "+(i+1)+"!");//remove later if added animations
             _moveUsageHandler.DisplayMoveDamage(move,attacker,victim,displayEffectiveness:false);
@@ -103,7 +103,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
             numHits++;
             yield return _dialogueHandler.AwaitAllDialogue();
         }
-        if (numHits>0 && consecutiveMoveInfo.displayHitCount && victim.pokemon.hp > 0)
+        if (numHits>0 && consecutiveMoveInfo.displayHitCount && victim.Pokemon.hp > 0)
         {
             _moveUsageHandler.DisplayEffectiveness
                 (_battleOperations.CheckTypeEffectiveness(victim, move.type), victim);
@@ -144,7 +144,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
     {
         var healthDrainInfo = move.GetDynamicModule<EffectValueInfo>();
         var damage = _moveUsageHandler.CalculateMoveDamage(move,attacker,victim);
-        var healAmount = victim.pokemon.hp-damage<=0 ? victim.pokemon.hp : damage;
+        var healAmount = victim.Pokemon.hp-damage<=0 ? victim.Pokemon.hp : damage;
         var percentageOfDamage = healthDrainInfo.effectValue;
         healAmount *= percentageOfDamage/100f;
         
@@ -152,13 +152,13 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         
         yield return _moveUsageHandler.AwaitDamageDisplay();
 
-        if (attacker.pokemon.hp >= attacker.pokemon.maxHp)
+        if (attacker.Pokemon.hp >= attacker.Pokemon.maxHp)
         {
             yield break;
         }
         
-        _moveUsageHandler.HealthGainDisplay(healAmount,healthGainer:attacker);
-        _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" gained health");
+        _moveUsageHandler.HealthGainDisplay(healAmount,attacker.pokemonState);
+        _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName+" gained health");
         yield return _dialogueHandler.AwaitAllDialogue();
         yield return _moveUsageHandler.AwaitHealthGainDisplay();
     }
@@ -237,16 +237,16 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
             yield break;
         }
         
-        _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName +" was identified!");
+        _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName +" was identified!");
         
         if(currentMoveEnum == MoveName.Foresight)
         {
-            victim.pokemon.statModifiers
+            victim.Pokemon.statModifiers
                 .RemoveAll(b => b.stat == Stat.Evasion);
-            victim.pokemon.evasion = 100;
+            victim.Pokemon.evasion = 100;
         }
         
-        if(victim.pokemon.HasType(PokemonType.Ghost))
+        if(victim.Pokemon.HasType(PokemonType.Ghost))
         {
             var newImmunityNegation = new TypeImmunityNegation(_battleHandler
                 ,currentMoveEnum
@@ -273,7 +273,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         var move = currentTurn.move;
         if (attacker.semiInvulnerabilityData.executionTurn)
         {
-            _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName
+            _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName
                                                         + attacker.semiInvulnerabilityData.onHitMessage);
             _moveUsageHandler.DisplayMoveDamage(move,attacker,victim);
             attacker.semiInvulnerabilityData.executionTurn = false;
@@ -292,7 +292,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         attacker.isSemiInvulnerable = true;
         move.isSureHit = false;
         attacker.semiInvulnerabilityData.executionTurn = true;
-        _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+semiInvulnerableData.executionMessage);
+        _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName+semiInvulnerableData.executionMessage);
     }
     
     IEnumerator ChangeWeather(Move move)
@@ -304,9 +304,9 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
     }
     private IEnumerator HealFromWeather(BattleParticipant attacker)
     {
-        if (attacker.pokemon.hp >= attacker.pokemon.maxHp)
+        if (attacker.Pokemon.hp >= attacker.Pokemon.maxHp)
         {
-            _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+"'s health is already full!");
+            _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName+"'s health is already full!");
             yield break;
         }
         float fraction;
@@ -326,13 +326,13 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
                 fraction = 1f / 2f; 
                 break;
         }
-        int healthGain = Mathf.FloorToInt(attacker.pokemon.maxHp * fraction);
+        int healthGain = Mathf.FloorToInt(attacker.Pokemon.maxHp * fraction);
         
-        if (healthGain < 1 && attacker.pokemon.hp < attacker.pokemon.maxHp) healthGain = 1;
+        if (healthGain < 1 && attacker.Pokemon.hp < attacker.Pokemon.maxHp) healthGain = 1;
         
-        _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" restored it's health!");
+        _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName+" restored it's health!");
 
-        _moveUsageHandler.HealthGainDisplay(healthGain,healthGainer:attacker);
+        _moveUsageHandler.HealthGainDisplay(healthGain,attacker.pokemonState);
         yield return _moveUsageHandler.AwaitHealthGainDisplay();
     }
     private IEnumerator DealSpecificDamage(Move move, BattleParticipant victim)

@@ -33,14 +33,14 @@ public class RestTest : BattleBasedTest
         enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
         enemy.pokemonTrainerAI.AssignBehaviorAction(UseSpecificMove);
         
-        player.pokemon.moveSet[moveIndex].priority = 100;
+        player.Pokemon.moveSet[moveIndex].priority = 100;
         _sequencer.UseMove(moveIndex);
         return;
         void UseSpecificMove()
         {
-            enemy.pokemon.moveSet[enemyMoveIndex].statusChance = 100;
-            enemy.pokemon.moveSet[enemyMoveIndex].isSureHit = true;
-            _battleHandler.UseMove(enemy.pokemon.moveSet[enemyMoveIndex], enemy, BattleParticipantKey.Player);
+            enemy.Pokemon.moveSet[enemyMoveIndex].statusChance = 100;
+            enemy.Pokemon.moveSet[enemyMoveIndex].isSureHit = true;
+            _battleHandler.UseMove(enemy.Pokemon.moveSet[enemyMoveIndex], enemy, BattleParticipantKey.Player);
         }
     }
     public override IEnumerator BeginTest()
@@ -48,14 +48,14 @@ public class RestTest : BattleBasedTest
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
         _testCaseHandler.AddTestCase("Player must get hit by enemy",
-            () => player.pokemon.hp < player.pokemon.maxHp);
+            () => player.Pokemon.hp < player.Pokemon.maxHp);
         
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
             new("Player must be healed by rest",
-                () =>  player.pokemon.hp >= player.pokemon.maxHp),
+                () =>  player.Pokemon.hp >= player.Pokemon.maxHp),
             new ("Player must be asleep",
-                () => player.pokemon.statusEffect == StatusEffect.Sleep),
+                () => player.Pokemon.statusEffect == StatusEffect.Sleep),
         });
         
         yield return HandleBattleState();
@@ -67,10 +67,10 @@ public class RestTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
-                                  $"/{enemy.pokemon.maxHp}",TestLogType.Health);
-        testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
-                                  $"/{player.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of enemy: {enemy.Pokemon.hp}" +
+                                  $"/{enemy.Pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of player: {player.Pokemon.hp}" +
+                                  $"/{player.Pokemon.maxHp}",TestLogType.Health);
 
         _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
         return;

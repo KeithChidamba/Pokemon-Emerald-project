@@ -87,8 +87,6 @@ public class GameInstaller : MonoBehaviour
         _container.RegisterSingleton(typingInterfaceHandler);
         _container.RegisterSingleton(testingSetupHandler);
         
-        InstanceFactory.GetContainer(_container);//static class dependency
-        
         //Non-Mono services
         _container.RegisterSingleton(new PlayerBagInputService(_container));
         _container.RegisterSingleton(new PokemonBattleInputService(_container));

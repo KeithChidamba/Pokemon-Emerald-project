@@ -23,27 +23,27 @@ public class BattleParticipantStatData
     }
     public void SaveActualStats()
     {
-        attack = participant.pokemon.attack;
-        spAtk = participant.pokemon.specialAttack;
-        defense = participant.pokemon.defense;
-        spDef = participant.pokemon.specialDefense;
-        speed = participant.pokemon.speed;
-        accuracy = participant.pokemon.accuracy;
-        evasion = participant.pokemon.evasion;
-        crit = participant.pokemon.critChance;
+        attack = participant.Pokemon.attack;
+        spAtk = participant.Pokemon.specialAttack;
+        defense = participant.Pokemon.defense;
+        spDef = participant.Pokemon.specialDefense;
+        speed = participant.Pokemon.speed;
+        accuracy = participant.Pokemon.accuracy;
+        evasion = participant.Pokemon.evasion;
+        crit = participant.Pokemon.critChance;
     }
     public void LoadActualStats(bool fullReset=false)
     {
-        participant.pokemon.attack=attack;
-        participant.pokemon.specialAttack=spAtk;
-        participant.pokemon.defense=defense;
-        participant.pokemon.specialDefense=spDef;
-        participant.pokemon.speed=speed;
+        participant.Pokemon.attack=attack;
+        participant.Pokemon.specialAttack=spAtk;
+        participant.Pokemon.defense=defense;
+        participant.Pokemon.specialDefense=spDef;
+        participant.Pokemon.speed=speed;
         if (fullReset)
         {
-            participant.pokemon.accuracy = 100;
-            participant.pokemon.evasion = 100;
-            participant.pokemon.critChance = 6.25f;
+            participant.Pokemon.accuracy = 100;
+            participant.Pokemon.evasion = 100;
+            participant.Pokemon.critChance = 6.25f;
         }
     }
     public void ResetBattleState(Pokemon pokemon,bool justLeveledUp = false)

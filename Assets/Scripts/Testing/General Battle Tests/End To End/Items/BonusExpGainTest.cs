@@ -18,12 +18,12 @@ public class BonusExpGainTest: EndToEndTest,IBattleTestable
         { 
             _battleHandler.OnBattleStarted -= SetupHpAndExp;
             var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-            player.pokemon.OnExpGained += exp =>
+            player.pokemonState.OnExpGained += exp =>
             {
                 expGained = exp;
             };
             var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-            enemy.pokemon.hp = 1;
+            enemy.Pokemon.hp = 1;
         }
         //Run test case before battle ends
         AddTestCase("Attack, then validate test during battle victory message", ExpGainWorked);
@@ -36,8 +36,8 @@ public class BonusExpGainTest: EndToEndTest,IBattleTestable
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        var gain = enemy.pokemon.CalculateExperience();
-        var result = Mathf.FloorToInt(player.pokemon.AccountForExpGainModifier() * gain);
+        var gain = enemy.Pokemon.CalculateExperience();
+        var result = Mathf.FloorToInt(player.Pokemon.AccountForExpGainModifier() * gain);
         _testingHandler.LogMessage("Exp gained = base exp gain * modifier",TestLogType.Information);
         _testingHandler.LogMessage($"base exp gain: {gain}",TestLogType.Calculation);
         _testingHandler.LogMessage($"exp after bonus gain: {result}",TestLogType.Calculation);

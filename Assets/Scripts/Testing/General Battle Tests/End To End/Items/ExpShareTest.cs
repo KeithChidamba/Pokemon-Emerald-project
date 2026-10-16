@@ -19,16 +19,14 @@ public class ExpShareTest: EndToEndTest,IBattleTestable
         { 
             _battleHandler.OnBattleStarted -= SetupHpAndExp;
             
-            foreach (var pokemon in _pokemonPartyHandler.Party)
+            var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
+            player.pokemonState.OnExpGained += exp =>
             {
-                pokemon.OnExpGained += exp =>
-                {
-                    expGainedList.Add(exp);
-                };
-            }
+                expGainedList.Add(exp);
+            };
             
             var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-            enemy.pokemon.hp = 1;
+            enemy.Pokemon.hp = 1;
             //to help test case
             _pokemonPartyHandler.Party[2].moveSet[0].isSureHit = true;
         }
@@ -41,7 +39,7 @@ public class ExpShareTest: EndToEndTest,IBattleTestable
     private bool ExpGainWorked()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        var totalExp = enemy.pokemon.CalculateExperience();
+        var totalExp = enemy.Pokemon.CalculateExperience();
         _testingHandler.LogMessage($"Total exp gain: {totalExp}",TestLogType.Calculation);
         //copied logic from actual exp share logic
         var expShareTotal =  totalExp/ 2;

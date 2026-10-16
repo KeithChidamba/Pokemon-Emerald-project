@@ -23,9 +23,9 @@ public class ConsecutiveMoveTest : BattleBasedTest
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         
-        testingHandler.LogMessage($"Health of enemy target: {enemy.pokemon.hp}/{enemy.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of enemy target: {enemy.Pokemon.hp}/{enemy.Pokemon.maxHp}",TestLogType.Health);
 
-        var testPassed = enemy.pokemon.hp < enemy.pokemon.maxHp;
+        var testPassed = enemy.Pokemon.hp < enemy.Pokemon.maxHp;
         
         SetTestStatus(testPassed);
     }
@@ -36,7 +36,7 @@ public class ConsecutiveMoveTest : BattleBasedTest
         {
             //use consecutive move : pin-missile
             var zigzagoonParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-            var pinMissile = zigzagoonParticipant.pokemon.moveSet[0];
+            var pinMissile = zigzagoonParticipant.Pokemon.moveSet[0];
             pinMissile.isSureHit = true;
             _battleHandler.UseMove(pinMissile,zigzagoonParticipant, BattleParticipantKey.Enemy);
         }

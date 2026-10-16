@@ -29,9 +29,9 @@ public class SilverwindBattleEndTest : BattleBasedTest
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        player.pokemon.moveSet[0].statusChance = 100;
-        player.pokemon.moveSet[0].priority = 100;
-        enemy.pokemon.hp = 1;
+        player.Pokemon.moveSet[0].statusChance = 100;
+        player.Pokemon.moveSet[0].priority = 100;
+        enemy.Pokemon.hp = 1;
         _sequencer.UseMove();
     }
     public override IEnumerator BeginTest()
@@ -39,7 +39,7 @@ public class SilverwindBattleEndTest : BattleBasedTest
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
         _testCaseHandler.AddTestCase("Silverwind buffs should not be applied(because battle ended) even though status chance has been guaranteed",
-            () => player.pokemon.statModifiers.Count == 0);
+            () => player.Pokemon.statModifiers.Count == 0);
         
         yield return HandleBattleState();
         onTestResult.Invoke();

@@ -29,8 +29,8 @@ public class ExpGainTest: EndToEndTest,IBattleTestable
             _pokemonPartyHandler.Party[0].currentExpAmount = _pokemonPartyHandler.Party[0].nextLevelExpAmount - 1;
             //guarantee enemy will be hit
             _pokemonPartyHandler.Party[0].moveSet[0].isSureHit = true;
-            enemy.pokemon.hp = 1;
-            enemy.pokemon.expYield *= 2;//calculated this using previous run of this test
+            enemy.Pokemon.hp = 1;
+            enemy.Pokemon.expYield *= 2;//calculated this using previous run of this test
             //guarantee move learn
             _pokemonPartyHandler.Party[0].learnSet[5].requiredLevel = _pokemonPartyHandler.Party[0].currentLevel + 1;
             //guarantee next move learn

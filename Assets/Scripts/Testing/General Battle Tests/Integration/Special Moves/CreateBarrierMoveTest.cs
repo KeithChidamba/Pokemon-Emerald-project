@@ -61,13 +61,13 @@ public class CreateBarrierMoveTest : BattleBasedTest
             //use barrier creation move : light screen or reflect
             var mudkipParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Player);
             var barrierMove = _currentBarrierToTest == BarrierType.Special
-                ? mudkipParticipant.pokemon.moveSet[0] //light screen
-                : mudkipParticipant.pokemon.moveSet[1];//reflect
+                ? mudkipParticipant.Pokemon.moveSet[0] //light screen
+                : mudkipParticipant.Pokemon.moveSet[1];//reflect
             
             var treeckoParticipant1 = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
             var treeckoParticipant2 = _battleHandler.GetParticipant(BattleParticipantKey.EnemyPartner);
-            treeckoParticipant1.pokemon.moveSet.Clear();
-            treeckoParticipant2.pokemon.moveSet.Clear();
+            treeckoParticipant1.Pokemon.moveSet.Clear();
+            treeckoParticipant2.Pokemon.moveSet.Clear();
 
             var moveName = _currentBarrierToTest == BarrierType.Physical
                 ? NameDB.GetMoveName(MoveName.Tackle)
@@ -77,12 +77,12 @@ public class CreateBarrierMoveTest : BattleBasedTest
             var moveFromAsset = Resources.Load<Move>(assetPath);
             var newMove = InstanceFactory.CreateMove(moveFromAsset);
             var newMove2 = InstanceFactory.CreateMove(moveFromAsset);
-            treeckoParticipant1.pokemon.moveSet.Add(newMove);
-            treeckoParticipant2.pokemon.moveSet.Add(newMove2);
+            treeckoParticipant1.Pokemon.moveSet.Add(newMove);
+            treeckoParticipant2.Pokemon.moveSet.Add(newMove2);
             
             //make sure 2 treeko enemies hit the barriers and dont miss
-            treeckoParticipant1.pokemon.moveSet[0].isSureHit = true; 
-            treeckoParticipant2.pokemon.moveSet[0].isSureHit = true;
+            treeckoParticipant1.Pokemon.moveSet[0].isSureHit = true; 
+            treeckoParticipant2.Pokemon.moveSet[0].isSureHit = true;
             
             _moveUsageHandler.OnDamageModified += CheckForBarrierEffect;
             _battleHandler.UseMove(barrierMove,mudkipParticipant, BattleParticipantKey.Enemy);
@@ -91,7 +91,7 @@ public class CreateBarrierMoveTest : BattleBasedTest
         if (_battleHandler.GetCurrentParticipant().participantKey == BattleParticipantKey.PlayerPartner)
         {
             var partnerParticipant = _battleHandler.GetParticipant(BattleParticipantKey.PlayerPartner);
-            var thunderBolt = partnerParticipant.pokemon.moveSet[0];
+            var thunderBolt = partnerParticipant.Pokemon.moveSet[0];
             thunderBolt.moveDamage = 1f;//don't kill enemy
             _battleHandler.UseMove(thunderBolt,partnerParticipant,BattleParticipantKey.EnemyPartner);
         }

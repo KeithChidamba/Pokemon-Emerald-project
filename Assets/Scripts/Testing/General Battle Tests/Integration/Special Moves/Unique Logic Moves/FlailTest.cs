@@ -57,17 +57,17 @@ public class FlailTest : BattleBasedTest
         enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
         enemy.pokemonTrainerAI.AssignBehaviorAction(UseSpecificMove);
         //make damage test case more reliable
-        player.pokemon.critChance = 0;
+        player.Pokemon.critChance = 0;
         
-        player.pokemon.hp = Mathf.FloorToInt(player.pokemon.maxHp / hpLevel);
+        player.Pokemon.hp = Mathf.FloorToInt(player.Pokemon.maxHp / hpLevel);
         
         _sequencer.UseMove(moveIndex);
         return;
         void UseSpecificMove()
         {
             //modified for test case reliability
-            enemy.pokemon.moveSet[enemyMoveIndex].isSureHit = true;
-            _battleHandler.UseMove(enemy.pokemon.moveSet[enemyMoveIndex], enemy, BattleParticipantKey.Player);
+            enemy.Pokemon.moveSet[enemyMoveIndex].isSureHit = true;
+            _battleHandler.UseMove(enemy.Pokemon.moveSet[enemyMoveIndex], enemy, BattleParticipantKey.Player);
         }
     }
     public override IEnumerator BeginTest()
@@ -100,8 +100,8 @@ public class FlailTest : BattleBasedTest
         else
         {
             var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-            testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
-                                      $"/{player.pokemon.maxHp}",TestLogType.Health);
+            testingHandler.LogMessage($"Health of player: {player.Pokemon.hp}" +
+                                      $"/{player.Pokemon.maxHp}",TestLogType.Health);
             testingHandler.LogMessage($"Flail damage ({_moveDamageList[^1]})", TestLogType.Information);
         }
         return;

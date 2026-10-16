@@ -32,10 +32,10 @@ public class Endeavor : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        player.pokemon.maxHp = enemy.pokemon.maxHp;
+        player.Pokemon.maxHp = enemy.Pokemon.maxHp;
         
-        enemy.pokemon.hp = Mathf.FloorToInt(enemy.pokemon.maxHp * enemyHealthRatio);
-        player.pokemon.hp = Mathf.FloorToInt(player.pokemon.maxHp * playerHealthRatio);
+        enemy.Pokemon.hp = Mathf.FloorToInt(enemy.Pokemon.maxHp * enemyHealthRatio);
+        player.Pokemon.hp = Mathf.FloorToInt(player.Pokemon.maxHp * playerHealthRatio);
         
         _sequencer.UseMove();
     }
@@ -47,9 +47,9 @@ public class Endeavor : BattleBasedTest
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
             new("Endeavor should fail,Player's health should be unchanged",
-                ()=>  player.pokemon.hp >= player.pokemon.maxHp),
+                ()=>  player.Pokemon.hp >= player.Pokemon.maxHp),
             new("Enemy's health should be unchanged",
-                ()=> (int)enemy.pokemon.hp == Mathf.FloorToInt(enemy.pokemon.maxHp * .65f)),
+                ()=> (int)enemy.Pokemon.hp == Mathf.FloorToInt(enemy.Pokemon.maxHp * .65f)),
         });
         
         //endeavor = victim.hp - attacker.hp
@@ -57,10 +57,10 @@ public class Endeavor : BattleBasedTest
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
             new("Endeavor should work, Player's health should be unchanged",
-                ()=> (int)player.pokemon.hp ==
-                     Mathf.FloorToInt(player.pokemon.maxHp * .45f)),
+                ()=> (int)player.Pokemon.hp ==
+                     Mathf.FloorToInt(player.Pokemon.maxHp * .45f)),
             new("Endeavor should work, Enemy's health should decrease and match player's health",
-                ()=> (int)enemy.pokemon.hp == (int)player.pokemon.hp),
+                ()=> (int)enemy.Pokemon.hp == (int)player.Pokemon.hp),
         });
   
         yield return HandleBattleState();
@@ -72,10 +72,10 @@ public class Endeavor : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
-                                  $"/{enemy.pokemon.maxHp}",TestLogType.Health);
-        testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
-                                  $"/{player.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of enemy: {enemy.Pokemon.hp}" +
+                                  $"/{enemy.Pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of player: {player.Pokemon.hp}" +
+                                  $"/{player.Pokemon.maxHp}",TestLogType.Health);
 
         _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
         return;

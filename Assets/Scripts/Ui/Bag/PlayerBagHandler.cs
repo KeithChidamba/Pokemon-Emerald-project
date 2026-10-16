@@ -370,7 +370,7 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
          void AllowItemUsage(int memberIndex)
          {
              _pokemonPartyHandler.OnMemberSelected -= AllowItemUsage;
-             _itemHandler.UseItem(itemToUse,_pokemonPartyHandler.Party[memberIndex]);
+             _itemHandler.UseItem(itemToUse,_pokemonPartyHandler.memberCards[memberIndex].pokemonState);
          }
      }
 

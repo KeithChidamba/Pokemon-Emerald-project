@@ -149,7 +149,7 @@ public class UnitTestHandler
         void CreateMember(Pokemon createdPokemon)
         {
             createdPokemon.GiveItem(amuletCoin);
-            participants[0].pokemon = createdPokemon;
+            participants[0].ReceivePokemon(createdPokemon);
             var moneyBonus = _battleHandler.PrizeMoneyModifier(participants);
             _testingHandler.LogMessage("Test Requires money bonus greater than 1",TestLogType.TestCase);
             _testingHandler.LogMessage($"Money bonus: {moneyBonus}",TestLogType.Calculation);

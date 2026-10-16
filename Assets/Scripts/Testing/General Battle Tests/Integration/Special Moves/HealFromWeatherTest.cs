@@ -23,18 +23,18 @@ public class HealFromWeatherTest : BattleBasedTest
     protected override void DetermineSuccess()
     {
         var playerParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        testingHandler.LogMessage($"Health of player: {playerParticipant.pokemon.hp}" +
-                                  $"/{playerParticipant.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of player: {playerParticipant.Pokemon.hp}" +
+                                  $"/{playerParticipant.Pokemon.maxHp}",TestLogType.Health);
         
         //initial hp
-        var tenthHp = Mathf.FloorToInt(playerParticipant.pokemon.maxHp * 0.1f);
+        var tenthHp = Mathf.FloorToInt(playerParticipant.Pokemon.maxHp * 0.1f);
         
         //50% healing when weather isn't a factor
-        var baseHealthGain = Mathf.FloorToInt(playerParticipant.pokemon.maxHp * (1f / 2f));
+        var baseHealthGain = Mathf.FloorToInt(playerParticipant.Pokemon.maxHp * (1f / 2f));
         
         //weather health gain is between (25% and 66%)
         //so this test will never leave pokemon at full hp
-        var healthGain = Mathf.FloorToInt(playerParticipant.pokemon.hp - tenthHp);
+        var healthGain = Mathf.FloorToInt(playerParticipant.Pokemon.hp - tenthHp);
 
         testingHandler.LogMessage($"Tenth hp of player: {tenthHp}",TestLogType.Calculation);
         testingHandler.LogMessage($"base health gain: {baseHealthGain}",TestLogType.Calculation);
@@ -59,10 +59,10 @@ public class HealFromWeatherTest : BattleBasedTest
             var wurmpleParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Player);
             
             //decrease hp to half so healing is allowed
-            wurmpleParticipant.pokemon.hp = Mathf.FloorToInt(wurmpleParticipant.pokemon.maxHp * 0.1f);
+            wurmpleParticipant.Pokemon.hp = Mathf.FloorToInt(wurmpleParticipant.Pokemon.maxHp * 0.1f);
             
             //use heal from weather move : moonlight
-            var moonlight = wurmpleParticipant.pokemon.moveSet[0];
+            var moonlight = wurmpleParticipant.Pokemon.moveSet[0];
             _battleHandler.UseMove(moonlight,wurmpleParticipant, BattleParticipantKey.Enemy);
         }
     }

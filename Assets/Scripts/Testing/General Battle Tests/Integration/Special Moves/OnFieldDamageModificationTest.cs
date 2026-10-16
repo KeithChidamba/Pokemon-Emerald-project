@@ -75,8 +75,8 @@ public class OnFieldDamageModificationTest : BattleBasedTest
         var moveFromAsset = Resources.Load<Move>(assetPath);
         var newMove = InstanceFactory.CreateMove(moveFromAsset);
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemon.moveSet.RemoveAt(0);
-        enemy.pokemon.moveSet.Add(newMove);
+        enemy.Pokemon.moveSet.RemoveAt(0);
+        enemy.Pokemon.moveSet.Add(newMove);
         //prevent burn to keep accurate damage values for test success 
         newMove.hasStatus = false;
         _sequencer.UseMove();//Rain dance
@@ -131,11 +131,11 @@ public class OnFieldDamageModificationTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         
         //prevent paralysis from thunderbolt 
-        enemy.pokemon.moveSet[0].hasStatus = false;
-        enemy.pokemon.moveSet[0].isSureHit = true;
+        enemy.Pokemon.moveSet[0].hasStatus = false;
+        enemy.Pokemon.moveSet[0].isSureHit = true;
         
-        testingHandler.LogMessage($"Health of player: {currentParticipant.pokemon.hp}" +
-                                  $"/{currentParticipant.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of player: {currentParticipant.Pokemon.hp}" +
+                                  $"/{currentParticipant.Pokemon.maxHp}",TestLogType.Health);
         
         _sequencer.CallNextAction();
     }

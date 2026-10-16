@@ -126,7 +126,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         var imagePos = participant.pokemonImage.rectTransform.anchoredPosition;
         var imageRectDimensions = participant.pokemonImage.rectTransform.rect;
         
-        if (participant.pokemon.statusEffect == StatusEffect.Sleep)
+        if (participant.Pokemon.statusEffect == StatusEffect.Sleep)
         {
             var start = new Vector2(imagePos.x,
                 imagePos.y + imageRectDimensions.height*0.5f);
@@ -140,7 +140,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
             participant.statusAnimationHandler.PlayEmptyAnimation();
         }
         else 
-        if (participant.pokemon.statusEffect == StatusEffect.Paralysis)
+        if (participant.Pokemon.statusEffect == StatusEffect.Paralysis)
         {
             var imageRect = participant.pokemonImage.rectTransform;
             rect.anchoredPosition = imageRect.anchoredPosition;

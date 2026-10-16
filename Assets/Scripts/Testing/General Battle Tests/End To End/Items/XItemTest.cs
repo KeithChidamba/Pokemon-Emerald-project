@@ -20,22 +20,22 @@ public class XItemTest: EndToEndTest,IItemTestable,IBattleTestable
         });
         AddTestCaseScenario(()=>
         {
-            player.pokemon.statModifiers[0].isAtLimit = true;
+            player.Pokemon.statModifiers[0].isAtLimit = true;
         });
         
         AddTestCase(new List<TestCaseCondition>{
             new("X Attack must give an attack buff", 
-                () => player.pokemon.statModifiers.Any(m=>m.stat==Stat.Attack)),
+                () => player.Pokemon.statModifiers.Any(m=>m.stat==Stat.Attack)),
             new ("Attack buff must be stage 1", 
-                () => player.pokemon.statModifiers.Any(m=>m.stage==1)),
+                () => player.Pokemon.statModifiers.Any(m=>m.stage==1)),
             new ("X Attack must increase friendship by 1", 
-                () => player.pokemon.friendshipLevel == 201)
+                () => player.Pokemon.friendshipLevel == 201)
         });
         AddTestCase(new List<TestCaseCondition>{
             new("X Attack must not give an attack buff", 
-                () => player.pokemon.statModifiers.Any(m=>m.stat==Stat.Attack)),
+                () => player.Pokemon.statModifiers.Any(m=>m.stat==Stat.Attack)),
             new ("Attack buff must be at limit", 
-                () =>  player.pokemon.statModifiers.Any(m=>m.isAtLimit))
+                () =>  player.Pokemon.statModifiers.Any(m=>m.isAtLimit))
         });
         this.StartBattle(battleTestData,this);
         yield return null;

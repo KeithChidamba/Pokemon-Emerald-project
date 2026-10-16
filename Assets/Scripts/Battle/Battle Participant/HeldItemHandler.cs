@@ -27,8 +27,8 @@ public class HeldItemHandler
     }
     public void SetHeldItemEffect()
     {
-        if (!participant.pokemon.hasItem) return;
-        var heldItem = participant.pokemon.heldItem;
+        if (!participant.Pokemon.hasItem) return;
+        var heldItem = participant.Pokemon.heldItem;
         if (!heldItem.canBeUsedInBattle) return;
         if (heldItem.isHeldItem)
         {
@@ -74,9 +74,9 @@ public class HeldItemHandler
     }
     public IEnumerator CheckForConsumableItem()
     {
-        if (!participant.pokemon.hasItem) yield break;
+        if (!participant.Pokemon.hasItem) yield break;
         
-        var heldItem = participant.pokemon.heldItem;
+        var heldItem = participant.Pokemon.heldItem;
         if (heldItem.isHeldItem)
         {
             //this method is only for consumables
@@ -85,7 +85,7 @@ public class HeldItemHandler
         
         if (heldItem.quantity == 0)
         {
-            participant.pokemon.RemoveHeldItem(); yield break; 
+            participant.Pokemon.RemoveHeldItem(); yield break; 
         }
         if (!heldItem.canBeUsedInBattle) yield break;
         
@@ -125,7 +125,7 @@ public class HeldItemHandler
     }
     private IEnumerator CheckHealCondition(Item heldItem)
     {
-        if(participant.pokemon.hp >= participant.pokemon.maxHp/2f) yield break;
+        if(participant.Pokemon.hp >= participant.Pokemon.maxHp/2f) yield break;
 
         heldItem.quantity--;
         yield return GetHealing(heldItem);
@@ -134,18 +134,18 @@ public class HeldItemHandler
     {
         if (!fullHeal)
         {
-            if(participant.pokemon.statusEffect==StatusEffect.None)yield break;
+            if(participant.Pokemon.statusEffect==StatusEffect.None)yield break;
             
             var statusInfo = heldItem.GetDynamicModule<StatusHealInfoModule>();
             
             var curableStatus = statusInfo.statusEffect;
         
             if (curableStatus == StatusEffect.Poison &&
-                participant.pokemon.statusEffect == StatusEffect.BadlyPoison)
+                participant.Pokemon.statusEffect == StatusEffect.BadlyPoison)
             {//antidote heals all poison
                 curableStatus = StatusEffect.BadlyPoison;
             }
-            if (participant.pokemon.statusEffect != curableStatus)
+            if (participant.Pokemon.statusEffect != curableStatus)
             { 
                 yield break;
             }
@@ -156,21 +156,21 @@ public class HeldItemHandler
         }
         participant.statusHandler.RemoveStatusEffect(fullHeal);
         participant.RefreshStatusEffectImage();
-        _dialogueHandler.DisplayBattleInfo($"{participant.pokemon.pokemonDisplayName}'s {heldItem.itemName} healed it");
+        _dialogueHandler.DisplayBattleInfo($"{participant.Pokemon.pokemonDisplayName}'s {heldItem.itemName} healed it");
         heldItem.quantity--;
     }
     private IEnumerator CheckIfConfused(Item heldItem)
     {
         if(!participant.isConfused) yield break;
 
-        _dialogueHandler.DisplayBattleInfo($"{participant.pokemon.pokemonDisplayName}'s {heldItem.itemName} healed its confusion");
+        _dialogueHandler.DisplayBattleInfo($"{participant.Pokemon.pokemonDisplayName}'s {heldItem.itemName} healed its confusion");
         participant.isConfused = false;
     }
     private IEnumerator GetHealing(Item heldItem)
     { 
-        _dialogueHandler.DisplayBattleInfo($"{participant.pokemon.pokemonDisplayName}'s {heldItem.itemName} healed it");
+        _dialogueHandler.DisplayBattleInfo($"{participant.Pokemon.pokemonDisplayName}'s {heldItem.itemName} healed it");
         var healEffect = heldItem.GetDynamicModule<EffectValueInfo>().effectValue;
-        _moveUsageHandler.HealthGainDisplay(healEffect,healthGainer:participant);
+        _moveUsageHandler.HealthGainDisplay(healEffect,participant.pokemonState);
         yield return _moveUsageHandler.AwaitHealthGainDisplay();
     }
  

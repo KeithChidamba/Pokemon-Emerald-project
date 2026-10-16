@@ -37,16 +37,16 @@ public class WhirlwindTrainerBattleTest : BattleBasedTest
     private void UseWhirlWind()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        _currentEnemyID = enemy.pokemon.pokemonID;
+        _currentEnemyID = enemy.Pokemon.pokemonID;
         _sequencer.UseMove();
     }
     private void ForceEnemyFaint()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         //ensure faint
-        enemy.pokemon.hp = 2;
+        enemy.Pokemon.hp = 2;
         //tackle
-        _currentEnemyID = enemy.pokemon.pokemonID;
+        _currentEnemyID = enemy.Pokemon.pokemonID;
         _sequencer.UseMove(1);
     }
     public override IEnumerator BeginTest()
@@ -55,19 +55,19 @@ public class WhirlwindTrainerBattleTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         
         _testCaseHandler.AddTestCase("Whirlwind should fail due to level gap",
-            () => player.pokemon.currentLevel < enemy.pokemon.currentLevel);
+            () => player.Pokemon.currentLevel < enemy.Pokemon.currentLevel);
         
         _testCaseHandler.AddTestCase("Enemy was fainted",
             () => enemy.pokemonTrainerAI.GetLivingPokemonCount() < enemy.pokemonTrainerAI.TrainerParty.Count);
         
         _testCaseHandler.AddTestCase("Whirlwind should succeed",
-            () => _currentEnemyID != enemy.pokemon.pokemonID);
+            () => _currentEnemyID != enemy.Pokemon.pokemonID);
         
         _testCaseHandler.AddTestCase("Enemy was fainted",
             () => enemy.pokemonTrainerAI.GetLivingPokemonCount() < enemy.pokemonTrainerAI.TrainerParty.Count-1);
 
         _testCaseHandler.AddTestCase("Whirlwind should fail",
-            () => _currentEnemyID == enemy.pokemon.pokemonID);
+            () => _currentEnemyID == enemy.Pokemon.pokemonID);
         
         //for testing purposes, disable the switch style
         _battleHandler.SetBattleStyle((int)BattleHandler.BattlesStyle.Set);

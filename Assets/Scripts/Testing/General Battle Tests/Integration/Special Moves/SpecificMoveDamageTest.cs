@@ -35,8 +35,8 @@ public class SpecificMoveDamageTest : BattleBasedTest
         void UseSpecificMove()
         {
             //modified for test case reliability
-            enemy.pokemon.moveSet[enemyMoveIndex].isSureHit = true;
-            _battleHandler.UseMove(enemy.pokemon.moveSet[enemyMoveIndex], enemy, BattleParticipantKey.Player);
+            enemy.Pokemon.moveSet[enemyMoveIndex].isSureHit = true;
+            _battleHandler.UseMove(enemy.Pokemon.moveSet[enemyMoveIndex], enemy, BattleParticipantKey.Player);
         }
     }
     public override IEnumerator BeginTest()
@@ -44,7 +44,7 @@ public class SpecificMoveDamageTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         
         _testCaseHandler.AddTestCase("Enemy must loose only 20hp",
-            () => Mathf.FloorToInt(enemy.pokemon.maxHp - enemy.pokemon.hp) == 20);
+            () => Mathf.FloorToInt(enemy.Pokemon.maxHp - enemy.Pokemon.hp) == 20);
         
         yield return HandleBattleState();
         onTestResult.Invoke();
@@ -55,10 +55,10 @@ public class SpecificMoveDamageTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
-                                  $"/{enemy.pokemon.maxHp}",TestLogType.Health);
-        testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
-                                  $"/{player.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of enemy: {enemy.Pokemon.hp}" +
+                                  $"/{enemy.Pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of player: {player.Pokemon.hp}" +
+                                  $"/{player.Pokemon.maxHp}",TestLogType.Health);
 
         _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
         return;

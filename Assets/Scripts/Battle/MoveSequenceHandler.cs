@@ -21,7 +21,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     
     [SerializeField]private List<OnFieldDamageModifier> _onFieldDamageModifiers = new();
     [SerializeField]private List<DamageDisplayData> _damageDisplayQueue = new();
-    [SerializeField]private List<DamageDisplayData> _healhGainQueue = new();
+    [SerializeField]private List<HealthGainData> _healhGainQueue = new();
     
     [SerializeField]private bool doingMove;
     [SerializeField]private bool repeatingMoveCycle;
@@ -90,7 +90,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
                                    && !move.hasTypelessEffect 
                                    && !move.isSelfTargeted)
         {
-            _dialogueHandler.DisplayBattleInfo("It doesn't affect " + victim.pokemon.pokemonDisplayName);
+            _dialogueHandler.DisplayBattleInfo("It doesn't affect " + victim.Pokemon.pokemonDisplayName);
         }
         else
         {
@@ -183,11 +183,11 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     
     private float CalculateConfusionDamage(BattleParticipant confusionVictim)
     {
-        int level = confusionVictim.pokemon.currentLevel;
+        int level = confusionVictim.Pokemon.currentLevel;
         float levelFactor = ((level * 2f) / 5f) + 2f;
         int power = 40;
-        float attackDefenseRatio = confusionVictim.pokemon.attack 
-                                   / Mathf.Max(1, confusionVictim.pokemon.defense);
+        float attackDefenseRatio = confusionVictim.Pokemon.attack 
+                                   / Mathf.Max(1, confusionVictim.Pokemon.defense);
 
         float randomFactor = Utility.RandomRange(217, 256) / 255f;
         
@@ -205,7 +205,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         
         yield return AwaitDamageDisplay();
         
-        float recoil = Mathf.Floor(struggleUser.pokemon.maxHp * 0.25f);
+        float recoil = Mathf.Floor(struggleUser.Pokemon.maxHp * 0.25f);
         
         DisplaySpecialDamage(struggleUser,predefinedDamage:recoil);
         
@@ -213,13 +213,13 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     }
     private float CalculateStruggleDamage(BattleParticipant victim,BattleParticipant struggleUser,Move struggle)
     {
-        var critValue = GetCritValue(struggleUser.pokemon);
+        var critValue = GetCritValue(struggleUser.Pokemon);
         if (critValue > 1)
         {
             _dialogueHandler.DisplayBattleInfo("Critical Hit!");
         }
         
-        float levelFactor = ((struggleUser.pokemon.currentLevel * 2f) / 5f) + 2f;
+        float levelFactor = ((struggleUser.Pokemon.currentLevel * 2f) / 5f) + 2f;
         
         float attackDefenseRatio = SetAtkDefRatio(critValue, false, struggleUser, victim);
         
@@ -268,7 +268,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     {
          if (victim.canBeDamaged) return false;
          
-         _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName+" protected itself");
+         _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName+" protected itself");
          
          if (!move.isMultiTarget)
          {
@@ -284,15 +284,15 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         if (IsInvincible(move, victim)) return 0;
         
         //calc crit
-        var critValue = GetCritValue(attacker.pokemon);
+        var critValue = GetCritValue(attacker.Pokemon);
         
         if (critValue > 1f) _dialogueHandler.DisplayBattleInfo("Critical Hit!");
         
-        float levelFactor = ((attacker.pokemon.currentLevel * 2f) / 5f) + 2f;
+        float levelFactor = ((attacker.Pokemon.currentLevel * 2f) / 5f) + 2f;
         
         float attackDefenseRatio = SetAtkDefRatio(critValue, move.isSpecial, attacker, victim);
 
-        float stab = _battleOperations.IsStab(attacker.pokemon, move.type) ? 1.5f : 1f;
+        float stab = _battleOperations.IsStab(attacker.Pokemon, move.type) ? 1.5f : 1f;
         
         float typeEffectiveness = isTypeless? 1f 
             :_battleOperations.CheckTypeEffectiveness(victim, move.type);
@@ -385,41 +385,38 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     private float SetAtkDefRatio(int crit, bool isSpecial, BattleParticipant currentAttacker, BattleParticipant victim)
     {
         float atk, def;
-        bool canIgnoreStages = currentAttacker.pokemon.currentLevel >= victim.pokemon.currentLevel  && crit == 2;
+        bool canIgnoreStages = currentAttacker.Pokemon.currentLevel >= victim.Pokemon.currentLevel  && crit == 2;
         if (!isSpecial)
         {
-            atk = canIgnoreStages && currentAttacker.statData.attack < currentAttacker.pokemon.attack
-                ? currentAttacker.pokemon.attack  // Ignore stat change
+            atk = canIgnoreStages && currentAttacker.statData.attack < currentAttacker.Pokemon.attack
+                ? currentAttacker.Pokemon.attack  // Ignore stat change
                 : currentAttacker.statData.attack;
             
-            def = canIgnoreStages && victim.statData.defense > victim.pokemon.defense
-                ? victim.pokemon.defense  // Ignore stat change
+            def = canIgnoreStages && victim.statData.defense > victim.Pokemon.defense
+                ? victim.Pokemon.defense  // Ignore stat change
                 : victim.statData.defense;
         }
         else
         {
-            atk = canIgnoreStages && currentAttacker.statData.spAtk < currentAttacker.pokemon.specialAttack
-                ? currentAttacker.pokemon.specialAttack
+            atk = canIgnoreStages && currentAttacker.statData.spAtk < currentAttacker.Pokemon.specialAttack
+                ? currentAttacker.Pokemon.specialAttack
                 : currentAttacker.statData.spAtk;
             
-            def = canIgnoreStages && victim.statData.spDef > victim.pokemon.specialDefense
-                ? victim.pokemon.specialDefense
+            def = canIgnoreStages && victim.statData.spDef > victim.Pokemon.specialDefense
+                ? victim.Pokemon.specialDefense
                 : victim.statData.spDef;
         }
         return atk / def;
     }
-    public void HealthGainDisplay(float healthGained,Pokemon affectedPokemon = null,BattleParticipant healthGainer = null)
+    public void HealthGainDisplay(float healthGained,PokemonStateHandler pokemonState)
     {
-        var data = new DamageDisplayData(DamageSource.Normal,
-            affectedParticipant:healthGainer
-            ,healthChange:healthGained,
-            affectedPokemon:affectedPokemon);
-        
+        var data = new HealthGainData(healthChange:healthGained, pokemonState:pokemonState);
         _healhGainQueue.Add(data);
         if (!displayingHealthGain) StartCoroutine(ProcessHealthGainDisplay());
     }
     
-    public void DisplaySpecialDamage(BattleParticipant victim, float predefinedDamage
+    public void DisplaySpecialDamage(BattleParticipant victim, 
+        float predefinedDamage
         ,DamageSource damageSource=DamageSource.Normal) 
     {
         var data = new DamageDisplayData(damageSource,affectedParticipant:victim,
@@ -456,11 +453,13 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         while (_healhGainQueue.Count > 0)
         {
             var data = _healhGainQueue[0];
+            var affectedPokemon = data.pokemonState.pokemon;
+           
             var healthAfterChange = Mathf.Clamp(
-                data.affectedPokemon.hp + data.healthChange
-                ,0,data.affectedPokemon.maxHp);
+                affectedPokemon.hp + data.healthChange
+                ,0,affectedPokemon.maxHp);
             
-            float displayHp = data.affectedPokemon.hp;
+            float displayHp = affectedPokemon.hp;
             
             //visual speed of hp bar[values are based on visual feel]
             float healthDifference = healthAfterChange - displayHp;
@@ -471,18 +470,18 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
             while (displayHp < healthAfterChange)
             {
                 float newHp = Mathf.MoveTowards(displayHp, healthAfterChange
-                    ,data.affectedPokemon.healthPhase  * healthGainSpeed * Time.unscaledDeltaTime);
+                    ,data.pokemonState.healthPhase  * healthGainSpeed * Time.unscaledDeltaTime);
                 displayHp = newHp;
-                data.affectedPokemon.hp =  Mathf.Floor(displayHp);
-                data.affectedPokemon.NotifyHealthChange();
+                affectedPokemon.hp =  Mathf.Floor(displayHp);
+                data.pokemonState.NotifyHealthChange();
                 yield return null;
             }
-            yield return new WaitUntil(() => data.affectedPokemon.hp >= Mathf.Floor(healthAfterChange));
+            yield return new WaitUntil(() => affectedPokemon.hp >= Mathf.Floor(healthAfterChange));
             _healhGainQueue.RemoveAt(0);
         }
         displayingHealthGain = false;
     }
-    IEnumerator ProcessDamageDisplay()
+    private IEnumerator ProcessDamageDisplay()
     {
         displayingDamage = true; 
         while (_damageDisplayQueue.Count > 0)
@@ -501,26 +500,28 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
             StartCoroutine(_battleVisualsHandler.DisplayDamageTakenVisual(data));
             
             yield return new WaitForSecondsRealtime(0.5f);
+            var affectedPokemon = data.affectedParticipant.Pokemon;
+            var state = data.affectedParticipant.pokemonState;
             
             var healthAfterChange = Mathf
-                .Clamp(data.affectedPokemon.hp - damage,0,data.affectedPokemon.maxHp);
-            float displayHp = data.affectedPokemon.hp;
+                .Clamp(affectedPokemon.hp - damage,0,affectedPokemon.maxHp);
+            float displayHp = affectedPokemon.hp;
             while (displayHp > healthAfterChange)
             {
                 float newHp = Mathf.MoveTowards(displayHp, healthAfterChange,
-                    (20f/data.affectedPokemon.healthPhase) * Time.unscaledDeltaTime);
+                    (20f/state.healthPhase) * Time.unscaledDeltaTime);
                 displayHp = newHp;
-                data.affectedPokemon.hp =  Mathf.Floor(displayHp);
+                affectedPokemon.hp =  Mathf.Floor(displayHp);
                 yield return null;
             }
-            yield return new WaitUntil(() => data.affectedPokemon.hp <= healthAfterChange);
-            data.affectedPokemon.hp =  Mathf.Floor(healthAfterChange);
+            yield return new WaitUntil(() => affectedPokemon.hp <= healthAfterChange);
+            affectedPokemon.hp =  Mathf.Floor(healthAfterChange);
             
             if (data.displayEffectiveness)
             {
                 DisplayEffectiveness(data.effectivenessScore,data.affectedParticipant);
             }
-            data.affectedPokemon.NotifyHealthChange();  
+            data.affectedParticipant.pokemonState.NotifyHealthChange();  
             _damageDisplayQueue.RemoveAt(0);
             yield return _dialogueHandler.AwaitAllDialogue();
             yield return null;
@@ -533,7 +534,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         string message;
         if (typeEffectiveness == 0)
         {
-            message = "It doesn't affect " + victim.pokemon.pokemonDisplayName + "!";
+            message = "It doesn't affect " + victim.Pokemon.pokemonDisplayName + "!";
         }
         else
         {
@@ -551,13 +552,13 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     
     private void CheckVictimVulnerabilityToStatus(Move move,BattleParticipant attacker, BattleParticipant victim)
     {
-        if (victim.pokemon.statusEffect != StatusEffect.None)
+        if (victim.Pokemon.statusEffect != StatusEffect.None)
         {
             if (move.moveDamage == 0)
             {
                 //only display message for status-condition-only moves
-                var statusRejectionMessage = move.statusEffect == victim.pokemon.statusEffect?
-                    $"{victim.pokemon.pokemonDisplayName} already has a {victim.pokemon.statusEffect} effect!"
+                var statusRejectionMessage = move.statusEffect == victim.Pokemon.statusEffect?
+                    $"{victim.Pokemon.pokemonDisplayName} already has a {victim.Pokemon.statusEffect} effect!"
                     :"but it failed!";
                 _dialogueHandler.DisplayBattleInfo(statusRejectionMessage);
             }
@@ -565,7 +566,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
             return;
         }
 
-        if (victim.pokemon.hp <= 0)
+        if (victim.Pokemon.hp <= 0)
         {
             _processingOrder = false; 
             return;
@@ -573,7 +574,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         
         if (!victim.canBeDamaged)
         {
-            _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName+" protected itself");
+            _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName+" protected itself");
             _processingOrder = false;
             return;
         }
@@ -619,7 +620,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     }
     public void HandleStatusApplication(BattleParticipant victim,Move move, bool displayMessage)
     {
-        foreach (var type in victim.pokemon.types)
+        foreach (var type in victim.Pokemon.types)
         {
             if (CheckInvalidStatusEffect(move.statusEffect, type.typeEnum, move))
             {
@@ -628,7 +629,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         }
         if (displayMessage)
         {
-            _dialogueHandler.DisplayBattleInfo($"{victim.pokemon.pokemonDisplayName} {GetStatusMessage(move.statusEffect)}");
+            _dialogueHandler.DisplayBattleInfo($"{victim.Pokemon.pokemonDisplayName} {GetStatusMessage(move.statusEffect)}");
         }
         ApplyStatusToVictim(victim,move.statusEffect);
     }
@@ -709,7 +710,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
             if (victim.canBeDamaged)
                 ApplyConfusion(victim,move);
             else
-                _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName + " protected itself");
+                _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName + " protected itself");
         }
         _processingOrder = false;
     }
@@ -719,7 +720,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         if (Utility.RandomRange100() <= move.statusChance)
         {
             var randomNumTurns = Utility.GetRandomChance(CommonRandom.Rnd5);
-            _dialogueHandler.DisplayBattleInfo(victimOfConfusion.pokemon.pokemonDisplayName
+            _dialogueHandler.DisplayBattleInfo(victimOfConfusion.Pokemon.pokemonDisplayName
                                                         + " was confused");
             victimOfConfusion.statusHandler.GetConfusion(randomNumTurns);
         }
@@ -743,7 +744,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     {
         if (victim.isInfatuated)
         {
-            _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName+" is already in love!");
+            _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName+" is already in love!");
             _processingOrder = false;
             return;
         }
@@ -752,9 +753,9 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
             _processingOrder = false;
             return;
         }
-        if (victim.pokemon.gender == Gender.None 
-            || attacker.pokemon.gender == Gender.None
-            || attacker.pokemon.gender == victim.pokemon.gender)
+        if (victim.Pokemon.gender == Gender.None 
+            || attacker.Pokemon.gender == Gender.None
+            || attacker.Pokemon.gender == victim.Pokemon.gender)
         {
             _dialogueHandler.DisplayBattleInfo("but it failed!");
             _processingOrder = false;
@@ -819,11 +820,11 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     {
         if (!enemy.canBeDamaged)
         {
-            _dialogueHandler.DisplayBattleInfo(enemy.pokemon.pokemonDisplayName + " protected itself");
+            _dialogueHandler.DisplayBattleInfo(enemy.Pokemon.pokemonDisplayName + " protected itself");
         }
         else if (enemy.ProtectedFromStatChange(isIncreasing))
         {
-            _dialogueHandler.DisplayBattleInfo(enemy.pokemon.pokemonDisplayName + " is protected by Mist!");
+            _dialogueHandler.DisplayBattleInfo(enemy.Pokemon.pokemonDisplayName + " is protected by Mist!");
         }
         else
         {
@@ -871,7 +872,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     private void BeginStatChangeOperation(StatChangeTransitData data)
     {
         var unModifiedStats = data.receiver.statData;
-        var affectedPokemon = data.receiver.pokemon;
+        var affectedPokemon = data.receiver.Pokemon;
         switch (data.stat)
         {
             case Stat.Defense:
@@ -912,7 +913,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         if(result.finalStatData.stage == 0)
         {
             //remove because it's neutral, but still return that neutral stat value
-            data.receiver.pokemon.statModifiers.RemoveAll(s => s.stat == data.stat);
+            data.receiver.Pokemon.statModifiers.RemoveAll(s => s.stat == data.stat);
         }
         //stat stage modifiers
         var updatedStat= ModifyStatValue(data.stat, unmodifiedStatValue, result.finalStatData.stage);

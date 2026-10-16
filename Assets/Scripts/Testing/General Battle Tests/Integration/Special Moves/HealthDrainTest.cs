@@ -25,15 +25,15 @@ public class HealthDrainTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var playerParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        var halfHp = Mathf.FloorToInt(playerParticipant.pokemon.maxHp / 2f);
+        var halfHp = Mathf.FloorToInt(playerParticipant.Pokemon.maxHp / 2f);
         
-        testingHandler.LogMessage($"Health of enemy target: {enemy.pokemon.hp}/{enemy.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of enemy target: {enemy.Pokemon.hp}/{enemy.Pokemon.maxHp}",TestLogType.Health);
         testingHandler.LogMessage($"Half Health of player: {halfHp}",TestLogType.Calculation);
-        testingHandler.LogMessage($"Health of player: {playerParticipant.pokemon.hp}" +
-                                  $"/{playerParticipant.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of player: {playerParticipant.Pokemon.hp}" +
+                                  $"/{playerParticipant.Pokemon.maxHp}",TestLogType.Health);
         
-        var testPassed = enemy.pokemon.hp < enemy.pokemon.maxHp
-            && playerParticipant.pokemon.hp > halfHp;
+        var testPassed = enemy.Pokemon.hp < enemy.Pokemon.maxHp
+            && playerParticipant.Pokemon.hp > halfHp;
         
         SetTestStatus(testPassed);
     }
@@ -48,9 +48,9 @@ public class HealthDrainTest : BattleBasedTest
             //use health drain move : leech-life
             var zubatParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Player);
             
-            zubatParticipant.pokemon.hp = Mathf.FloorToInt(zubatParticipant.pokemon.maxHp / 2f);
+            zubatParticipant.Pokemon.hp = Mathf.FloorToInt(zubatParticipant.Pokemon.maxHp / 2f);
             
-            var leechLife = zubatParticipant.pokemon.moveSet[0];
+            var leechLife = zubatParticipant.Pokemon.moveSet[0];
             leechLife.isSureHit = true;
             _battleHandler.UseMove(leechLife,zubatParticipant, BattleParticipantKey.Enemy);
         }

@@ -12,7 +12,7 @@ public class StatusEffectAnimationHandler
     
     public void PlayStatusEffectAnimation()
     {
-        statusEffectAnimator.Play(participant.pokemon.statusEffect.ToString());
+        statusEffectAnimator.Play(participant.Pokemon.statusEffect.ToString());
     }
     public void PlayConfusionAnimation()
     {

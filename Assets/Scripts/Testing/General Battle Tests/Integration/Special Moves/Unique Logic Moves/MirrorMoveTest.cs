@@ -25,7 +25,7 @@ public class MirrorMoveTest : BattleBasedTest
         {
             //should fail, mirror can't copy when there's no previous move
             var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-            player.pokemon.moveSet[0].priority = 100;
+            player.Pokemon.moveSet[0].priority = 100;
             _sequencer.UseMove();
         });
         
@@ -56,8 +56,8 @@ public class MirrorMoveTest : BattleBasedTest
         var moveFromAsset = Resources.Load<Move>(assetPath);
         var newMove = InstanceFactory.CreateMove(moveFromAsset);
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemon.moveSet.RemoveAt(0);
-        enemy.pokemon.moveSet.Add(newMove);
+        enemy.Pokemon.moveSet.RemoveAt(0);
+        enemy.Pokemon.moveSet.Add(newMove);
         //make enemy use tackle which can be copied
         MakeEnemyUseInvalidMove(3);
     }
@@ -68,15 +68,15 @@ public class MirrorMoveTest : BattleBasedTest
         enemy.pokemonTrainerAI.AssignBehaviorAction(UseSpecificMove);
         
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        player.pokemon.moveSet[0].priority = 0;//ensure mirror move happens after enemy attack
+        player.Pokemon.moveSet[0].priority = 0;//ensure mirror move happens after enemy attack
         _sequencer.UseMove();
         return;
         void UseSpecificMove()
         {
             //modified for test case reliability
-            enemy.pokemon.moveSet[moveIndex].priority = 100;
-            enemy.pokemon.moveSet[moveIndex].isSureHit = true;
-            _battleHandler.UseMove(enemy.pokemon.moveSet[moveIndex], enemy, BattleParticipantKey.Player);
+            enemy.Pokemon.moveSet[moveIndex].priority = 100;
+            enemy.Pokemon.moveSet[moveIndex].isSureHit = true;
+            _battleHandler.UseMove(enemy.Pokemon.moveSet[moveIndex], enemy, BattleParticipantKey.Player);
         }
     }
     public override IEnumerator BeginTest()
@@ -86,7 +86,7 @@ public class MirrorMoveTest : BattleBasedTest
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
             new("Mirror move should fail due to no previous move being used by enemy" +
-                " and enemy should be un-harmed", ()=> enemy.pokemon.hp >= enemy.pokemon.maxHp),
+                " and enemy should be un-harmed", ()=> enemy.Pokemon.hp >= enemy.Pokemon.maxHp),
         });
         
         var nonCopyableMoves = new[] {MoveName.Detect,MoveName.Protect,MoveName.Haze};
@@ -95,20 +95,20 @@ public class MirrorMoveTest : BattleBasedTest
             var index = i;
             _testCaseHandler.AddTestCase(new List<TestCaseCondition>
             {
-                new("Enemy should be un-harmed", ()=> enemy.pokemon.hp >= enemy.pokemon.maxHp),
+                new("Enemy should be un-harmed", ()=> enemy.Pokemon.hp >= enemy.Pokemon.maxHp),
                 new($"Mirror move should fail due to invalid previous move({nonCopyableMoves[index]}) used by enemy",
                     ()=> NameDB.NameMatch(enemy.previousMoveData.move,nonCopyableMoves[index]))
             });
         }
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
-            new("Enemy should be un-harmed", ()=> enemy.pokemon.hp >= enemy.pokemon.maxHp),
+            new("Enemy should be un-harmed", ()=> enemy.Pokemon.hp >= enemy.Pokemon.maxHp),
             new("Mirror move should fail due to self-targeting previous move (Bulk up) used by enemy",
                     ()=> NameDB.NameMatch(enemy.previousMoveData.move,MoveName.BulkUp))
         });
         
         _testCaseHandler.AddTestCase("Enemy should be hurt because Player copied tackle from enemy"
-            , ()=> enemy.pokemon.hp < enemy.pokemon.maxHp);
+            , ()=> enemy.Pokemon.hp < enemy.Pokemon.maxHp);
 
         _testCaseHandler.AddTestCase("Player used regular move tailwhip",
             () => NameDB.NameMatch(player.previousMoveData.move, MoveName.TailWhip));

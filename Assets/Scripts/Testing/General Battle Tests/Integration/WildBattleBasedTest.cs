@@ -59,8 +59,8 @@ public class WildBattleBasedTest : BattleBasedTest
         wildPokemonAi.AssignBehaviorAction(()=>
         {
             //attack player, since its single battle
-            var randMove = Utility.RandomRange(0, wildPokemonAi.participant.pokemon.moveSet.Count);
-            _battleHandler.UseMove(wildPokemonAi.participant.pokemon.moveSet[randMove]
+            var randMove = Utility.RandomRange(0, wildPokemonAi.participant.Pokemon.moveSet.Count);
+            _battleHandler.UseMove(wildPokemonAi.participant.Pokemon.moveSet[randMove]
                 ,wildPokemonAi.participant,BattleParticipantKey.Player);
         });
         

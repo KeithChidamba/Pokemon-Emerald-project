@@ -41,8 +41,8 @@ public static class BattleTestableExtensions
                 wildPokemonAi.AssignBehaviorAction(()=>
                 {
                     //attack player, prevent running away
-                    var randMove = Utility.RandomRange(0, wildPokemonAi.participant.pokemon.moveSet.Count);
-                    battleHandler.UseMove(wildPokemonAi.participant.pokemon.moveSet[randMove]
+                    var randMove = Utility.RandomRange(0, wildPokemonAi.participant.Pokemon.moveSet.Count);
+                    battleHandler.UseMove(wildPokemonAi.participant.Pokemon.moveSet[randMove]
                         ,wildPokemonAi.participant,BattleParticipantKey.Player);
                 });
         

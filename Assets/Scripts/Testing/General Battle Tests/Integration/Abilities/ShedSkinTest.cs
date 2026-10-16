@@ -35,10 +35,10 @@ public class ShedSkinTest : BattleBasedTest
         void UseMove()
         {
             //thunder wave
-            enemy.pokemon.moveSet[0].priority = 100;
-            enemy.pokemon.moveSet[0].statusChance = 100;
-            enemy.pokemon.moveSet[0].isSureHit = true;
-            _battleHandler.UseMove(enemy.pokemon.moveSet[0], enemy, BattleParticipantKey.Player);
+            enemy.Pokemon.moveSet[0].priority = 100;
+            enemy.Pokemon.moveSet[0].statusChance = 100;
+            enemy.Pokemon.moveSet[0].isSureHit = true;
+            _battleHandler.UseMove(enemy.Pokemon.moveSet[0], enemy, BattleParticipantKey.Player);
         }
     }
     public override IEnumerator BeginTest()
@@ -54,7 +54,7 @@ public class ShedSkinTest : BattleBasedTest
         }
         
         _testCaseHandler.AddTestCase("Player Shed skin must heal it",
-            () => player.pokemon.statusEffect == StatusEffect.None);
+            () => player.Pokemon.statusEffect == StatusEffect.None);
         
         yield return HandleBattleState();
         onTestResult.Invoke();

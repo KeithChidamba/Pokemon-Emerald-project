@@ -27,9 +27,9 @@ public class GuardSpecItemTest: EndToEndTest,IItemTestable,IBattleTestable
             new("Immunity must last 5 turns", 
                 () => playerTeam.statChangeEffects.Any(m=>m.effectDuration == 5)),
             new("Player must have no stat decrease after a full turn of attacks from enemy", 
-                () => player.pokemon.statModifiers.Count == 0),
+                () => player.Pokemon.statModifiers.Count == 0),
             new("Partner must have no stat decrease after a full turn of attacks from enemy", 
-                () => playerPartner.pokemon.statModifiers.Count == 0),
+                () => playerPartner.Pokemon.statModifiers.Count == 0),
         });
         
         AddTestCase("Use Guard Spec to refresh protection", 

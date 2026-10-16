@@ -37,15 +37,15 @@ public class MultiTargetDamageTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var enemyPartner = _battleHandler.GetParticipant(BattleParticipantKey.EnemyPartner);
         var partnerParticipant = _battleHandler.GetParticipant(BattleParticipantKey.PlayerPartner);
-        testingHandler.LogMessage($"Health of enemy target(Flying Type): {enemy.pokemon.hp}/{enemy.pokemon.maxHp}",TestLogType.Health);
-        testingHandler.LogMessage($"Health of enemy partner target: {enemyPartner.pokemon.hp}/{enemyPartner.pokemon.maxHp}",TestLogType.Health);
-        testingHandler.LogMessage($"Health of partner: {partnerParticipant.pokemon.hp}/{partnerParticipant.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of enemy target(Flying Type): {enemy.Pokemon.hp}/{enemy.Pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of enemy partner target: {enemyPartner.Pokemon.hp}/{enemyPartner.Pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of partner: {partnerParticipant.Pokemon.hp}/{partnerParticipant.Pokemon.maxHp}",TestLogType.Health);
         
         if (_sequencer.SequenceComplete())
         {
-           var testPassed = enemy.pokemon.hp <= enemy.pokemon.maxHp && 
-                             enemyPartner.pokemon.hp <= enemyPartner.pokemon.maxHp && 
-                             partnerParticipant.pokemon.hp <= partnerParticipant.pokemon.maxHp;
+           var testPassed = enemy.Pokemon.hp <= enemy.Pokemon.maxHp && 
+                             enemyPartner.Pokemon.hp <= enemyPartner.Pokemon.maxHp && 
+                             partnerParticipant.Pokemon.hp <= partnerParticipant.Pokemon.maxHp;
             EndTest(testPassed);
         }
     }

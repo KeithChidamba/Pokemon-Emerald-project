@@ -39,9 +39,9 @@ public class WeatherDamageTest : BattleBasedTest
     private void GiveEnemyIceType()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemon.types.Clear();
+        enemy.Pokemon.types.Clear();
         var iceType = Resources.Load<PokemonTypeData>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + PokemonType.Ice);
-        enemy.pokemon.types.Add(iceType);
+        enemy.Pokemon.types.Add(iceType);
         
         _sequencer.UseMove();//Hail
     }
@@ -50,15 +50,15 @@ public class WeatherDamageTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var enemyPartner = _battleHandler.GetParticipant(BattleParticipantKey.EnemyPartner);
         
-        enemy.pokemon.types.Clear();
-        enemyPartner.pokemon.types.Clear();
+        enemy.Pokemon.types.Clear();
+        enemyPartner.Pokemon.types.Clear();
         
         var rockType = Resources.Load<PokemonTypeData>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + PokemonType.Rock);
         var groundType = Resources.Load<PokemonTypeData>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + PokemonType.Ground);
         var steelType = Resources.Load<PokemonTypeData>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + PokemonType.Steel);
-        enemy.pokemon.types.Add(rockType);//to test special defense boost from sandstorm
-        enemy.pokemon.types.Add(groundType);
-        enemyPartner.pokemon.types.Add(steelType);
+        enemy.Pokemon.types.Add(rockType);//to test special defense boost from sandstorm
+        enemy.Pokemon.types.Add(groundType);
+        enemyPartner.Pokemon.types.Add(steelType);
         _battleOperations.OnStatChangeApplied += AwaitStatChangeAddition;
         _sequencer.UseMove(1);//Sandstorm
 
@@ -73,7 +73,7 @@ public class WeatherDamageTest : BattleBasedTest
         }
         
         testingHandler.LogMessage($"The {operationData.finalStatData.statName} stat is at stage {operationData.finalStatData.stage}" +
-                                  $" and is affecting {operationData.statChangeData.receiver.pokemon.pokemonName}"
+                                  $" and is affecting {operationData.statChangeData.receiver.Pokemon.pokemonName}"
             ,TestLogType.Information);
     }
     public override IEnumerator BeginTest()
@@ -90,9 +90,9 @@ public class WeatherDamageTest : BattleBasedTest
             var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
             var enemyPartner = _battleHandler.GetParticipant(BattleParticipantKey.EnemyPartner);
             var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-            var testPassed = enemy.pokemon.hp >= enemy.pokemon.maxHp //should be unaffected
-                             && enemyPartner.pokemon.hp < enemyPartner.pokemon.maxHp //hail damage
-                             && player.pokemon.hp < player.pokemon.maxHp; //both weather damage cases
+            var testPassed = enemy.Pokemon.hp >= enemy.Pokemon.maxHp //should be unaffected
+                             && enemyPartner.Pokemon.hp < enemyPartner.Pokemon.maxHp //hail damage
+                             && player.Pokemon.hp < player.Pokemon.maxHp; //both weather damage cases
            
             EndTest(testPassed);
         }
@@ -103,8 +103,8 @@ public class WeatherDamageTest : BattleBasedTest
         var currentParticipant = _battleHandler.GetCurrentParticipant();
         if (currentParticipant.participantKey != BattleParticipantKey.Player) return;
         
-        testingHandler.LogMessage($"Health of player: {currentParticipant.pokemon.hp}" +
-                                  $"/{currentParticipant.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of player: {currentParticipant.Pokemon.hp}" +
+                                  $"/{currentParticipant.Pokemon.maxHp}",TestLogType.Health);
         
         _sequencer.CallNextAction();
     }

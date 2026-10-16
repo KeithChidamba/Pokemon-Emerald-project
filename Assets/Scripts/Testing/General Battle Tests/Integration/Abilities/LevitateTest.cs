@@ -37,19 +37,19 @@ public class LevitateTest : BattleBasedTest
         void UseMove()
         {
             //mud slap
-            enemy.pokemon.moveSet[0].isSureHit = true;
-            _battleHandler.UseMove(enemy.pokemon.moveSet[0], enemy, BattleParticipantKey.Player);
+            enemy.Pokemon.moveSet[0].isSureHit = true;
+            _battleHandler.UseMove(enemy.Pokemon.moveSet[0], enemy, BattleParticipantKey.Player);
         }
     }
     private void SetupAbilityChange()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         var levitateAsset = Resources.Load<Ability>(DirectoryHandler.GetDirectory(AssetDirectory.Abilities) + nameof(AbilityName.Levitate));
-        player.pokemon.ability = levitateAsset;
+        player.Pokemon.ability = levitateAsset;
         player.abilityHandler.ResetState();
         player.abilityHandler.SetAbilityMethod();
         _sequencer.UseMove();
-        testingHandler.LogMessage($"player participant artificially received ability {player.pokemon.ability.abilityName}" +
+        testingHandler.LogMessage($"player participant artificially received ability {player.Pokemon.ability.abilityName}" +
                                   $", which grants additional immunity to {player.additionalTypeImmunity.typeEnum}",TestLogType.Information);
     }
     public override IEnumerator BeginTest()
@@ -57,16 +57,16 @@ public class LevitateTest : BattleBasedTest
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
         _testCaseHandler.AddTestCase("Player should be damaged by ground move",
-            () => player.pokemon.hp < player.pokemon.maxHp);
+            () => player.Pokemon.hp < player.Pokemon.maxHp);
         
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
             new("Player should have levitate",
-                () => player.pokemon.ability.abilityName == AbilityName.Levitate),
+                () => player.Pokemon.ability.abilityName == AbilityName.Levitate),
             new("Player should be immune to ground move",
                 () => player.additionalTypeImmunity.typeEnum == PokemonType.Ground),
             new("Player's immunity should keep it at full health",
-                () => player.pokemon.hp >= player.pokemon.maxHp)
+                () => player.Pokemon.hp >= player.Pokemon.maxHp)
         });
         
         yield return HandleBattleState();
@@ -77,15 +77,15 @@ public class LevitateTest : BattleBasedTest
     {
        var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-       testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
-                                  $"/{player.pokemon.maxHp}",TestLogType.Health);
+       testingHandler.LogMessage($"Health of player: {player.Pokemon.hp}" +
+                                  $"/{player.Pokemon.maxHp}",TestLogType.Health);
 
         _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
         return;
         void CheckTestEnd()
         {
             //for test cases
-            player.pokemon.hp = player.pokemon.maxHp;
+            player.Pokemon.hp = player.Pokemon.maxHp;
             if (_sequencer.SequenceComplete())
             {
                 EndTest(true);

@@ -38,10 +38,10 @@ public class HazeTest : BattleBasedTest
         void UseSpecificMove()
         {
             //modified for test case reliability
-            enemy.pokemon.moveSet[enemyMoveIndex].isSureHit = true;
+            enemy.Pokemon.moveSet[enemyMoveIndex].isSureHit = true;
             //haze must happen last for test case
-            enemy.pokemon.moveSet[enemyMoveIndex].priority = -5;
-            _battleHandler.UseMove(enemy.pokemon.moveSet[enemyMoveIndex], enemy, BattleParticipantKey.Player);
+            enemy.Pokemon.moveSet[enemyMoveIndex].priority = -5;
+            _battleHandler.UseMove(enemy.Pokemon.moveSet[enemyMoveIndex], enemy, BattleParticipantKey.Player);
         }
     }
     public override IEnumerator BeginTest()
@@ -52,26 +52,26 @@ public class HazeTest : BattleBasedTest
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
             new("Player must have attack buff",
-                () => player.pokemon.attack > player.statData.attack),
+                () => player.Pokemon.attack > player.statData.attack),
                 new ("Player must have defense buff",
-                () =>   player.pokemon.defense > player.statData.defense),
+                () =>   player.Pokemon.defense > player.statData.defense),
             new("Player must have stat modifiers",
-                () => player.pokemon.statModifiers.Count > 0)
+                () => player.Pokemon.statModifiers.Count > 0)
         });
         
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
             new("Player must have no stat modifiers",
-                () => player.pokemon.statModifiers.Count == 0),
+                () => player.Pokemon.statModifiers.Count == 0),
             new ("Player must have no defense buff",
-                () =>  Mathf.FloorToInt(player.pokemon.defense) == Mathf.FloorToInt(player.statData.defense)),
+                () =>  Mathf.FloorToInt(player.Pokemon.defense) == Mathf.FloorToInt(player.statData.defense)),
             new ("Player must have no attack buff",
-                () =>   Mathf.FloorToInt(player.pokemon.attack) == Mathf.FloorToInt(player.statData.attack)),
+                () =>   Mathf.FloorToInt(player.Pokemon.attack) == Mathf.FloorToInt(player.statData.attack)),
             
             new("Enemy must have no defense reduction",
-                () => Mathf.FloorToInt(enemy.pokemon.defense) == Mathf.FloorToInt(enemy.statData.defense)),
+                () => Mathf.FloorToInt(enemy.Pokemon.defense) == Mathf.FloorToInt(enemy.statData.defense)),
             new("Enemy must have no stat modifiers",
-                () => enemy.pokemon.statModifiers.Count == 0)
+                () => enemy.Pokemon.statModifiers.Count == 0)
         });
         yield return HandleBattleState();
         onTestResult.Invoke();

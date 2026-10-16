@@ -191,7 +191,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
             var swapIn = _battleHandler.GetParticipant(participantKey);
             if (canDisplayMessage)
             {
-                _dialogueHandler.DisplayDetails(swapIn.pokemon.pokemonDisplayName +
+                _dialogueHandler.DisplayDetails(swapIn.Pokemon.pokemonDisplayName +
                                                 " is already in battle");
             }
             return false;
@@ -204,7 +204,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
         {
             if (canDisplayMessage)
             {
-                _dialogueHandler.DisplayDetails(currentParticipant.pokemon.pokemonDisplayName +
+                _dialogueHandler.DisplayDetails(currentParticipant.Pokemon.pokemonDisplayName +
                                                 " is trapped");
             }
             return false;
@@ -257,7 +257,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
         
         if (currentUsage is PartyUsage.SwapOut 
             or PartyUsage.SwitchOutFromBattleStyle 
-            && selectedMember.pokemon.hp <= 0)
+            && selectedMember.pokemonState.pokemon.hp <= 0)
         {
             return;
         }
@@ -382,7 +382,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
     {
         for (var i = 0;i<party.Count;i++)
         {
-            PokemonOperations.UpdateHealthPhase(party[i],memberCards[i].hpSliderImage);
+            PokemonOperations.UpdateHealthPhase(memberCards[i].pokemonState,memberCards[i].hpSliderImage);
         }
     }
  
@@ -469,8 +469,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
         {
             if (i < party.Count)
             {
-                memberCards[i].pokemon = party[i];
-                memberCards[i].ActivateUI();
+                memberCards[i].ActivateUI(party[i]);
             }
             else
             {

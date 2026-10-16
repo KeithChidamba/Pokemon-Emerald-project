@@ -48,14 +48,14 @@ public class FuryCutterTest : BattleBasedTest
         enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
         enemy.pokemonTrainerAI.AssignBehaviorAction(UseSpecificMove);
         //make damage test case more reliable
-        player.pokemon.critChance = 0;
+        player.Pokemon.critChance = 0;
         _sequencer.UseMove(moveIndex);
         return;
         void UseSpecificMove()
         {
             //modified for test case reliability
-            enemy.pokemon.moveSet[enemyMoveIndex].isSureHit = true;
-            _battleHandler.UseMove(enemy.pokemon.moveSet[enemyMoveIndex], enemy, BattleParticipantKey.Player);
+            enemy.Pokemon.moveSet[enemyMoveIndex].isSureHit = true;
+            _battleHandler.UseMove(enemy.Pokemon.moveSet[enemyMoveIndex], enemy, BattleParticipantKey.Player);
         }
     }
     public override IEnumerator BeginTest()

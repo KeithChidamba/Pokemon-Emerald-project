@@ -25,23 +25,17 @@ public class StatChangeOperationData
 public class BattleOperations : MonoBehaviour,IInjectable
 {   
     public event Action<StatChangeOperationData> OnStatChangeApplied;
-    private PokemonOperations _pokemonOperations;
-    
+
     public void Inject(ServiceContainer container)
     {
-        _pokemonOperations = container.Resolve<PokemonOperations>();
         gameObject.SetActive(true);
     }
+    public void OnInject() { }
 
-    public void OnInject()
-    {
-        
-    }
-    
     public bool HasImmunity(Pokemon victim,PokemonTypeData enemyType)
     {
         foreach(var type in victim.types)
-            if (_pokemonOperations.ContainsType(type.immunities,enemyType))
+            if (PokemonOperations.ContainsType(type.immunities,enemyType))
                 return true;
         return false;
     } 
@@ -62,14 +56,14 @@ public class BattleOperations : MonoBehaviour,IInjectable
         }
         else
         {
-            if (HasImmunity(victim.pokemon, moveType)) 
+            if (HasImmunity(victim.Pokemon, moveType)) 
             {
                 //if victim had their immunity altered by moves, like foresight
                 return victim.immunityNegations
                     .Any(negation => negation.ImmunityNegationTypes
                         .Any(type=>type == moveType.typeEnum)) ? 1 : 0;
             }
-            return GetTypeEffectiveness(victim.pokemon, moveType);
+            return GetTypeEffectiveness(victim.Pokemon, moveType);
         }
         return 1;
     }
@@ -78,11 +72,11 @@ public class BattleOperations : MonoBehaviour,IInjectable
         float effectiveness = 1;
         //Weakness
         foreach(PokemonTypeData t in victim.types)
-            if (_pokemonOperations.ContainsType(t.weaknesses, enemyType))
+            if (PokemonOperations.ContainsType(t.weaknesses, enemyType))
                 effectiveness *= 2f;
         //Resistance
         foreach(PokemonTypeData t in victim.types)
-            if (_pokemonOperations.ContainsType(t.resistances, enemyType))
+            if (PokemonOperations.ContainsType(t.resistances, enemyType))
                 effectiveness /= 2f;
         
         return effectiveness;
@@ -116,11 +110,11 @@ public class BattleOperations : MonoBehaviour,IInjectable
     
     public StatChangeOperationData AttemptStatChangeOperation(StatChangeTransitData data)
     {
-        var desiredModifier = data.receiver.pokemon.statModifiers.FirstOrDefault(b=>b.stat==data.stat);
+        var desiredModifier = data.receiver.Pokemon.statModifiers.FirstOrDefault(b=>b.stat==data.stat);
         if (desiredModifier is null)
         {
             desiredModifier = CreateNewStatModifier(data.stat); 
-            data.receiver.pokemon.statModifiers.Add(desiredModifier);
+            data.receiver.Pokemon.statModifiers.Add(desiredModifier);
         }
 
         string message;
@@ -140,8 +134,8 @@ public class BattleOperations : MonoBehaviour,IInjectable
             desiredModifier.isAtLimit = true;
 
             message = increased
-                ? $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} can't go any higher!"
-                : $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} can't go any lower!";
+                ? $"{data.receiver.Pokemon.pokemonDisplayName}'s {desiredModifier.statName} can't go any higher!"
+                : $"{data.receiver.Pokemon.pokemonDisplayName}'s {desiredModifier.statName} can't go any lower!";
         }
         else
         {
@@ -154,18 +148,18 @@ public class BattleOperations : MonoBehaviour,IInjectable
             {
                 message = actualChange switch
                 {
-                    1 => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} rose!",
-                    2 => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} rose sharply!",
-                    _ => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} rose drastically!"
+                    1 => $"{data.receiver.Pokemon.pokemonDisplayName}'s {desiredModifier.statName} rose!",
+                    2 => $"{data.receiver.Pokemon.pokemonDisplayName}'s {desiredModifier.statName} rose sharply!",
+                    _ => $"{data.receiver.Pokemon.pokemonDisplayName}'s {desiredModifier.statName} rose drastically!"
                 };
             }
             else
             {
                 message = actualChange switch
                 {
-                    1 => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} fell!",
-                    2 => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} harshly fell!",
-                    _ => $"{data.receiver.pokemon.pokemonDisplayName}'s {desiredModifier.statName} severely fell!"
+                    1 => $"{data.receiver.Pokemon.pokemonDisplayName}'s {desiredModifier.statName} fell!",
+                    2 => $"{data.receiver.Pokemon.pokemonDisplayName}'s {desiredModifier.statName} harshly fell!",
+                    _ => $"{data.receiver.Pokemon.pokemonDisplayName}'s {desiredModifier.statName} severely fell!"
                 };
             }
         }

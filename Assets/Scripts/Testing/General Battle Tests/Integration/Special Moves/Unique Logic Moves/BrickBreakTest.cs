@@ -40,8 +40,8 @@ public class BrickBreakTest : BattleBasedTest
         void UseSpecificMove()
         {
             //modified for test case reliability
-            enemy.pokemon.moveSet[enemyMoveIndex].isSureHit = true;
-            _battleHandler.UseMove(enemy.pokemon.moveSet[enemyMoveIndex], enemy, BattleParticipantKey.Player);
+            enemy.Pokemon.moveSet[enemyMoveIndex].isSureHit = true;
+            _battleHandler.UseMove(enemy.Pokemon.moveSet[enemyMoveIndex], enemy, BattleParticipantKey.Player);
         }
         
     }

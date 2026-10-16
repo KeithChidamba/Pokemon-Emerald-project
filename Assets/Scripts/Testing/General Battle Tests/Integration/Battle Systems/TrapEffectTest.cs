@@ -59,10 +59,10 @@ public class TrapEffectTest : BattleBasedTest
         void UseSpecificMove()
         {
             //modified for test case reliability
-            enemy.pokemon.moveSet[moveIndex].moveDamage = 0;
-            enemy.pokemon.moveSet[moveIndex].priority = 100;
-            enemy.pokemon.moveSet[moveIndex].isSureHit = true;
-            _battleHandler.UseMove(enemy.pokemon.moveSet[moveIndex], enemy, BattleParticipantKey.Player);
+            enemy.Pokemon.moveSet[moveIndex].moveDamage = 0;
+            enemy.Pokemon.moveSet[moveIndex].priority = 100;
+            enemy.Pokemon.moveSet[moveIndex].isSureHit = true;
+            _battleHandler.UseMove(enemy.Pokemon.moveSet[moveIndex], enemy, BattleParticipantKey.Player);
         }
     }
 
@@ -117,7 +117,7 @@ public class TrapEffectTest : BattleBasedTest
         });
         
         _testCaseHandler.AddTestCase("Player should be damaged due to sand Tomb",
-            () => player.pokemon.hp < player.pokemon.maxHp);
+            () => player.Pokemon.hp < player.Pokemon.maxHp);
         
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {

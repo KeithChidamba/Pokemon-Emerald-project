@@ -41,7 +41,7 @@ public class StaticTest : BattleBasedTest
     private void AttackFirst()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        player.pokemon.moveSet[0].priority = 100;
+        player.Pokemon.moveSet[0].priority = 100;
         _sequencer.UseMove();
     }
     public override IEnumerator BeginTest()
@@ -52,9 +52,9 @@ public class StaticTest : BattleBasedTest
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
             new("enemy should be attacked",
-                () => enemy.pokemon.hp < enemy.pokemon.maxHp),
+                () => enemy.Pokemon.hp < enemy.Pokemon.maxHp),
             new("Enemy's static ability should paralyze player",
-                ()=> player.pokemon.statusEffect == StatusEffect.Paralysis)
+                ()=> player.Pokemon.statusEffect == StatusEffect.Paralysis)
         });
         
         yield return HandleBattleState();
@@ -64,8 +64,8 @@ public class StaticTest : BattleBasedTest
     protected override void DetermineSuccess()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
-                                  $"/{enemy.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of enemy: {enemy.Pokemon.hp}" +
+                                  $"/{enemy.Pokemon.maxHp}",TestLogType.Health);
 
         _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
         return;

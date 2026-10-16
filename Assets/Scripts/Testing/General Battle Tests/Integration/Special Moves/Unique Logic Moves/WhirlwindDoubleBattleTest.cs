@@ -41,7 +41,7 @@ public class WhirlwindDoubleBattleTest : BattleBasedTest
     private void PartnerUseWhirlwind()
     {
         var enemyPartner = _battleHandler.GetParticipant(BattleParticipantKey.EnemyPartner);
-        _currentEnemyID = enemyPartner.pokemon.pokemonID;
+        _currentEnemyID = enemyPartner.Pokemon.pokemonID;
         _sequencer.UseMoveOnSpecific(0,
             BattleParticipantKey.PlayerPartner,
             BattleParticipantKey.EnemyPartner);
@@ -50,7 +50,7 @@ public class WhirlwindDoubleBattleTest : BattleBasedTest
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         //ensure faint
-        enemy.pokemon.hp = 2;
+        enemy.Pokemon.hp = 2;
         //tackle
         _sequencer.UseMove(1);
     }
@@ -62,18 +62,18 @@ public class WhirlwindDoubleBattleTest : BattleBasedTest
         
         _testCaseHandler.AddTestCase("Whirlwind should fail due to level gap," +
                                      "partner's whirlwind should fail as well",
-            () => player.pokemon.currentLevel < enemy.pokemon.currentLevel);
+            () => player.Pokemon.currentLevel < enemy.Pokemon.currentLevel);
         
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
             new("Enemy was fainted",
                 () => enemy.pokemonTrainerAI.GetLivingPokemonCount() < enemy.pokemonTrainerAI.TrainerParty.Count),
             new("Partner successfully used whirlwind",
-                () => enemyPartner.pokemon.pokemonID != _currentEnemyID)
+                () => enemyPartner.Pokemon.pokemonID != _currentEnemyID)
         });
 
         _testCaseHandler.AddTestCase("Whirlwind should fail",
-            () => _currentEnemyID == enemyPartner.pokemon.pokemonID);
+            () => _currentEnemyID == enemyPartner.Pokemon.pokemonID);
         
         //for testing purposes, disable the switch style
         _battleHandler.SetBattleStyle((int)BattleHandler.BattlesStyle.Set);

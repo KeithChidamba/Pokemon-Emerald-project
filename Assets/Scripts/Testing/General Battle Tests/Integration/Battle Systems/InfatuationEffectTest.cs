@@ -46,20 +46,20 @@ public class InfatuationEffectTest : BattleBasedTest
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Natural);
-        enemy.pokemon.moveSet[0].isSureHit = true;
+        enemy.Pokemon.moveSet[0].isSureHit = true;
         _sequencer.UseMove();//tackle
     }
     private void TestAttractWithGender(Gender gender)
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        enemy.pokemon.gender = gender;
-        player.pokemon.gender = Gender.Female;
+        enemy.Pokemon.gender = gender;
+        player.Pokemon.gender = Gender.Female;
         
         enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
         enemy.pokemonTrainerAI.AssignBehaviorAction(ForceEnemySkip);
         
-        player.pokemon.moveSet[0].priority = 100;
+        player.Pokemon.moveSet[0].priority = 100;
         _sequencer.UseMove();//attract
     }
     private void ForceEnemySkip()
@@ -87,13 +87,13 @@ public class InfatuationEffectTest : BattleBasedTest
         {
             new("Enemy must be infatuated",()=> enemy.isInfatuated),
             new("Enemy must be immobilized by it so it can't attack player",
-                ()=> player.pokemon.hp >= player.pokemon.maxHp)
+                ()=> player.Pokemon.hp >= player.Pokemon.maxHp)
         });
         
         _testCaseHandler.AddTestCase("Enemy must not be infatuated(After player switch out)",
             () => !enemy.isInfatuated);
         _testCaseHandler.AddTestCase("Player must be damaged(No more infatuation immobilization of enemy)",
-            () => player.pokemon.hp < player.pokemon.maxHp);
+            () => player.Pokemon.hp < player.Pokemon.maxHp);
 
         yield return HandleBattleState();
         onTestResult.Invoke();
@@ -104,10 +104,10 @@ public class InfatuationEffectTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
-                                  $"/{enemy.pokemon.maxHp}",TestLogType.Health);
-        testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
-                                  $"/{player.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of enemy: {enemy.Pokemon.hp}" +
+                                  $"/{enemy.Pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of player: {player.Pokemon.hp}" +
+                                  $"/{player.Pokemon.maxHp}",TestLogType.Health);
         
         var caseExists = _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
         if (!caseExists)

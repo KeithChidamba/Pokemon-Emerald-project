@@ -70,7 +70,7 @@ public class StatusEffectTest : BattleBasedTest
             newMove.moveDamage = 0;
             newMove.statusChance = 100;
         }
-        currentParticipant.pokemon.moveSet[0] = newMove;
+        currentParticipant.Pokemon.moveSet[0] = newMove;
         
         if (moveEnum == MoveName.Ember)
         {
@@ -86,13 +86,13 @@ public class StatusEffectTest : BattleBasedTest
         var tacklePath = DirectoryHandler.GetDirectory(AssetDirectory.Moves) + "Tackle";
         var tackleAsset = Resources.Load<Move>(tacklePath);
         var tackle = InstanceFactory.CreateMove(tackleAsset);
-        enemy.pokemon.moveSet.Add(tackle);
+        enemy.Pokemon.moveSet.Add(tackle);
             
         enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
         enemy.pokemonTrainerAI.AssignBehaviorAction(() =>
         {
-            enemy.pokemon.moveSet[0].isSureHit = true;
-            _battleHandler.UseMove(enemy.pokemon.moveSet.Last(), enemy, BattleParticipantKey.Player);
+            enemy.Pokemon.moveSet[0].isSureHit = true;
+            _battleHandler.UseMove(enemy.Pokemon.moveSet.Last(), enemy, BattleParticipantKey.Player);
         });
         _moveUsageHandler.OnDamageModified += CheckForBurnEffect;
     }
@@ -101,7 +101,7 @@ public class StatusEffectTest : BattleBasedTest
         if (modifier == DamageCalculationModifier.StatusEffect)
         {
             var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-            enemy.pokemon.moveSet.Remove(enemy.pokemon.moveSet.Last());//remove added move
+            enemy.Pokemon.moveSet.Remove(enemy.Pokemon.moveSet.Last());//remove added move
             _moveUsageHandler.OnDamageModified -= CheckForBurnEffect;
             _damageDecreased = modifiedDamage < initialDamage;
             var message = _damageDecreased ? "reduced":"increased";
@@ -116,47 +116,47 @@ public class StatusEffectTest : BattleBasedTest
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
             new("Victim has to suffer burn",
-                ()=> enemy.pokemon.statusEffect == StatusEffect.Burn),
+                ()=> enemy.Pokemon.statusEffect == StatusEffect.Burn),
             new("Victim has to be hurt by burn",
-                ()=> enemy.pokemon.hp < enemy.pokemon.maxHp),
+                ()=> enemy.Pokemon.hp < enemy.Pokemon.maxHp),
             new("Victim deals reduced physical damage because of burn",
                 ()=> _damageDecreased)
         });
         
         _testCaseHandler.AddTestCase("Victim has to be frozen", 
             () => !enemy.canAttack
-                 && enemy.pokemon.statusEffect == StatusEffect.Freeze);
+                 && enemy.Pokemon.statusEffect == StatusEffect.Freeze);
         
         _testCaseHandler.AddTestCase( "Victim has to be unfrozen", 
             () => enemy.canAttack
-                  && enemy.pokemon.statusEffect == StatusEffect.None);
+                  && enemy.Pokemon.statusEffect == StatusEffect.None);
         
         _testCaseHandler.AddTestCase( "Victim has to be asleep", 
             () => !enemy.canAttack
-            && enemy.pokemon.statusEffect == StatusEffect.Sleep);
+            && enemy.Pokemon.statusEffect == StatusEffect.Sleep);
         
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
             new("Victim has to be poisoned",
-                ()=> enemy.pokemon.statusEffect == StatusEffect.Poison),
+                ()=> enemy.Pokemon.statusEffect == StatusEffect.Poison),
             new("Victim has to be hurt by poison",
-                ()=> enemy.pokemon.hp < enemy.pokemon.maxHp),
+                ()=> enemy.Pokemon.hp < enemy.Pokemon.maxHp),
         });
         
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
             new("Victim has to be paralyzed",
-                ()=> enemy.pokemon.statusEffect == StatusEffect.Paralysis),
+                ()=> enemy.Pokemon.statusEffect == StatusEffect.Paralysis),
             new("Victim has to be slowed down",
-                ()=> enemy.pokemon.speed < enemy.statData.speed),
+                ()=> enemy.Pokemon.speed < enemy.statData.speed),
         });
         
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
             new("Victim has to be poisoned badly",
-                ()=> enemy.pokemon.statusEffect == StatusEffect.BadlyPoison),
+                ()=> enemy.Pokemon.statusEffect == StatusEffect.BadlyPoison),
             new("Victim has to be hurt by poison",
-                ()=> enemy.pokemon.hp < enemy.pokemon.maxHp),
+                ()=> enemy.Pokemon.hp < enemy.Pokemon.maxHp),
         });
         
         _testCaseHandler.AddTestCase( "Victim's [Badly Poisoned] status should be reduced to [Poisoned] after it switches out", 
@@ -167,7 +167,7 @@ public class StatusEffectTest : BattleBasedTest
             new("Victim should be in confusion",
                 ()=> enemy.isConfused),
             new("Confusion should hurt victim",
-                ()=> enemy.pokemon.hp < enemy.pokemon.maxHp),
+                ()=> enemy.Pokemon.hp < enemy.Pokemon.maxHp),
         });
         
         _testCaseHandler.AddTestCase( "Victim should be healed from confusion", 
@@ -181,8 +181,8 @@ public class StatusEffectTest : BattleBasedTest
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         
-        testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
-                                  $"/{enemy.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of enemy: {enemy.Pokemon.hp}" +
+                                  $"/{enemy.Pokemon.maxHp}",TestLogType.Health);
         
          _testCaseHandler.HandleCurrentTestCase(CheckTestEnd, TestCaseFailed);
         return;
@@ -193,7 +193,7 @@ public class StatusEffectTest : BattleBasedTest
                 testingHandler.LogMessage($"Status of enemy partner (who was switched out) : {enemy.pokemonTrainerAI.TrainerParty[1].statusEffect}"
                     ,TestLogType.Information);
             }
-            if (enemy.pokemon.statusEffect==StatusEffect.BadlyPoison)
+            if (enemy.Pokemon.statusEffect==StatusEffect.BadlyPoison)
             {
                 enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
                 enemy.pokemonTrainerAI.AssignBehaviorAction(ForceEnemySwap);
@@ -204,10 +204,10 @@ public class StatusEffectTest : BattleBasedTest
                 }
             } 
             //freeze has a test case that requires its status to remain
-            else if (enemy.pokemon.statusEffect != StatusEffect.Freeze)
+            else if (enemy.Pokemon.statusEffect != StatusEffect.Freeze)
             {
                 enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Natural);
-                enemy.pokemon.hp = enemy.pokemon.maxHp;
+                enemy.Pokemon.hp = enemy.Pokemon.maxHp;
                 enemy.statusHandler.RemoveStatusEffect(true);
             }
 

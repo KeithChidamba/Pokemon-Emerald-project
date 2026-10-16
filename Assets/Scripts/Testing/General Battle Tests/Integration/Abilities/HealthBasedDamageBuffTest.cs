@@ -34,9 +34,9 @@ public class HealthBasedDamageBuffTest : BattleBasedTest
     private void AttackWithBuffedDamage()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        player.pokemon.critChance = 0;
-        player.pokemon.hp = player.pokemon.maxHp * 0.25f;
-        player.pokemon.moveSet[0].priority = 100;
+        player.Pokemon.critChance = 0;
+        player.Pokemon.hp = player.Pokemon.maxHp * 0.25f;
+        player.Pokemon.moveSet[0].priority = 100;
         _sequencer.UseMove();
     }
     private void CheckForAbilityEffect(DamageCalculationModifier modifier,float initialDamage,float modifiedDamage)
@@ -49,9 +49,9 @@ public class HealthBasedDamageBuffTest : BattleBasedTest
             if(_damageWasChanged)
             {
                 var result = modifiedDamage > initialDamage? "increased":"decreased";
-                testingHandler.LogMessage($"{player.pokemon.ability.abilityName} {result} the damage of " +
-                                          $"{player.pokemon.moveSet[0].type.typeEnum}" +
-                                          $" type move {player.pokemon.moveSet[0].moveName}",  TestLogType.Information);
+                testingHandler.LogMessage($"{player.Pokemon.ability.abilityName} {result} the damage of " +
+                                          $"{player.Pokemon.moveSet[0].type.typeEnum}" +
+                                          $" type move {player.Pokemon.moveSet[0].moveName}",  TestLogType.Information);
                 testingHandler.LogMessage($"{result} damage from {initialDamage} to {modifiedDamage}"
                     ,  TestLogType.Calculation);
             }
@@ -70,10 +70,10 @@ public class HealthBasedDamageBuffTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
-                                  $"/{enemy.pokemon.maxHp}",TestLogType.Health);
-        testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
-                                  $"/{player.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of enemy: {enemy.Pokemon.hp}" +
+                                  $"/{enemy.Pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of player: {player.Pokemon.hp}" +
+                                  $"/{player.Pokemon.maxHp}",TestLogType.Health);
 
         var caseExists= _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
         if (!caseExists)

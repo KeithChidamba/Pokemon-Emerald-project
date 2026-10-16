@@ -15,7 +15,8 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     [SerializeField]public EnemyAiHandler pokemonTrainerAI;
     [SerializeField]public BattleParticipantStatData statData;
 
-    public Pokemon pokemon;
+    public Pokemon Pokemon { get; private set; }
+    public PokemonStateHandler pokemonState;
     public string rawName;
     public List<BattleParticipant> currentEnemies;
     
@@ -60,7 +61,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     public Slider playerExpSlider;
     public GameObject[] singleBattleUI;
     
-    public List<Pokemon> expReceivers;
+    public List<PokemonStateHandler> expReceivers;
     [SerializeField]private bool handlingFaintEvent;
     
     public StatusEffectAnimationHandler statusAnimationHandler;
@@ -98,6 +99,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         statusHandler = new BattleParticipantStatusHandler(_container,this);
         abilityHandler = new AbilityHandler(_container,this);
         statData = new BattleParticipantStatData(this);
+        pokemonState = new PokemonStateHandler(_container);
         
         currentCoolDown = new TurnCoolDown(this, _moveUsageHandler);
         currentMoveLock = new MoveLockData { moveLocked = false,moveToLock = null};
@@ -106,7 +108,17 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         _defaultUIPosition = _uiRect.anchoredPosition; 
         statusAnimationHandler.participant = this;
     }
-
+    
+    public void RemovePokemon()
+    {
+        Pokemon = null;
+        pokemonState.pokemon = null;
+    }
+    public void ReceivePokemon(Pokemon pokemon)
+    {
+        pokemonState.pokemon = pokemon;
+        Pokemon = pokemonState.pokemon;
+    }
     public IEnumerator SetupEnemyAi(TrainerData trainerData,BattleParticipant partner = null)
     {
         pokemonTrainerAI = new EnemyAiHandler(_container,this);
@@ -128,38 +140,52 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     }
     private void GiveEVs(BattleParticipant enemy)
     {
-        foreach (var ev in pokemon.effortValues)
+        foreach (var ev in Pokemon.effortValues)
         {
-            _pokemonOperationsHandler.CalculateEvForStat(ev.stat,ev.eVAmount,enemy.pokemon);
+            _pokemonOperationsHandler.CalculateEvForStat(ev.stat,ev.eVAmount,enemy.Pokemon);
         }
     }
-    public  void AddToExpList(Pokemon pkm)
+    
+    public void AddToExpList(PokemonStateHandler state)
     {
-        if(!expReceivers.Contains(pkm))
-            expReceivers.Add(pkm);
+        if(!expReceivers.Contains(state))
+        {
+            expReceivers.Add(state);
+        }
     }
     private IEnumerator DistributeExp()
     {
-        var expFromEnemy = pokemon.CalculateExperience();
+        var expFromEnemy = Pokemon.CalculateExperience();
         
         // Remove fainted or invalid Pokémon
-        expReceivers.RemoveAll(p => p.hp <= 0);
+        expReceivers.RemoveAll(p => pokemonState.pokemon.hp <= 0);
+        
         //only player pokemon receive exp
-        expReceivers.RemoveAll(p => !_pokemonPartyHandler.Party.Contains(p));
+        var filter =  new List<PokemonStateHandler>();
+        foreach (var receiver in expReceivers)
+        {
+            if (_pokemonPartyHandler.Party.Contains(receiver.pokemon))
+            {
+                filter.Add(receiver);
+            }
+        }
+        expReceivers.Clear();
+        expReceivers.AddRange(filter);
+        
         if (expReceivers.Count < 1) yield break;
 
         // Separate holders and participants
-        var expShareHolders = new List<Pokemon>();
-        foreach (var receiverPokemon in expReceivers)
+        var expShareHolders = new List<PokemonStateHandler>();
+        foreach (var receiver in expReceivers)
         {
-            if (!receiverPokemon.hasItem) continue;
-            var expHeldItem = receiverPokemon.heldItem.GetDynamicModule<ExpModifierInfo>();
+            if (!receiver.pokemon.hasItem) continue;
+            var expHeldItem = receiver.pokemon.heldItem.GetDynamicModule<ExpModifierInfo>();
             if (expHeldItem is not null)
             {
                 var hasExpShare = expHeldItem.modifier == ExpModifier.ExpShare;
                 if (hasExpShare)
                 {
-                    expShareHolders.Add(receiverPokemon);
+                    expShareHolders.Add(receiver);
                 }
             }
         }
@@ -212,13 +238,13 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     private void CheckIfFainted()
     {
         if (!isActive) return;
-        if (pokemon.hp > 0) return;
+        if (Pokemon.hp > 0) return;
         
         if (_battleHandler.HasFaintedParticipant(this)) return;
         
-        pokemon.statusEffect = StatusEffect.None;
+        Pokemon.statusEffect = StatusEffect.None;
         _battleHandler.AddFaintedParticipant(this);
-        pokemon.DetermineFriendshipLevelChange(false, FriendshipModifier.Fainted);
+        Pokemon.DetermineFriendshipLevelChange(false, FriendshipModifier.Fainted);
     }
     public IEnumerator HandleFaintLogic()
     {
@@ -314,14 +340,14 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         _turnBasedCombatHandler.UnsubscribeFromMoveExecution(statusHandler.ConfusionCheck);
         _turnBasedCombatHandler.UnsubscribeFromMoveExecution(statusHandler.NotifyHealing);
         
-        pokemon.OnHealthChanged -= CheckIfFainted;
-        pokemon.ResetMoveData();
+        pokemonState.OnHealthChanged -= CheckIfFainted;
+        pokemonState.ResetMoveData();
     }
 
     public void ResetParticipantState()
     {
         statData.LoadActualStats();
-        statData.ResetBattleState(pokemon);
+        statData.ResetBattleState(Pokemon);
         abilityHandler.ResetState();
         isSemiInvulnerable = false;
         semiInvulnerabilityData.ResetState();
@@ -331,17 +357,18 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         
         currentCoolDown.ResetState();
         immunityNegations.Clear();
+        
         if (isPlayer)
         {
-            pokemon.pokemonDisplayName = pokemon.pokemonName;
-            pokemon.OnEvolutionSuccessful -= AddToEvolutionQueue;
-            pokemon.OnNewLevel -= statData.SaveActualStats;
-            pokemon.OnLevelUp -= ResetParticipantStateAfterLevelUp;
+            Pokemon.pokemonDisplayName = Pokemon.pokemonName;
+            pokemonState.OnEvolutionSuccessful -= AddToEvolutionQueue;
+            pokemonState.OnNewLevel -= statData.SaveActualStats;
+            pokemonState.OnLevelUp -= ResetParticipantStateAfterLevelUp;
         }
-        pokemon.OnHealthChanged -= CheckIfFainted;
-        if (pokemon.statusEffect == StatusEffect.BadlyPoison)
+        pokemonState.OnHealthChanged -= CheckIfFainted;
+        if (Pokemon.statusEffect == StatusEffect.BadlyPoison)
         {
-            pokemon.statusEffect = StatusEffect.Poison;
+            Pokemon.statusEffect = StatusEffect.Poison;
         }
     }
     private void ResetParticipantStateAfterLevelUp(Pokemon pokemonAfterLevelUp)
@@ -378,30 +405,30 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     
     private void UpdateUI()
     {
-        PokemonOperations.UpdateHealthPhase(pokemon,hpSliderImage); 
+        PokemonOperations.UpdateHealthPhase(pokemonState,hpSliderImage); 
         pokemonNameText.text = rawName;
-        pokemonLevelText.text = "Lv: " + pokemon.currentLevel;
+        pokemonLevelText.text = "Lv: " + Pokemon.currentLevel;
         if (isPlayer && !_battleHandler.isDoubleBattle)
         {
-            pokemonHealthText.text = pokemon.hp + "/" + pokemon.maxHp;
-            playerExpSlider.value = pokemon.currentExpAmount;
-            playerExpSlider.maxValue = pokemon.nextLevelExpAmount;
-            playerExpSlider.minValue = pokemon.currentLevelExpAmount;
+            pokemonHealthText.text = Pokemon.hp + "/" + Pokemon.maxHp;
+            playerExpSlider.value = Pokemon.currentExpAmount;
+            playerExpSlider.maxValue = Pokemon.nextLevelExpAmount;
+            playerExpSlider.minValue = Pokemon.currentLevelExpAmount;
         }
-        playerHpSlider.value = pokemon.hp;
-        playerHpSlider.maxValue = pokemon.maxHp;
-        if(pokemon.hp<=0) pokemon.hp = 0;
+        playerHpSlider.value = Pokemon.hp;
+        playerHpSlider.maxValue = Pokemon.maxHp;
+        if(Pokemon.hp<=0) Pokemon.hp = 0;
     }
     public void RefreshStatusEffectImage()
     {
-        if (pokemon.statusEffect == StatusEffect.None)
+        if (Pokemon.statusEffect == StatusEffect.None)
             statusImage.gameObject.SetActive(false);
         else
         {
             statusImage.gameObject.SetActive(true);
             statusImage.sprite = Resources.Load<Sprite>(
                 DirectoryHandler.GetDirectory(AssetDirectory.Status) 
-             + pokemon.statusEffect.ToString().ToLower());
+             + Pokemon.statusEffect.ToString().ToLower());
         }
     }
     private void ActivateUI(GameObject[]arr,bool on)
@@ -427,15 +454,15 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     {
         playerHpSlider.minValue = 0;
         isActive = true;
-        pokemonImage.sprite = isPlayer?pokemon.backPicture : pokemon.frontPicture;
-        rawName = isPlayer? pokemon.pokemonDisplayName :  pokemon.pokemonDisplayName.Replace("Foe ", "");
+        pokemonImage.sprite = isPlayer?Pokemon.backPicture : Pokemon.frontPicture;
+        rawName = isPlayer? Pokemon.pokemonDisplayName :  Pokemon.pokemonDisplayName.Replace("Foe ", "");
         ActivateGenderImage();
-        if (pokemon.statusEffect == StatusEffect.BadlyPoison)
+        if (Pokemon.statusEffect == StatusEffect.BadlyPoison)
         {
-            pokemon.statusEffect = StatusEffect.Poison;
+            Pokemon.statusEffect = StatusEffect.Poison;
         }
         
-        _moveUsageHandler.ApplyStatusToVictim(this, pokemon.statusEffect);
+        _moveUsageHandler.ApplyStatusToVictim(this, Pokemon.statusEffect);
         
         if (initialCall)
         {
@@ -450,23 +477,23 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         ActivateUI(singleBattleUI, !_battleHandler.isDoubleBattle);
         
         //these are reset each time participant is reset
-        pokemon.OnHealthChanged += CheckIfFainted;
+        pokemonState.OnHealthChanged += CheckIfFainted;
         if (isPlayer)
         {
-            pokemon.OnEvolutionSuccessful += AddToEvolutionQueue;
-            pokemon.OnLevelUp +=  ResetParticipantStateAfterLevelUp;
-            pokemon.OnNewLevel += statData.SaveActualStats;
+            pokemonState.OnEvolutionSuccessful += AddToEvolutionQueue;
+            pokemonState.OnLevelUp +=  ResetParticipantStateAfterLevelUp;
+            pokemonState.OnNewLevel += statData.SaveActualStats;
         }
     }
 
     private void ActivateGenderImage()
     {
         pokemonGenderImage.gameObject.SetActive(true);
-        if(pokemon.hasGender)
+        if(Pokemon.hasGender)
         {
             pokemonGenderImage.sprite = Resources.Load<Sprite>(
                 DirectoryHandler.GetDirectory(AssetDirectory.UI)
-                + pokemon.gender.ToString().ToLower());
+                + Pokemon.gender.ToString().ToLower());
         }
         else
         {

@@ -22,6 +22,7 @@ public class Evolution : ScriptableObject
     public Sprite partyFrame1;
     public Sprite partyFrame2;
     public Sprite battleIntroFrame;
+    
     [FormerlySerializedAs("BaseHP")] public float baseHp;
     [FormerlySerializedAs("BaseAttack")] public float baseAttack;
     [FormerlySerializedAs("BaseDefense")] public float baseDefense;
@@ -29,6 +30,7 @@ public class Evolution : ScriptableObject
     [FormerlySerializedAs("BaseSP_DEF")] public float baseSpecialDefense;
     [FormerlySerializedAs("Basespeed")] public float baseSpeed;
     [FormerlySerializedAs("EVs")] public List<EvYield> effortValues=new();
+    
     public bool requiresFriendshipEvolution;
     public bool requiresEvolutionStone;
     public FriendShipEvolutionData friendshipEvolutionRequirement;

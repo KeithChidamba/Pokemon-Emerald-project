@@ -19,22 +19,24 @@ public class Pokemon : ScriptableObject
     public string nickName;
     public string pokemonDisplayName;
     
-    public CaptureInformation captureInformation;
+    [HideInInspector]public CaptureInformation captureInformation;
+    
     public long pokemonID;
     public uint personalityValue;
     public bool isShiny;
     public Gender gender;
     public float ratioFemale;
-    public Nature nature;
+    
     [FormerlySerializedAs("has_gender")] public bool hasGender = true;
-    [FormerlySerializedAs("HP")] public float hp;
-    [FormerlySerializedAs("max_HP")] public float maxHp;
     [FormerlySerializedAs("BaseHP")] public float baseHp;
     [FormerlySerializedAs("BaseAttack")] public float baseAttack;
     [FormerlySerializedAs("BaseDefense")] public float baseDefense;
     [FormerlySerializedAs("BaseSP_ATK")] public float baseSpecialAttack;
     [FormerlySerializedAs("BaseSP_DEF")] public float baseSpecialDefense;
     [FormerlySerializedAs("Basespeed")] public float baseSpeed;
+    
+    [FormerlySerializedAs("HP")] public float hp;
+    [FormerlySerializedAs("max_HP")] public float maxHp;
     public float attack;
     public float defense;
     public float specialAttack;
@@ -53,169 +55,61 @@ public class Pokemon : ScriptableObject
     public float specialDefenseEv;
     public float speedEv;
     [FormerlySerializedAs("EVs")] public List<EvYield> effortValues=new();
-    public float accuracy = 100;
-    public float evasion = 100;
-    public float critChance = 6.25f;
+    
+    [HideInInspector]public float accuracy = 100;
+    [HideInInspector]public float evasion = 100;
+    [HideInInspector]public float critChance = 6.25f;
+    
     [FormerlySerializedAs("CatchRate")] public float catchRate;
+    
     public int currentLevel = 1;
     public int currentExpAmount;
     public int currentLevelExpAmount;
     public int nextLevelExpAmount;
     [FormerlySerializedAs("EXPGroup")] public ExpGroup expGroup;
     [FormerlySerializedAs("exp_yield")] public int expYield;
-    public bool canEvolve = true;
+    
     public int friendshipLevel;
     public bool hasTrainer;
     
     public List<PokemonTypeData> types = new();
     public StatusEffect statusEffect;
     public List<StatChangeData> statModifiers = new();
+    
     [FormerlySerializedAs("evo_line")] public int[] evolutionLineLevels;
     public int currentEvolutionLineIndex;
     public FriendShipEvolutionData friendshipEvolutionRequirement;
-    [FormerlySerializedAs("RequiresEvolutionStone")] public bool requiresEvolutionStone = false;
+    public bool requiresFriendshipEvolution;
+    [FormerlySerializedAs("RequiresEvolutionStone")] public bool requiresEvolutionStone;
     [FormerlySerializedAs("EvolutionStoneName")] public EvolutionStone evolutionStone;
-    public AbilityName[] abilities;
-    [FormerlySerializedAs("split_evolution")] public bool splitEvolution = false;
-    public bool requiresFriendshipEvolution = false;
-    public LearnSetMove[] learnSet;
+    [FormerlySerializedAs("split_evolution")] public bool splitEvolution;
+    public List<Evolution> evolutions = new();
     
+    public LearnSetMove[] learnSet;
     public List<MoveName> learnableTms = new();
     public List<MoveName> learnableHms = new();
     
     public List<Move> moveSet=new();
+    public AbilityName[] abilities;
     public Ability ability;
-    public List<Evolution> evolutions = new();
+    public Nature nature;
+    
     public Item heldItem;
     public bool hasItem;
+    
     [FormerlySerializedAs("front_picture")] public Sprite frontPicture;
     [FormerlySerializedAs("back_picture")] public Sprite backPicture;
     public Sprite partyFrame1;
     public Sprite partyFrame2;
     public Sprite battleIntroFrame;
-    public string pokeballName;
-    public int healthPhase;
-
-    /// <summary>
-    /// [Testing] Notify when exp is gained
-    /// </summary>
-    public event Action<int> OnExpGained;
-    public event Action OnNewLevel;
-    public event Action<Pokemon> OnLevelUp;
-    public event Action<Pokemon> OnExpGainComplete;
-    public event Action OnHealthChanged;
-    public event Action<int> OnEvolutionSuccessful;
-    //data conversion when json to obj
-    public string abilityName;
-    public string natureName;
-    public List<string> evolutionNames=new();
-    public List<string> typeNames = new();
-    public List<MoveSaveData> moveData=new();
     
-    //dependencies
-    private DialogueHandler _dialogueHandler;
-    private BattleHandler _battleHandler;
-    private PokemonPartyHandler _pokemonPartyHandler;
-    private PokemonOperations _pokemonOperationsHandler;
+    [HideInInspector]public string pokeballName;
     
-    public void SaveUnserializableData()
-    {
-        abilityName = NameDB.GetAbility(ability.abilityName);
-        natureName = nature.natureName;
-        hasItem = heldItem is not null;
-        moveData.Clear();
-        typeNames.Clear();
-        evolutionNames.Clear();
-
-        foreach (var move in moveSet)
-        {
-            moveData.Add(new MoveSaveData(move.moveName.ToLower(), move.powerpoints, move.maxPowerpoints));
-        }
-        foreach (var type in types) typeNames.Add(type.GetTypeName.ToLower());
-        
-        foreach (var evo in evolutions) evolutionNames.Add(evo.evolutionName);
-    }
-    public void LoadDataAndDependencies(ServiceContainer serviceContainer)
-    {//gives values to attributes that cant be deserialized, using saved values
-        frontPicture = AssetHealthChecks.GetValidImage( DirectoryHandler.GetDirectory
-            (AssetDirectory.PokemonImage),pokemonName + (isShiny?"_s":"_f"));
-        backPicture =AssetHealthChecks.GetValidImage( DirectoryHandler.GetDirectory
-            (AssetDirectory.PokemonImage),pokemonName+ (isShiny?"_sb":"_b"));
-        partyFrame1=AssetHealthChecks.GetValidImage( DirectoryHandler.GetDirectory
-            (AssetDirectory.PokemonPartyImage),pokemonName+"_1");
-        partyFrame2=AssetHealthChecks.GetValidImage( DirectoryHandler.GetDirectory
-            (AssetDirectory.PokemonPartyImage),pokemonName+"_2");
-        battleIntroFrame=AssetHealthChecks.GetValidImage( DirectoryHandler.GetDirectory
-            (AssetDirectory.PokemonImage),pokemonName+ (isShiny?"_s_intro":"_intro"));
-        
-        nature = Resources.Load<Nature>(DirectoryHandler.GetDirectory
-            (AssetDirectory.Natures) + natureName.ToLower());
-        ability = Resources.Load<Ability>(DirectoryHandler.GetDirectory
-            (AssetDirectory.Abilities) + abilityName.ToLower());
-        types.Clear();
-        evolutions.Clear();
-        
-        LoadMovesFromSource(moveData);
-        
-        foreach (var typeName in typeNames)
-        {
-            types.Add(Resources.Load<PokemonTypeData>(DirectoryHandler.GetDirectory
-                (AssetDirectory.Types) + typeName));
-        }
-        foreach (var evolutionName in evolutionNames)
-        {
-            var pokemonDirectory = DirectoryHandler.GetDirectory
-                (AssetDirectory.Pokemon);
-            evolutions.Add(Resources.Load<Evolution>($"{pokemonDirectory}{basePokemonName}/{evolutionName}"));
-        }
-        for (int i = 0; i < types.Count; i++)
-        {
-            types[i].typeImage = Resources.Load<Sprite>(DirectoryHandler.GetDirectory
-                (AssetDirectory.UI) + typeNames[i]);
-        }
-
-        Inject(serviceContainer);
-
-        _battleHandler.OnBattleEnd += ClearEvents;
-    }
-
-    public void Inject(ServiceContainer serviceContainer)
-    {
-        _dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
-        _battleHandler = serviceContainer.Resolve<BattleHandler>(); 
-        _pokemonPartyHandler = serviceContainer.Resolve<PokemonPartyHandler>();
-        _pokemonOperationsHandler = serviceContainer.Resolve<PokemonOperations>();
-    }
-    /// <summary>
-    /// Resets move data in case of in-battle modification
-    /// </summary>
-    public void ResetMoveData()
-    {
-        List<MoveSaveData> uniqueMoveData = new ();
-        moveSet.ForEach(move=>uniqueMoveData.Add(
-            new (move.moveName,move.powerpoints,move.maxPowerpoints)
-            ));
-        LoadMovesFromSource(uniqueMoveData);
-    }
-    private void LoadMovesFromSource(List<MoveSaveData> movesetTemplate)
-    {
-        moveSet.Clear();
-        foreach (var move in movesetTemplate)
-        {
-            var moveCopy = InstanceFactory.CreateMove(Resources.Load<Move>(
-                DirectoryHandler.GetDirectory(AssetDirectory.Moves) + move.moveName));
-            
-            moveCopy.powerpoints = move.powerPoints;
-            moveCopy.maxPowerpoints = move.maxPowerpoints;
-            moveSet.Add(moveCopy);
-        }
-    }
     public void RemoveHeldItem()
     {
         heldItem = null;
         hasItem = false;
     }
-
     public void GiveItem(Item itemToGive)
     {
         hasItem = true;
@@ -226,10 +120,10 @@ public class Pokemon : ScriptableObject
     {
         return types.Any(type=>type.typeEnum == typeName);
     }
-
+    
     private int ApplyFriendshipModifier(int currentIncrease)
     {
-        float modifier = 0;
+        float modifier = 1;
         
         if (hasItem)
         {
@@ -295,63 +189,6 @@ public class Pokemon : ScriptableObject
         }
     }
     
-    private void CheckEvolutionRequirements(int evoIndex)
-    {
-        var isPlayerPokemon = _pokemonPartyHandler.Party.Contains(this);
-        
-        if (requiresFriendshipEvolution)
-        {
-            if (friendshipLevel >= friendshipEvolutionRequirement.friendshipRequirement)
-            {
-                SetupEvolution();
-            } 
-            return;
-        } 
-        
-//regular evolution
-        if (currentEvolutionLineIndex >= evolutionLineLevels.Length)
-        {
-            return;//max evolution
-        }
-        if (currentLevel>=evolutionLineLevels[currentEvolutionLineIndex])
-        {
-            SetupEvolution();
-        }
-        return;
-        void SetupEvolution()
-        {
-            if (isPlayerPokemon && _battleHandler.BattleInProgress)
-            {
-                OnEvolutionSuccessful?.Invoke(currentEvolutionLineIndex+evoIndex);
-            }
-            else
-            {
-                Evolve(evolutions[currentEvolutionLineIndex+evoIndex]);
-            }
-        }
-    }
-    private void DetermineSplitEvolution()
-    {
-        int evolutionValue = (int)personalityValue % 10;
-        if (evolutionValue>=0 & evolutionValue<5)
-            CheckEvolutionRequirements(0);
-        else if (evolutionValue>4 & evolutionValue<10)
-            CheckEvolutionRequirements(2);
-    }
-
-    public IEnumerator ReceiveExperienceOutsideBattle(int amount,bool displayMessage)
-    {
-        if (currentLevel >= 100) yield break;
-        int remainingExp = amount;
-        while (remainingExp > 0 && currentLevel < 100)
-        {
-            int expToNextLevel = nextLevelExpAmount - currentExpAmount;
-            int expThisLoop = Mathf.Min(remainingExp, expToNextLevel);
-            currentExpAmount += expThisLoop;
-            remainingExp -= expThisLoop;
-            yield return LevelUpAtThreshold(displayMessage,false,false);
-        }
-    }
     public float AccountForExpGainModifier()
     {
         if (hasItem)
@@ -368,110 +205,15 @@ public class Pokemon : ScriptableObject
         }
         return 1f;
     }
-    /// <summary>
-    /// Use to give a pokemon exp from battle
-    /// </summary>
-    /// <returns></returns>
-    public IEnumerator ReceiveExperienceAndDisplay(int amount)
-    {
-        if (currentLevel >= 100) yield break;
-        
-        int remainingExp = Mathf.FloorToInt(AccountForExpGainModifier() * amount);
-        
-        OnExpGained?.Invoke(remainingExp);
-        
-        _battleHandler.StartExpEvent(this);
-        
-        while (remainingExp > 0 && currentLevel < 100)
-        {
-            int expToNextLevel = nextLevelExpAmount - currentExpAmount;
-            
-            // How much EXP should we add this loop? Either all remaining or just enough to hit the next level.
-            int expThisLoop = Mathf.Min(remainingExp, expToNextLevel);
-            float displayExp = currentExpAmount;
-            var expAfterChange = currentExpAmount + expThisLoop;
-            
-            // Animate EXP bar filling
-            var increaseDeltaMultiplier = expThisLoop / 100f > 3? expThisLoop / 100f: 3;
-            SoundManager.Play(SfxId.ExpGain);
-            while (displayExp < expAfterChange)
-            {
-                displayExp = Mathf.MoveTowards(displayExp,expAfterChange , 
-                    30f * increaseDeltaMultiplier * Time.deltaTime);
-                currentExpAmount = (int)Mathf.Floor(displayExp);
-                yield return null;
-            }
-            // Deduct what we just gave
-            remainingExp -= expThisLoop;
-            // If we reached or passed the next level threshold > level up
-            
-            yield return LevelUpAtThreshold(true,true);
-        }
-        _dialogueHandler.DisplayBattleInfo($"{pokemonDisplayName} gained {amount} EXP points");
-        OnExpGainComplete?.Invoke(this);
-    }
-    IEnumerator LevelUpAtThreshold(bool displayMessage,bool increaseFriendship,bool playSound=true)
-    {
-        if (currentExpAmount >= nextLevelExpAmount && currentLevel < 100)
-        {
-            if (playSound)
-            {
-                SoundManager.Play(JingleId.LevelUp);
-            }
-            LevelUp(increaseFriendship);
-            
-            if(displayMessage)_dialogueHandler.DisplayBattleInfo(pokemonDisplayName+" grew to lv"+currentLevel);
-               
-            yield return _dialogueHandler.AwaitAllDialogue();
-            
-            yield return _pokemonOperationsHandler.WaitForNewMoveCheck(this);
-   
-            nextLevelExpAmount = _pokemonOperationsHandler.CalculateExpForNextLevel(currentLevel, expGroup);
-        }
-    }
+    
     public int CalculateExperience()
     {
         var trainerBonus = hasTrainer? 1.5f : 1f;
         var baseExp = (expYield * currentLevel) / 7f;
         return (int)math.trunc(baseExp * trainerBonus);
     }
-    public void Evolve(Evolution evo)
-    {
-        var previousName = pokemonName;
 
-        pokemonName = evo.evolutionName;
-        PokemonOperations.UpdatePokemonDisplayName(this,previousName);
-        
-        effortValues=evo.effortValues;
-        types = evo.types;
-        ability = evo.ability;
-        
-        //edit this
-        learnableTms = new List<MoveName>(evo.learnableTms);
-        learnableHms = new List<MoveName>(evo.learnableHms);
-        
-        learnSet = (LearnSetMove[])evo.learnSet.Clone();
-        frontPicture = evo.frontPicture;
-        backPicture = evo.backPicture;
-        partyFrame1 = evo.partyFrame1;
-        partyFrame2 = evo.partyFrame2;
-        battleIntroFrame = evo.battleIntroFrame;
-        expGroup = evo.expGroup;
-        expYield = evo.expYield;
-        catchRate = evo.catchRate;
-        baseHp=evo.baseHp;
-        baseAttack=evo.baseAttack;
-        baseDefense=evo.baseDefense;
-        baseSpecialAttack=evo.baseSpecialAttack;
-        baseSpecialDefense=evo.baseSpecialDefense;
-        baseSpeed = evo.baseSpeed;
-        requiresFriendshipEvolution = evo.requiresFriendshipEvolution;
-        requiresEvolutionStone = evo.requiresEvolutionStone;
-        friendshipEvolutionRequirement = evo.friendshipEvolutionRequirement;
-        currentEvolutionLineIndex++;
-    }
-
-    void IncreaseStats()
+    public void IncreaseStats()
     {
         attack = DetermineStatIncrease(baseAttack,attackIv,attackEv,Stat.Attack);
         defense = DetermineStatIncrease(baseDefense,defenseIv,defenseEv,Stat.Defense);
@@ -501,40 +243,39 @@ public class Pokemon : ScriptableObject
         float bracket3 = currentLevel + 10f;
         return math.floor(bracket1 * bracket2 + bracket3);
     }
-    private void LevelUp(bool increaseFriendship)
-    {
-        OnLevelUp?.Invoke(this);
-        if(increaseFriendship)
-        {
-            DetermineFriendshipLevelChange(true, FriendshipModifier.LevelUp);
-        }
-        currentLevel++;
-        currentLevelExpAmount = _pokemonOperationsHandler.CalculateExpForLevel(currentLevel,expGroup);
-        nextLevelExpAmount = _pokemonOperationsHandler.CalculateExpForNextLevel(currentLevel,expGroup);
-        IncreaseStats();
-        
-        if (!requiresEvolutionStone)
-        {
-            if (canEvolve)
-            {
-                if(splitEvolution)
-                    DetermineSplitEvolution();
-                else
-                    CheckEvolutionRequirements(0);
-            }
-        }
-        OnNewLevel?.Invoke();
-    }
 
-    public void NotifyHealthChange()
+    public void Evolve(Evolution evo)
     {
-        OnHealthChanged?.Invoke();
-    }
-    private void ClearEvents()
-    {
-        OnLevelUp = null;
-        OnNewLevel = null;
-        OnEvolutionSuccessful = null;
-        OnExpGained = null;
+        var previousName = pokemonName;
+
+        pokemonName = evo.evolutionName;
+        PokemonOperations.UpdatePokemonDisplayName(this,previousName);
+        
+        effortValues=evo.effortValues;
+        types = evo.types;
+        ability = evo.ability;
+        
+        learnableTms = new List<MoveName>(evo.learnableTms);
+        learnableHms = new List<MoveName>(evo.learnableHms);
+        
+        learnSet = (LearnSetMove[])evo.learnSet.Clone();
+        frontPicture = evo.frontPicture;
+        backPicture = evo.backPicture;
+        partyFrame1 = evo.partyFrame1;
+        partyFrame2 = evo.partyFrame2;
+        battleIntroFrame = evo.battleIntroFrame;
+        expGroup = evo.expGroup;
+        expYield = evo.expYield;
+        catchRate = evo.catchRate;
+        baseHp=evo.baseHp;
+        baseAttack=evo.baseAttack;
+        baseDefense=evo.baseDefense;
+        baseSpecialAttack=evo.baseSpecialAttack;
+        baseSpecialDefense=evo.baseSpecialDefense;
+        baseSpeed = evo.baseSpeed;
+        requiresFriendshipEvolution = evo.requiresFriendshipEvolution;
+        requiresEvolutionStone = evo.requiresEvolutionStone;
+        friendshipEvolutionRequirement = evo.friendshipEvolutionRequirement;
+        currentEvolutionLineIndex++;
     }
 }

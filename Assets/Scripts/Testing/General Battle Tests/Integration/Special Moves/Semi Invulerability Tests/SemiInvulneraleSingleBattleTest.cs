@@ -59,14 +59,14 @@ public class SemiInvulnerableSingleBattleTest : BattleBasedTest
     {
         //To make test case reliable
         var currentParticipant = _battleHandler.GetCurrentParticipant();
-        currentParticipant.pokemon.moveSet[0].priority = 100;
+        currentParticipant.Pokemon.moveSet[0].priority = 100;
         _sequencer.UseMove();
     }
     private void AllowEnemyToCounter()
     {
         //give enemy a move that can negate 
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        var semiData = player.pokemon.moveSet[0].GetDynamicModule<SemiInvulnerabilityInfo>().semiInvulnerabilities;
+        var semiData = player.Pokemon.moveSet[0].GetDynamicModule<SemiInvulnerabilityInfo>().semiInvulnerabilities;
         var movesThatCounter = semiData.Select(data => data.moveName).ToList();
         
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
@@ -74,9 +74,9 @@ public class SemiInvulnerableSingleBattleTest : BattleBasedTest
         enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Natural);
         
         //enemy will use tackle but disguised as a counter viable move
-        enemy.pokemon.moveSet[0].moveName = NameDB.GetMoveName(movesThatCounter[0]);
-        enemy.pokemon.moveSet[0].isSureHit = true;
-        testingHandler.LogMessage($"changed enemy move to {enemy.pokemon.moveSet[0].moveName}",TestLogType.Information);
+        enemy.Pokemon.moveSet[0].moveName = NameDB.GetMoveName(movesThatCounter[0]);
+        enemy.Pokemon.moveSet[0].isSureHit = true;
+        testingHandler.LogMessage($"changed enemy move to {enemy.Pokemon.moveSet[0].moveName}",TestLogType.Information);
         AttackFirst();
     }
     
@@ -106,10 +106,10 @@ public class SemiInvulnerableSingleBattleTest : BattleBasedTest
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
       
-        _testCaseHandler.AddTestCase(0,"Player has full health",() => player.pokemon.hp >= player.pokemon.maxHp);
-        _testCaseHandler.AddTestCase(2,"Player has to be damaged",() => player.pokemon.hp < player.pokemon.maxHp);
-        _testCaseHandler.AddTestCase(5,"Player has full health",() => player.pokemon.hp >= player.pokemon.maxHp);
-        _testCaseHandler.AddTestCase(7,"Player has to be damaged",() => player.pokemon.hp < player.pokemon.maxHp);
+        _testCaseHandler.AddTestCase(0,"Player has full health",() => player.Pokemon.hp >= player.Pokemon.maxHp);
+        _testCaseHandler.AddTestCase(2,"Player has to be damaged",() => player.Pokemon.hp < player.Pokemon.maxHp);
+        _testCaseHandler.AddTestCase(5,"Player has full health",() => player.Pokemon.hp >= player.Pokemon.maxHp);
+        _testCaseHandler.AddTestCase(7,"Player has to be damaged",() => player.Pokemon.hp < player.Pokemon.maxHp);
 
         yield return HandleBattleState();
         onTestResult.Invoke();
@@ -120,10 +120,10 @@ public class SemiInvulnerableSingleBattleTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
-                                  $"/{enemy.pokemon.maxHp}",TestLogType.Health);
-        testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
-                                  $"/{player.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of enemy: {enemy.Pokemon.hp}" +
+                                  $"/{enemy.Pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of player: {player.Pokemon.hp}" +
+                                  $"/{player.Pokemon.maxHp}",TestLogType.Health);
         
         var caseExists = _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
         if (!caseExists)
@@ -133,8 +133,8 @@ public class SemiInvulnerableSingleBattleTest : BattleBasedTest
         void CheckTestEnd()
         {
             //make test more reliable,prevent conflicting outcomes
-            enemy.pokemon.hp = enemy.pokemon.maxHp;
-            player.pokemon.hp = player.pokemon.maxHp;
+            enemy.Pokemon.hp = enemy.Pokemon.maxHp;
+            player.Pokemon.hp = player.Pokemon.maxHp;
             if (_sequencer.SequenceComplete())
             {
                 _moveUsageHandler.OnDamageModified -= CheckForInvulnerableDamageEffect;

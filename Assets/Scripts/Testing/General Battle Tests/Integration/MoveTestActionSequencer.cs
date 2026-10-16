@@ -25,7 +25,7 @@ public class MoveTestActionSequencer : TestActionSequencer
     public void UseMove(int currentMoveUsageIndex = 0,bool isSureHit=true)
     {
         var playerParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        var move = playerParticipant.pokemon.moveSet[currentMoveUsageIndex];
+        var move = playerParticipant.Pokemon.moveSet[currentMoveUsageIndex];
         move.isSureHit = isSureHit;
         _battleHandler.UseMove(move,playerParticipant, BattleParticipantKey.Enemy);
     }
@@ -33,7 +33,7 @@ public class MoveTestActionSequencer : TestActionSequencer
         ,BattleParticipantKey enemyKey)
     {
         var playerParticipant = _battleHandler.GetParticipant(playerKey);
-        var move = playerParticipant.pokemon.moveSet[currentMoveUsageIndex];
+        var move = playerParticipant.Pokemon.moveSet[currentMoveUsageIndex];
         move.isSureHit = true;
         _battleHandler.UseMove(move,playerParticipant, enemyKey);
     }

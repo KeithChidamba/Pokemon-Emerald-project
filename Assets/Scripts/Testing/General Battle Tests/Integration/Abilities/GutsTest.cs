@@ -34,10 +34,10 @@ public class GutsTest : BattleBasedTest
         void UseMove()
         {
             //toxic
-            enemy.pokemon.moveSet[0].priority = 100;
-            enemy.pokemon.moveSet[0].statusChance = 100;
-            enemy.pokemon.moveSet[0].isSureHit = true;
-            _battleHandler.UseMove(enemy.pokemon.moveSet[0], enemy, BattleParticipantKey.Player);
+            enemy.Pokemon.moveSet[0].priority = 100;
+            enemy.Pokemon.moveSet[0].statusChance = 100;
+            enemy.Pokemon.moveSet[0].isSureHit = true;
+            _battleHandler.UseMove(enemy.Pokemon.moveSet[0], enemy, BattleParticipantKey.Player);
         }
     }
    
@@ -48,9 +48,9 @@ public class GutsTest : BattleBasedTest
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
             new("Player must be badly poisoned",
-                ()=>player.pokemon.statusEffect == StatusEffect.BadlyPoison),
+                ()=>player.Pokemon.statusEffect == StatusEffect.BadlyPoison),
             new("Player must have status and attack buff from guts",
-                ()=>player.pokemon.attack > player.statData.attack),
+                ()=>player.Pokemon.attack > player.statData.attack),
         });
         
         yield return HandleBattleState();
@@ -61,8 +61,8 @@ public class GutsTest : BattleBasedTest
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
 
-        testingHandler.LogMessage($"Status effect on player: { player.pokemon.statusEffect}",TestLogType.Information);
-        testingHandler.LogMessage($"Attack on player: { player.pokemon.attack}/{player.statData.attack}",TestLogType.Information);
+        testingHandler.LogMessage($"Status effect on player: { player.Pokemon.statusEffect}",TestLogType.Information);
+        testingHandler.LogMessage($"Attack on player: { player.Pokemon.attack}/{player.statData.attack}",TestLogType.Information);
         
         _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
         return;

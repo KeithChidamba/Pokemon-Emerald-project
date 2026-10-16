@@ -68,7 +68,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         var enemyTeam = _battleHandler.GetTeam(attacker.currentEnemies[0].participantKey);
         foreach (var barrier in enemyTeam.barriers)
         {
-            _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" shattered "+barrier.barrierName);
+            _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName+" shattered "+barrier.barrierName);
         }
         enemyTeam.barriers.Clear();
         
@@ -82,7 +82,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         var validParticipants = _battleHandler.GetValidParticipants();
         foreach (var participant in validParticipants)
         {
-            participant.pokemon.statModifiers.Clear();
+            participant.Pokemon.statModifiers.Clear();
             participant.statData.LoadActualStats(true);
         }
         yield return null;
@@ -101,7 +101,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     {
         if (attacker.currentCoolDown.isExecutionTurn)
         {
-            _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" unleashed the power");
+            _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName+" unleashed the power");
             var storedDamage = attacker.currentCoolDown.turnData.move.moveDamage;
             if (storedDamage > 0)
             {
@@ -133,7 +133,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         _moveUsageHandler.DisplaySpecificMoveDamage(currentTurn.move,victim,damage);
         yield return _moveUsageHandler.AwaitDamageDisplay();
         
-        _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName +" was hurt by the recoil");
+        _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName +" was hurt by the recoil");
         _moveUsageHandler.DisplaySpecialDamage(attacker,predefinedDamage:recoilDamage);
         yield return _moveUsageHandler.AwaitDamageDisplay();
     }
@@ -172,12 +172,12 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
 
     private IEnumerator Endeavor(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
-        if (victim.pokemon.hp < attacker.pokemon.hp)
+        if (victim.Pokemon.hp < attacker.Pokemon.hp)
         {
             _dialogueHandler.DisplayBattleInfo("but it failed!");
             yield break;
         }
-        var damage = victim.pokemon.hp - attacker.pokemon.hp;
+        var damage = victim.Pokemon.hp - attacker.Pokemon.hp;
         _moveUsageHandler.DisplaySpecificMoveDamage(currentTurn.move,victim,damage);
     }
 
@@ -202,7 +202,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         
         var damage = _moveUsageHandler.CalculateMoveDamage(currentTurn.move,attacker, victim);
       
-        if (victim.pokemon.hp - damage <= 0)
+        if (victim.Pokemon.hp - damage <= 0)
         {
             _battleHandler.OnFaintSequenceComplete += CancelOnBattleEnd;
             void CancelOnBattleEnd(BattleParticipant faintedParticipant)
@@ -239,7 +239,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             yield return _moveUsageHandler.ExecuteSequentialStatChange(buffData,false);
         }
         
-        var statChangeMessage = _battleOperationsHandler.GetStatModResultMessage(true,attacker.pokemon,stats);
+        var statChangeMessage = _battleOperationsHandler.GetStatModResultMessage(true,attacker.Pokemon,stats);
         _dialogueHandler.DisplayBattleInfo(statChangeMessage);
         yield return _battleVisualsHandler.SelectStatChangeVisuals(Stat.Multi,true,attacker);
         yield return _dialogueHandler.AwaitAllDialogue();
@@ -252,7 +252,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             (32, 200f), (16, 150f), (8, 100f), (4, 80f), (2, 40f)
         };
 
-        var currentHpRatio = attacker.pokemon.hp / attacker.pokemon.maxHp;
+        var currentHpRatio = attacker.Pokemon.hp / attacker.Pokemon.maxHp;
 
         foreach (var phase in damagePerLevel)
         {
@@ -269,7 +269,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     private IEnumerator FalseSwipe(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         var damage = _moveUsageHandler.CalculateMoveDamage(currentTurn.move,attacker, victim);
-        damage = Mathf.Min(damage, victim.pokemon.hp - 1);
+        damage = Mathf.Min(damage, victim.Pokemon.hp - 1);
         damage = Mathf.Max(damage, 0);
         _moveUsageHandler.DisplaySpecificMoveDamage(currentTurn.move,victim,damage);
         yield return null;
@@ -277,13 +277,13 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
 
     private IEnumerator BellyDrum(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
-        if (attacker.pokemon.hp < 2)
+        if (attacker.Pokemon.hp < 2)
         {
             _dialogueHandler.DisplayBattleInfo("But it failed!");
             yield break;
         }
         
-        var selfDamage = Mathf.FloorToInt(attacker.pokemon.maxHp / 2f);
+        var selfDamage = Mathf.FloorToInt(attacker.Pokemon.maxHp / 2f);
         _moveUsageHandler.DisplaySpecialDamage(attacker,selfDamage);
         
         var buffData = new StatChangeTransitData(attacker, Stat.Attack, true, 6);
@@ -293,12 +293,12 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     private IEnumerator Covet(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
         _moveUsageHandler.DisplayMoveDamage(currentTurn.move,attacker,victim);
-        if (victim.pokemon.hasItem && !attacker.pokemon.hasItem)
+        if (victim.Pokemon.hasItem && !attacker.Pokemon.hasItem)
         {
-            if (victim.pokemon.heldItem.itemType == ItemType.Berry)
+            if (victim.Pokemon.heldItem.itemType == ItemType.Berry)
             {
-                attacker.pokemon.GiveItem(InstanceFactory.CreateItem(victim.pokemon.heldItem));
-                victim.pokemon.RemoveHeldItem();
+                attacker.Pokemon.GiveItem(InstanceFactory.CreateItem(victim.Pokemon.heldItem));
+                victim.Pokemon.RemoveHeldItem();
             }
         }
         yield return null;
@@ -336,7 +336,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             _dialogueHandler.DisplayBattleInfo("but it failed!");
             yield break;
         }
-        if (attacker.pokemon.currentLevel < victim.pokemon.currentLevel)
+        if (attacker.Pokemon.currentLevel < victim.Pokemon.currentLevel)
         {
             _dialogueHandler.DisplayBattleInfo("but it failed!");
             yield break;
@@ -399,15 +399,15 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     }
     private IEnumerator Rest(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
-        var healthGain = attacker.pokemon.maxHp - attacker.pokemon.hp;
+        var healthGain = attacker.Pokemon.maxHp - attacker.Pokemon.hp;
         if (healthGain <= 0)
         {
             _dialogueHandler.DisplayBattleInfo("but it failed!");
             yield break;
         }
-        _dialogueHandler.DisplayBattleInfo(attacker.pokemon.pokemonDisplayName+" fell asleep!");
+        _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName+" fell asleep!");
         yield return new WaitForSeconds(0.25f);
-        _moveUsageHandler.HealthGainDisplay(healthGain,healthGainer:attacker);
+        _moveUsageHandler.HealthGainDisplay(healthGain,attacker.pokemonState);
         attacker.statusHandler.RemoveStatusEffect(true);
         yield return _moveUsageHandler.AwaitHealthGainDisplay();
         _moveUsageHandler.ApplyStatusToVictim(attacker, StatusEffect.Sleep, 2);
@@ -418,7 +418,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     {        
         if (!victim.canBeDamaged)
         { 
-            _dialogueHandler.DisplayBattleInfo(victim.pokemon.pokemonDisplayName+" protected itself");
+            _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName+" protected itself");
             yield break;
         }
         var currentWeather = _turnBasedCombatHandler.CurrentWeather;

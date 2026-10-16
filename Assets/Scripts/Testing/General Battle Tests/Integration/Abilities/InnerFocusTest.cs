@@ -28,9 +28,9 @@ public class InnerFocusTest : BattleBasedTest
     private void TryFlinch()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        player.pokemon.moveSet[0].priority = 100;
+        player.Pokemon.moveSet[0].priority = 100;
         //100% flinch rate but should fail because of enemy's ability
-        player.pokemon.moveSet[0].statusChance = 100;
+        player.Pokemon.moveSet[0].statusChance = 100;
         _sequencer.UseMove();//bite
         
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
@@ -40,8 +40,8 @@ public class InnerFocusTest : BattleBasedTest
         void UseMove()
         {
             //tackle
-            enemy.pokemon.moveSet[0].isSureHit = true;
-            _battleHandler.UseMove(enemy.pokemon.moveSet[0], enemy, BattleParticipantKey.Player);
+            enemy.Pokemon.moveSet[0].isSureHit = true;
+            _battleHandler.UseMove(enemy.Pokemon.moveSet[0], enemy, BattleParticipantKey.Player);
         }
         
     }
@@ -51,7 +51,7 @@ public class InnerFocusTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         
         _testCaseHandler.AddTestCase("Player must be attacked because enemy can't be flinched",
-            () => player.pokemon.hp < player.pokemon.maxHp
+            () => player.Pokemon.hp < player.Pokemon.maxHp
                   && !enemy.canBeFlinched);
        
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
@@ -59,7 +59,7 @@ public class InnerFocusTest : BattleBasedTest
             new("enemy can't be flinched",
                 ()=>!enemy.canBeFlinched),
             new("Player must be attacked because enemy can't be flinched",
-                ()=>player.pokemon.hp < player.pokemon.maxHp)
+                ()=>player.Pokemon.hp < player.Pokemon.maxHp)
         });
         
         yield return HandleBattleState();
@@ -71,10 +71,10 @@ public class InnerFocusTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
-                                  $"/{enemy.pokemon.maxHp}",TestLogType.Health);
-        testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
-                                  $"/{player.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of enemy: {enemy.Pokemon.hp}" +
+                                  $"/{enemy.Pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of player: {player.Pokemon.hp}" +
+                                  $"/{player.Pokemon.maxHp}",TestLogType.Health);
 
        _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
         return;

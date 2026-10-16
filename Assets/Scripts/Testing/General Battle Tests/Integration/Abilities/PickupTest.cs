@@ -28,11 +28,11 @@ public class PickupTest : BattleBasedTest
     private void SetupItemReceival()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        player.pokemon.heldItem = null;
-        player.pokemon.hasItem = false;
+        player.Pokemon.heldItem = null;
+        player.Pokemon.hasItem = false;
         //pickup triggers when the battle ends, which can't be tested using test cases
         //so rather test the method logic individually
-        AbilityHandler.CheckItemForPickUpAbility(player.pokemon);
+        AbilityHandler.CheckItemForPickUpAbility(player.Pokemon);
         _sequencer.UseMove();
     }
     
@@ -41,8 +41,8 @@ public class PickupTest : BattleBasedTest
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
         _testCaseHandler.AddTestCase("Player must have item",
-            () => player.pokemon.hasItem 
-            && player.pokemon.heldItem is not null);
+            () => player.Pokemon.hasItem 
+            && player.Pokemon.heldItem is not null);
         
         yield return HandleBattleState();
         onTestResult.Invoke();
@@ -57,7 +57,7 @@ public class PickupTest : BattleBasedTest
             if (_sequencer.SequenceComplete())
             {
                 var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-                testingHandler.LogMessage($"Item picked up: {player.pokemon.heldItem.itemName}" ,TestLogType.Information);
+                testingHandler.LogMessage($"Item picked up: {player.Pokemon.heldItem.itemName}" ,TestLogType.Information);
                 EndTest(true);
             }
         }

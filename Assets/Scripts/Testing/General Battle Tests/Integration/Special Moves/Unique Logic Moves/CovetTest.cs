@@ -40,7 +40,7 @@ public class CovetTest : BattleBasedTest
             Debug.LogError($"item not found: {assetDirectory}");
             EndTest(false);
         }
-        enemy.pokemon.GiveItem(oranBerry);
+        enemy.Pokemon.GiveItem(oranBerry);
         
         _sequencer.UseMove();
     }
@@ -50,21 +50,21 @@ public class CovetTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         
         _testCaseHandler.AddTestCase("Covet should not take item from enemy, but deal damage",
-            () => !player.pokemon.hasItem
-            && enemy.pokemon.hp < enemy.pokemon.maxHp);
+            () => !player.Pokemon.hasItem
+            && enemy.Pokemon.hp < enemy.Pokemon.maxHp);
         
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
-            new("Covet should not take item from enemy because the item is not a berry",()=> !player.pokemon.hasItem),
-            new("Enemy should still have item",()=> enemy.pokemon.hasItem)
+            new("Covet should not take item from enemy because the item is not a berry",()=> !player.Pokemon.hasItem),
+            new("Enemy should still have item",()=> enemy.Pokemon.hasItem)
         });
         
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
-            new($"Covet should take {_berryName} from enemy",()=>  player.pokemon.hasItem),
-            new("Enemy should not have item",()=> !enemy.pokemon.hasItem),
+            new($"Covet should take {_berryName} from enemy",()=>  player.Pokemon.hasItem),
+            new("Enemy should not have item",()=> !enemy.Pokemon.hasItem),
             new($"Player's item should be the specified berry {_berryName}",
-                () => player.pokemon.heldItem.itemName==_berryName)
+                () => player.Pokemon.heldItem.itemName==_berryName)
         });
         
         yield return HandleBattleState();
@@ -76,10 +76,10 @@ public class CovetTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
-                                  $"/{enemy.pokemon.maxHp}",TestLogType.Health);
-        testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
-                                  $"/{player.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of enemy: {enemy.Pokemon.hp}" +
+                                  $"/{enemy.Pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of player: {player.Pokemon.hp}" +
+                                  $"/{player.Pokemon.maxHp}",TestLogType.Health);
 
         _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
         return;

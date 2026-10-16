@@ -1,18 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 using UnityEngine;
 
 public static class InstanceFactory
 {
-    private static ServiceContainer _serviceContainer;
-
-    public static void GetContainer(ServiceContainer container)
-    {
-        _serviceContainer = container;
-    }  
-    
     public static Move CreateMove(Move m)
     {
         var newMove = ScriptableObject.CreateInstance<Move>();
@@ -98,7 +87,6 @@ public static class InstanceFactory
         newPokemon.nextLevelExpAmount = pkm.nextLevelExpAmount;
         newPokemon.expGroup = pkm.expGroup;
         newPokemon.expYield = pkm.expYield;
-        newPokemon.canEvolve = pkm.canEvolve;
         newPokemon.friendshipLevel = pkm.friendshipLevel;
         newPokemon.hasTrainer = pkm.hasTrainer;
         
@@ -142,8 +130,6 @@ public static class InstanceFactory
         newPokemon.partyFrame2 = pkm.partyFrame2;
         newPokemon.battleIntroFrame = pkm.battleIntroFrame;
         newPokemon.pokeballName = pkm.pokeballName;
-        newPokemon.healthPhase = pkm.healthPhase;
-        newPokemon.Inject(_serviceContainer);
         return newPokemon;
     }
 
@@ -169,8 +155,7 @@ public static class InstanceFactory
     {
         var memberCopy = ScriptableObject.CreateInstance<TrainerPokemonData>();
         memberCopy.data.pokemon = CreatePokemon(member.data.pokemon);
-        var pokemonOperationsHandler = _serviceContainer.Resolve<PokemonOperations>();
-        pokemonOperationsHandler.SetPokemonTraits(memberCopy.data.pokemon);
+        PokemonOperations.SetPokemonTraits(memberCopy.data.pokemon);
         memberCopy.data.moveSet = member.data.moveSet;
         memberCopy.data.pokemonLevel = member.data.pokemonLevel;
         memberCopy.data.hasItem = member.data.hasItem;

@@ -55,12 +55,12 @@ public class AbilityHandler
         //damage buffers
         bool HealthBased(BattleParticipant attacker, PokemonType typeRequirement)
         {
-            return attacker.pokemon.HasType(typeRequirement) &&
-                   attacker.pokemon.hp < (attacker.pokemon.maxHp * 0.33f);
+            return attacker.Pokemon.HasType(typeRequirement) &&
+                   attacker.Pokemon.hp < (attacker.Pokemon.maxHp * 0.33f);
         }
         bool StatusEffectCheck(BattleParticipant victim, StatusEffect statusEffect)
         {
-            return victim.pokemon.statusEffect == statusEffect;
+            return victim.Pokemon.statusEffect == statusEffect;
         }
         
         List<DamageBuff> healthBasedBuffs = new()
@@ -88,7 +88,7 @@ public class AbilityHandler
     
     public void SetAbilityMethod()
     {
-        _currentAbility = participant.pokemon.ability.abilityName;
+        _currentAbility = participant.Pokemon.ability.abilityName;
         if (_abilityMethods.TryGetValue(_currentAbility, out Action abilityMethod))
             abilityMethod();
         else
@@ -128,7 +128,7 @@ public class AbilityHandler
         {
             if (statToModify == Stat.Attack)
             {
-                if (participant.pokemon.statusEffect != StatusEffect.None)
+                if (participant.Pokemon.statusEffect != StatusEffect.None)
                 {
                     return initialStat * 1.5f;
                 }
@@ -153,7 +153,7 @@ public class AbilityHandler
         void GiveItem()
         {
             if (Utility.RandomChance(CommonRandom.Rnd90)) return;
-            CheckItemForPickUpAbility(participant.pokemon);
+            CheckItemForPickUpAbility(participant.Pokemon);
         }
     }
     public static void CheckItemForPickUpAbility(Pokemon pokemon)
@@ -233,11 +233,11 @@ public class AbilityHandler
         {
             foreach (var enemy in participant.currentEnemies)
             {
-                if (enemy.pokemon.ability.abilityName == AbilityName.Levitate)
+                if (enemy.Pokemon.ability.abilityName == AbilityName.Levitate)
                 {
                     continue;
                 }
-                if (enemy.pokemon.HasType(PokemonType.Flying))
+                if (enemy.Pokemon.HasType(PokemonType.Flying))
                 {
                     continue;
                 }
@@ -257,9 +257,9 @@ public class AbilityHandler
     }
     public void ShedSkinAbilityEffect(CommonRandom chance,BattleParticipant currentParticipant)
     {
-        if (currentParticipant.pokemon.statusEffect == StatusEffect.None)return;
+        if (currentParticipant.Pokemon.statusEffect == StatusEffect.None)return;
         
-        var currentStatus = currentParticipant.pokemon.statusEffect;
+        var currentStatus = currentParticipant.Pokemon.statusEffect;
         if (Utility.RandomChance(chance))
         {
             if (currentStatus is StatusEffect.Sleep
@@ -269,8 +269,8 @@ public class AbilityHandler
                 if(!currentParticipant.isFlinched)
                     currentParticipant.canAttack = true;
             }
-            currentParticipant.pokemon.statusEffect = StatusEffect.None;
-            _dialogueHandler.DisplayBattleInfo(currentParticipant.pokemon.pokemonDisplayName+"'s shed skin healed it");
+            currentParticipant.Pokemon.statusEffect = StatusEffect.None;
+            _dialogueHandler.DisplayBattleInfo(currentParticipant.Pokemon.pokemonDisplayName+"'s shed skin healed it");
             currentParticipant.RefreshStatusEffectImage();
         }
     }
@@ -291,7 +291,7 @@ public class AbilityHandler
         if (attacker.participantKey == participant.participantKey) return;
         if (victim.participantKey != participant.participantKey) return;
             
-        if (attacker.pokemon.statusEffect != StatusEffect.None) return;
+        if (attacker.Pokemon.statusEffect != StatusEffect.None) return;
         if (!attacker.canBeDamaged) return;
         if (!moveUsed.isContact)return;
             
@@ -304,7 +304,7 @@ public class AbilityHandler
         void NotifyStaticHit(StatusEffect status)
         {
             attacker.statusHandler.OnStatusEffectReceived -= NotifyStaticHit; 
-            _dialogueHandler.DisplayBattleInfo(participant.pokemon.pokemonDisplayName+"'s static paralysed "+attacker.pokemon.pokemonDisplayName);
+            _dialogueHandler.DisplayBattleInfo(participant.Pokemon.pokemonDisplayName+"'s static paralysed "+attacker.Pokemon.pokemonDisplayName);
         }
     }
 }

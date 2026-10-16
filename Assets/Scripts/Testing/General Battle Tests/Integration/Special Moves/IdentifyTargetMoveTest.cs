@@ -53,7 +53,7 @@ public class IdentifyTargetMoveTest : BattleBasedTest
         _battleHandler.OnSwitchOut += CheckMoveEffectRemoval;
         _pokemonPartyHandler.SwapToPartner();
         //test case index 5
-        enemy.pokemon.hp = enemy.pokemon.maxHp;
+        enemy.Pokemon.hp = enemy.Pokemon.maxHp;
         return;
         void ForceEnemySkip()
         {
@@ -75,19 +75,19 @@ public class IdentifyTargetMoveTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         
         _testCaseHandler.AddTestCase(0,"Enemies should be immune to Brick Break",
-            () => enemy.pokemon.hp >= enemy.pokemon.maxHp);
+            () => enemy.Pokemon.hp >= enemy.Pokemon.maxHp);
         
         _testCaseHandler.AddTestCase(2,"Enemies should be hit by Brick Break",
-            () => enemy.pokemon.hp < enemy.pokemon.maxHp);
+            () => enemy.Pokemon.hp < enemy.Pokemon.maxHp);
         
         _testCaseHandler.AddTestCase(5,"Enemies should be immune to Brick Break",
-            () => enemy.pokemon.hp >= enemy.pokemon.maxHp);
+            () => enemy.Pokemon.hp >= enemy.Pokemon.maxHp);
         
         _testCaseHandler.AddTestCase(6,"Foresight should remove evasion buff",
-            () => enemy.pokemon.evasion <= 100);
+            () => enemy.Pokemon.evasion <= 100);
         
         _testCaseHandler.AddTestCase(7,"Enemies should be hit by Brick Break",
-            () => enemy.pokemon.hp < enemy.pokemon.maxHp);
+            () => enemy.Pokemon.hp < enemy.Pokemon.maxHp);
 
         yield return HandleBattleState();
         onTestResult.Invoke();
@@ -96,19 +96,19 @@ public class IdentifyTargetMoveTest : BattleBasedTest
     {
         _turnBasedCombatHandler.OnNewTurn -= SetupEnemyPokemonState;
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
-        enemy.pokemon.types.Clear();
+        enemy.Pokemon.types.Clear();
         var ghostType = Resources.Load<PokemonTypeData>(DirectoryHandler.GetDirectory(AssetDirectory.Types) + PokemonType.Ghost);
-        enemy.pokemon.types.Add(ghostType);
-        enemy.pokemon.statModifiers.Add(new StatChangeData(Stat.Evasion,1));
-        enemy.pokemon.evasion = 133f;
+        enemy.Pokemon.types.Add(ghostType);
+        enemy.Pokemon.statModifiers.Add(new StatChangeData(Stat.Evasion,1));
+        enemy.Pokemon.evasion = 133f;
     }
     
     protected override void DetermineSuccess()
     {
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         
-        testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
-                                  $"/{enemy.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of enemy: {enemy.Pokemon.hp}" +
+                                  $"/{enemy.Pokemon.maxHp}",TestLogType.Health);
         
         var caseExists = _testCaseHandler.CheckForCurrentTestCase(CheckTestEnd,TestCaseFailed);
         if (!caseExists)
@@ -140,10 +140,10 @@ public class IdentifyTargetMoveTest : BattleBasedTest
                 $"Victim is vulnerable to: {enemy.immunityNegations[0].ImmunityNegationTypes[0]} and " +
                 $"{enemy.immunityNegations[0].ImmunityNegationTypes[1]}", TestLogType.Information);
 
-            testingHandler.LogMessage($"Victim has an evasion of: {enemy.pokemon.evasion}",
+            testingHandler.LogMessage($"Victim has an evasion of: {enemy.Pokemon.evasion}",
                 TestLogType.Information);
 
-            testingHandler.LogMessage($"Victim has buff count: {enemy.pokemon.statModifiers.Count}",
+            testingHandler.LogMessage($"Victim has buff count: {enemy.Pokemon.statModifiers.Count}",
                 TestLogType.Information);
         }            
         else

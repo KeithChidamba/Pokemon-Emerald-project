@@ -41,7 +41,7 @@ public class StatChangeApplicationTest : BattleBasedTest
             _turnBasedCombatHandler.SaveEmptyTurn(BattleParticipantKey.Enemy));
         
         var currentParticipant = _battleHandler.GetCurrentParticipant();
-        currentParticipant.pokemon.moveSet[0].priority = 100;
+        currentParticipant.Pokemon.moveSet[0].priority = 100;
         _sequencer.UseMove();//bulk up, increase attack and defense
     }
     private void OnlyLetEnemyLowerDefense()
@@ -62,7 +62,7 @@ public class StatChangeApplicationTest : BattleBasedTest
         return;
         void UseSpecificMove()
         {
-            _battleHandler.UseMove(enemy.pokemon.moveSet[moveIndex], enemy, BattleParticipantKey.Player);
+            _battleHandler.UseMove(enemy.Pokemon.moveSet[moveIndex], enemy, BattleParticipantKey.Player);
         }
     }
     public override IEnumerator BeginTest()
@@ -74,16 +74,16 @@ public class StatChangeApplicationTest : BattleBasedTest
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
             new("Player has higher Attack",
-                ()=> player.pokemon.attack > player.statData.attack),
+                ()=> player.Pokemon.attack > player.statData.attack),
             new("Player has higher Defense",
-                ()=>  player.pokemon.defense > player.statData.defense)
+                ()=>  player.Pokemon.defense > player.statData.defense)
         });
         
         _testCaseHandler.AddTestCase("Player has regular Defense",
-            () => (int)player.pokemon.defense == (int)player.statData.defense);
+            () => (int)player.Pokemon.defense == (int)player.statData.defense);
         
         _testCaseHandler.AddTestCase("Player has regular Attack",
-            () => (int)player.pokemon.attack == (int)player.statData.attack);
+            () => (int)player.Pokemon.attack == (int)player.statData.attack);
         
         yield return HandleBattleState();
         onTestResult.Invoke();
@@ -95,7 +95,7 @@ public class StatChangeApplicationTest : BattleBasedTest
             return;
         }
         testingHandler.LogMessage($"The {operationData.finalStatData.statName} stat is at stage {operationData.finalStatData.stage}" +
-                                  $" and is affecting {operationData.statChangeData.receiver.pokemon.pokemonName}"
+                                  $" and is affecting {operationData.statChangeData.receiver.Pokemon.pokemonName}"
             ,TestLogType.Information);
     }
     protected override void DetermineSuccess()

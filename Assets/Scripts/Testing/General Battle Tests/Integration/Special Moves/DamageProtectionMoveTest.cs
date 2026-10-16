@@ -21,10 +21,10 @@ public class DamageProtectionMoveTest : BattleBasedTest
     {
         var playerParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        testingHandler.LogMessage($"Health of player: {playerParticipant.pokemon.hp}" +
-                                  $"/{playerParticipant.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of player: {playerParticipant.Pokemon.hp}" +
+                                  $"/{playerParticipant.Pokemon.maxHp}",TestLogType.Health);
         
-        var testPassed = playerParticipant.pokemon.hp >= playerParticipant.pokemon.maxHp;
+        var testPassed = playerParticipant.Pokemon.hp >= playerParticipant.Pokemon.maxHp;
         
         SetTestStatus(testPassed);
     }
@@ -37,10 +37,10 @@ public class DamageProtectionMoveTest : BattleBasedTest
             var zigzagoonParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Player);
             var treeckoParticipant = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
 
-            var tackle = treeckoParticipant.pokemon.moveSet[0];
+            var tackle = treeckoParticipant.Pokemon.moveSet[0];
             tackle.isSureHit = true;//make sure it doesnt miss
             
-            var protect = zigzagoonParticipant.pokemon.moveSet[0];//protect never misses
+            var protect = zigzagoonParticipant.Pokemon.moveSet[0];//protect never misses
             _battleHandler.UseMove(protect,zigzagoonParticipant, BattleParticipantKey.Enemy);
         }
     }

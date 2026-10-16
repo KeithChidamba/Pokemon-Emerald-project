@@ -29,8 +29,8 @@ public class BellyDrumTest : BattleBasedTest
     private void AttackWithLowHp()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        player.pokemon.hp = 1;
-        player.pokemon.moveSet[0].priority = 100;
+        player.Pokemon.hp = 1;
+        player.Pokemon.moveSet[0].priority = 100;
         _sequencer.UseMove();
     }
     
@@ -39,14 +39,14 @@ public class BellyDrumTest : BattleBasedTest
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
         _testCaseHandler.AddTestCase("Belly drum should fail[No attack buffs]",
-            () =>  player.pokemon.statModifiers.Count == 0);
+            () =>  player.Pokemon.statModifiers.Count == 0);
         
         _testCaseHandler.AddTestCase(new List<TestCaseCondition>
         {
-            new("belly drum should buff attack",()=>player.pokemon.attack > player.statData.attack),
-            new("Player should have stat modifiers",()=>player.pokemon.statModifiers.Count>0),
+            new("belly drum should buff attack",()=>player.Pokemon.attack > player.statData.attack),
+            new("Player should have stat modifiers",()=>player.Pokemon.statModifiers.Count>0),
             new("belly drum should half player's health",
-                ()=>player.pokemon.hp <= Mathf.FloorToInt(player.pokemon.maxHp / 2f)),
+                ()=>player.Pokemon.hp <= Mathf.FloorToInt(player.Pokemon.maxHp / 2f)),
         });
         
         yield return HandleBattleState();
@@ -58,16 +58,16 @@ public class BellyDrumTest : BattleBasedTest
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
         
-        testingHandler.LogMessage($"Health of enemy: {enemy.pokemon.hp}" +
-                                  $"/{enemy.pokemon.maxHp}",TestLogType.Health);
-        testingHandler.LogMessage($"Health of player: {player.pokemon.hp}" +
-                                  $"/{player.pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of enemy: {enemy.Pokemon.hp}" +
+                                  $"/{enemy.Pokemon.maxHp}",TestLogType.Health);
+        testingHandler.LogMessage($"Health of player: {player.Pokemon.hp}" +
+                                  $"/{player.Pokemon.maxHp}",TestLogType.Health);
 
         _testCaseHandler.HandleCurrentTestCase(CheckTestEnd,TestCaseFailed);
         return;
         void CheckTestEnd()
         {
-            player.pokemon.hp = player.pokemon.maxHp;
+            player.Pokemon.hp = player.Pokemon.maxHp;
             if (_sequencer.SequenceComplete())
             {
                 EndTest(true);

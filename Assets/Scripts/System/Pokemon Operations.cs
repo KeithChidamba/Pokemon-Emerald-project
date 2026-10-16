@@ -26,7 +26,8 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     [SerializeField] private Image evolutionImageMask;
     [SerializeField] private Image evolutionBackground;
     private bool _learningNewMove;
-    
+    private static ushort _trainerID;
+    private static ushort _secretID;
     public event Action<Stat,bool> OnEvChange;
     public event Action<Pokemon,bool> OnPokeballUsed;
     /// <summary>
@@ -46,9 +47,11 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     private GameLoadingHandler _gameLoadingHandler;
     private BattleOperations _battleOperations;
     private TurnBasedCombatHandler _turnBasedCombatHandler;
-    
+    private static PokemonOperations _instance;
+    private ServiceContainer _container;
     public void Inject(ServiceContainer container)
     {
+        _container = container;
         _battleHandler = container.Resolve<BattleHandler>();
         _turnBasedCombatHandler = container.Resolve<TurnBasedCombatHandler>();
         _wildPokemonHandler = container.Resolve<WildPokemonAiHandler>();
@@ -56,77 +59,46 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         _playerParty = container.Resolve<PokemonPartyHandler>();
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _battleVisuals = container.Resolve<BattleVisuals>();
-        _gameHandler=container.Resolve<GameLoadingHandler>();
+        _gameHandler = container.Resolve<GameLoadingHandler>();
         _pokemonDetailsHandler=container.Resolve<PokemonDetailsHandler>();
         _gameUiHandler = container.Resolve<GameUiHandler>();
         _gameLoadingHandler = container.Resolve<GameLoadingHandler>();
         _battleOperations = container.Resolve<BattleOperations>();
-        
+        _instance = container.Resolve<PokemonOperations>();
         gameObject.SetActive(true);
     }   
 
     public void OnInject()
     {
-        
+       _gameLoadingHandler.OnGameStarted += SetIds;
     }
-    private long GeneratePokemonID(Pokemon pokemon)
+
+    private void SetIds()
     {
-        int combinedIDs = _gameHandler.playerData.trainerID;
-        combinedIDs <<= 16;
-        combinedIDs += _gameHandler.playerData.secretID;
-        long pkmID = (((long)combinedIDs)<<32) | pokemon.personalityValue;
-        return math.abs(pkmID);
+        _trainerID = _gameHandler.playerData.trainerID;
+        _secretID = _gameHandler.playerData.secretID;
     }
-    private uint GeneratePersonalityValue()
-    {
-        System.Random rand = new System.Random();
-        int part1 = rand.Next(0, 65536); // 16-bit random value
-        int part2 = rand.Next(0, 65536); // 16-bit random value
-        return (uint)math.abs((part1 << 16) | part2);
-    }
-    private void AssignPokemonAbility(Pokemon pokemon)
-    { 
-        pokemon.ability = null;
-        
-        var abilityEnum = pokemon.abilities.Length > 1?
-             pokemon.abilities[pokemon.personalityValue % 2] : pokemon.abilities[0];
-        
-        pokemon.abilityName = NameDB.GetAbility(abilityEnum);
-        pokemon.ability = Resources.Load<Ability>(
-            DirectoryHandler.GetDirectory(AssetDirectory.Abilities)
-            + pokemon.abilityName.ToLower());
-    }
-    public bool ContainsType(PokemonType[]typesList ,PokemonTypeData typesToCheck)
+    public static bool ContainsType(PokemonType[]typesList ,PokemonTypeData typesToCheck)
     {
         foreach (var type in typesList)
             if (type == typesToCheck.typeEnum)
                 return true;
         return false;
     }
-    private void AssignPokemonNature(Pokemon pokemon)
+    public static void LoadMovesFromSource(List<MoveSaveData> movesetTemplate, Pokemon pokemon)
     {
-        uint natureValue = 0;
-        if (pokemon.personalityValue > 0)
-            natureValue = pokemon.personalityValue % 25;
-        string[] natures =
+        pokemon.moveSet.Clear();
+        foreach (var move in movesetTemplate)
         {
-            "Hardy", "Lonely", "Brave", "Adamant", "Naughty",
-            "Bold", "Docile", "Relaxed", "Impish", "Lax",
-            "Timid", "Hasty", "Serious", "Jolly", "Naive",
-            "Modest", "Mild", "Quiet", "Bashful", "Rash",
-            "Calm", "Gentle", "Sassy", "Careful", "Quirky"
-        };
-        foreach (var nature in natures)
-        {
-            var assignedNature = Resources.Load<Nature>(
-                DirectoryHandler.GetDirectory(AssetDirectory.Natures)
-                + nature);
-            if (assignedNature.requiredNatureValue != natureValue) continue;
-            pokemon.nature = assignedNature;
-            break;
+            var moveCopy = InstanceFactory.CreateMove(Resources.Load<Move>(
+                DirectoryHandler.GetDirectory(AssetDirectory.Moves) + move.moveName));
+            
+            moveCopy.powerpoints = move.powerPoints;
+            moveCopy.maxPowerpoints = move.maxPowerpoints;
+            pokemon.moveSet.Add(moveCopy);
         }
     }
-    public int CalculateExpForLevel(int desiredLevel, ExpGroup expGroup)
+    public static int CalculateExpForLevel(int desiredLevel, ExpGroup expGroup)
     {
         if (desiredLevel == 0)
         {
@@ -135,7 +107,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         }
         return CalculateExpForNextLevel(desiredLevel - 1,expGroup)+1;
     }
-    public int CalculateExpForNextLevel(int currentLevel, ExpGroup expGroup)
+    public static int CalculateExpForNextLevel(int currentLevel, ExpGroup expGroup)
     {
         var cube = Utility.Cube(currentLevel);
         var square = Utility.Square(currentLevel);
@@ -224,27 +196,17 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         
         return currentEv + clampedAmount;
     }
-    private static void GeneratePokemonIVs(Pokemon pokemon)
-    {
-        pokemon.hpIv =  Utility.RandomRange(0,32);
-        pokemon.attackIv = Utility.RandomRange(0,32);
-        pokemon.defenseIv =  Utility.RandomRange(0,32);
-        pokemon.specialAttackIv =  Utility.RandomRange(0,32);
-        pokemon.specialDefenseIv =  Utility.RandomRange(0,32);
-        pokemon.speedIv =  Utility.RandomRange(0,32);
-    }
     public IEnumerator LearnTmOrHm(MoveLearningMachineInfo moveInfo, Pokemon currentPokemon)
     {
         yield return LearnMove(moveInfo.move, currentPokemon,true,false);
     }
-    public IEnumerator WaitForNewMoveCheck(Pokemon currentPokemon)
+    public static IEnumerator WaitForNewMoveCheck(Pokemon currentPokemon, bool isPartyPokemon)
     {
         if (currentPokemon.currentLevel > currentPokemon.learnSet[^1].requiredLevel)
         {//No more moves to learn
             yield break;
         }
         //Handle move learning
-        var isPartyPokemon = _playerParty.Party.Any(p=>p.pokemonID==currentPokemon.pokemonID);
         foreach (var move in currentPokemon.learnSet)
         {
             if (currentPokemon.currentLevel < move.requiredLevel)
@@ -255,12 +217,34 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             var moveName = move.GetName().ToLower();
             var assetPath = DirectoryHandler.GetDirectory(AssetDirectory.Moves) + moveName;
             var moveFromAsset = Resources.Load<Move>(assetPath);
-            
-            yield return LearnMove(moveFromAsset,currentPokemon,isPartyPokemon,true);
-            yield return _dialogueHandler.AwaitAllDialogue();
+            if (isPartyPokemon)
+            {
+                yield return LearnMove(moveFromAsset,currentPokemon,true,true);
+            }
+            else
+            {
+                WildPokemonLearnMove(moveFromAsset,currentPokemon);
+            }
+            yield return _instance._dialogueHandler.AwaitAllDialogue();
         }
     }
-    private IEnumerator LearnMove(Move moveFromAsset,Pokemon currentPokemon, bool isPartyPokemon,bool removeDetailsUi)
+    private static void WildPokemonLearnMove(Move moveFromAsset,Pokemon currentPokemon)
+    {
+        var newMove = InstanceFactory.CreateMove(moveFromAsset);
+        if (currentPokemon.moveSet.Any(move => move.moveName == newMove.moveName))
+        {
+            return;
+        }
+        var maxMoveCount = 4;
+        if (currentPokemon.moveSet.Count == maxMoveCount) 
+        {
+            //wild pokemon get generated with somewhat random moveset choices
+            currentPokemon.moveSet[Utility.RandomRange(0, maxMoveCount)]
+                = InstanceFactory.CreateMove(moveFromAsset);
+        }
+        else currentPokemon.moveSet.Add(newMove);
+    }
+    private static IEnumerator LearnMove(Move moveFromAsset,Pokemon currentPokemon, bool isPartyPokemon,bool removeDetailsUi)
     {
         var newMove = InstanceFactory.CreateMove(moveFromAsset);
         
@@ -270,11 +254,11 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             //Tm move already teaching an already taught move
             if (isPartyPokemon)
             {
-                _dialogueHandler.DisplayDetails(
+                _instance._dialogueHandler.DisplayDetails(
                     $"{currentPokemon.pokemonDisplayName} already knows {newMove.moveName}");
             }
 
-            OnMoveLearnOperationComplete?.Invoke(currentPokemon,false);
+            _instance.OnMoveLearnOperationComplete?.Invoke(currentPokemon,false);
             yield break;
         }
 
@@ -283,18 +267,19 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         {
             if (isPartyPokemon)
             {
-                _learningNewMove = true;
+                _instance._learningNewMove = true;
                 
-                _dialogueHandler.DisplayCustomOptions(
+                _instance._dialogueHandler.DisplayCustomOptions(
                     $"{currentPokemon.pokemonDisplayName} is trying to learn {newMove.moveName} ,do you want it to learn" +
                     $" {newMove.moveName}?", new[] { "Yes", "No" }
                     ,new Action[]
                     {
-                        () => LearnMove(currentPokemon,moveFromAsset,removeDetailsUi), () => SkipMove(currentPokemon,moveFromAsset)
+                        () => _instance.LearnMove(currentPokemon,moveFromAsset,removeDetailsUi)
+                        , () => _instance.SkipMove(currentPokemon,moveFromAsset)
                     });
                 
                 //Await move learning events
-                yield return new WaitUntil(()=>!_learningNewMove);
+                yield return new WaitUntil(()=>!_instance._learningNewMove);
             }
             else
             {
@@ -307,12 +292,13 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         {
             if (isPartyPokemon)
             {
-                _dialogueHandler.DisplayBattleInfo(
+                _instance._dialogueHandler.DisplayBattleInfo(
                     $"{currentPokemon.pokemonDisplayName} learned {newMove.moveName}");
-                OnMoveLearnOperationComplete?.Invoke(currentPokemon,true);
+                _instance.OnMoveLearnOperationComplete?.Invoke(currentPokemon,true);
             }
             currentPokemon.moveSet.Add(newMove);
         }
+        
     }
     private void LearnMove(Pokemon currentPokemon,Move newMoveAsset,bool removeDetailsUi = true)
     {        
@@ -403,7 +389,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         OnMoveLearnOperationComplete?.Invoke(currentPokemon,false);
         _learningNewMove = false;
     }
-    public static void UpdateHealthPhase(Pokemon pokemon,RawImage hpSliderColor)
+    public static void UpdateHealthPhase(PokemonStateHandler state,RawImage hpSliderColor)
     {
         List<(float threshold, Color color, int phase)> healthPhases = new()
         {
@@ -412,46 +398,83 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             (1f, Color.green, 1),
         };
 
-        var hpPercentage = pokemon.hp / pokemon.maxHp;
+        var hpPercentage = state.pokemon.hp / state.pokemon.maxHp;
         var phase = healthPhases.FirstOrDefault(hp => hpPercentage <= hp.threshold);
 
         hpSliderColor.color = phase.color;
-        pokemon.healthPhase = phase.phase;
+        state.healthPhase = phase.phase;
     }
-    private static void AssignPokemonGender(Pokemon pokemon)
+    public static void SetPokemonTraits(Pokemon newPokemon)
     {
-        uint genderValue = 0;
-        if(pokemon.personalityValue>0)
-            genderValue = pokemon.personalityValue % 256;
-        var genderThreshold = math.abs((int)math.trunc(((pokemon.ratioFemale / 100) * 256)));
-        pokemon.gender = (genderValue < genderThreshold)? Gender.Male : Gender.Female;
-    }
-
-    private bool IsShiny(uint pv)
-    {
-        ushort tid = _gameHandler.playerData.trainerID;
-        ushort sid = _gameHandler.playerData.secretID;
+        //Generate Personality Value
+        System.Random rand = new System.Random();
+        // 16-bit random values
+        int part1 = rand.Next(0, 65536); 
+        int part2 = rand.Next(0, 65536); 
+        newPokemon.personalityValue = (uint)math.abs((part1 << 16) | part2);
         
+        //Generate Pokemon ID
+        int combinedIDs = _trainerID;
+        combinedIDs <<= 16;
+        combinedIDs += _secretID;
+        long pkmID = ((long)combinedIDs << 32) | newPokemon.personalityValue;
+        newPokemon.pokemonID =  math.abs(pkmID);
+       
+        //Determine if Pokemon Shiny
+        var pv = newPokemon.personalityValue; 
+        ushort tid = _trainerID;
+        ushort sid = _secretID;
         ushort pvLow = (ushort)(pv & 0xFFFF);
         ushort pvHigh = (ushort)(pv >> 16);
-
         int shinyValue = tid ^ sid ^ pvLow ^ pvHigh;
-
-        return shinyValue < 8;
-    }
-    public void SetPokemonTraits(Pokemon newPokemon)
-    {
-        newPokemon.personalityValue = GeneratePersonalityValue();
-        newPokemon.pokemonID = GeneratePokemonID(newPokemon);
-        newPokemon.isShiny = IsShiny(newPokemon.personalityValue); 
+        newPokemon.isShiny =  shinyValue < 8;
+       
+        //Assign Pokemon Gender
         if (newPokemon.hasGender)
-            AssignPokemonGender(newPokemon);
-        else
-            newPokemon.gender = Gender.None;
+        {
+            uint genderValue = 0;
+            if(newPokemon.personalityValue>0)
+                genderValue = newPokemon.personalityValue % 256;
+            var genderThreshold = math.abs((int)math.trunc(((newPokemon.ratioFemale / 100) * 256)));
+            newPokemon.gender = (genderValue < genderThreshold)? Gender.Male : Gender.Female;
+        }else newPokemon.gender = Gender.None;
         
-        AssignPokemonAbility(newPokemon);
-        AssignPokemonNature(newPokemon);
-        GeneratePokemonIVs(newPokemon);
+        //Assign Pokemon Ability
+        newPokemon.ability = null;
+        
+        var abilityEnum = newPokemon.abilities.Length > 1?
+            newPokemon.abilities[newPokemon.personalityValue % 2] : newPokemon.abilities[0];
+        
+        var abilityName = NameDB.GetAbility(abilityEnum);
+        newPokemon.ability = Resources.Load<Ability>(
+            DirectoryHandler.GetDirectory(AssetDirectory.Abilities)
+            + abilityName.ToLower());
+        
+        //Assign Pokemon Nature
+        uint natureValue = 0;
+        if (newPokemon.personalityValue > 0)
+        {
+            natureValue = newPokemon.personalityValue % 25;
+        }
+        
+        var natures = NameDB.PokemonNatures;
+        foreach (var nature in natures)
+        {
+            var assignedNature = Resources.Load<Nature>(
+                DirectoryHandler.GetDirectory(AssetDirectory.Natures)
+                + nature);
+            if (assignedNature.requiredNatureValue != natureValue) continue;
+            newPokemon.nature = assignedNature;
+            break;
+        }
+        
+        //Generate Pokemon IVs
+        newPokemon.hpIv =  Utility.RandomRange(0,32);
+        newPokemon.attackIv = Utility.RandomRange(0,32);
+        newPokemon.defenseIv =  Utility.RandomRange(0,32);
+        newPokemon.specialAttackIv =  Utility.RandomRange(0,32);
+        newPokemon.specialDefenseIv =  Utility.RandomRange(0,32);
+        newPokemon.speedIv =  Utility.RandomRange(0,32);
     }
     public IEnumerator TryToCatchPokemon(Item pokeball)
     {
@@ -461,7 +484,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         _inputStateHandler.AddPlaceHolderState();
         
         var isCaught = false;
-        var wildPokemon = _wildPokemonHandler.participant.pokemon;
+        var wildPokemon = _wildPokemonHandler.participant.Pokemon;
         SoundManager.Play(SfxId.BallThrow);
         yield return StartCoroutine(_battleVisuals.DisplayPokemonThrow());
         var ballRate = pokeball.GetDynamicModule<EffectValueInfo>().effectValue;
@@ -498,7 +521,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
             SoundManager.Play(UiId.Success);
             _dialogueHandler.DisplayBattleInfo("Well done "+wildPokemon.pokemonDisplayName+" has been caught");
-            
+            SoundManager.PlayMusic(MusicId.VictoryWild);
             _wildPokemonHandler.participant.DeactivateUI();
             _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonBattle);
             var rawName = wildPokemon.pokemonDisplayName.Replace("Foe ", "");
@@ -588,11 +611,17 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         newPokemon.pokemonDisplayName = newPokemon.pokemonName;
         
         var expForRequiredLevel = CalculateExpForLevel(desiredLevel, newPokemon.expGroup);
-        newPokemon.canEvolve = false;//prevent evolution from artificial exp
-
-        yield return newPokemon.ReceiveExperienceOutsideBattle(expForRequiredLevel,false);
+        var newState = new PokemonStateHandler(_container)
+        {
+            pokemon = newPokemon,
+            canEvolve = false//prevent evolution from artificial exp
+        };
+        yield return newState.ReceiveExperienceOutsideBattle(expForRequiredLevel,false);
+        
+        newState.canEvolve = true;
+        
         newPokemon.hp = newPokemon.maxHp;
-        newPokemon.canEvolve = true;
+     
         creationCallBack.Invoke(newPokemon);
     }
     public IEnumerator HandlePokemonEvolution(Pokemon pokemon, int evolutionIndex)
@@ -643,7 +672,6 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             _dialogueHandler.DisplayTextOnly($"Congratulations! Your {previousName} evolved into {pokemon.pokemonName}",
                 false);
         }
-       
         
         if (_battleHandler.BattleInProgress)
         {
@@ -687,6 +715,8 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             newPokemon.nickName = newPokemon.pokemonName;
         }
     }
+    
+
 }
 
 

@@ -54,9 +54,9 @@ public class SemiInvulnerableDoubleBattleTest : BattleBasedTest
         _testCaseHandler.AddTestCase(1,new List<TestCaseCondition>
         {
             new("Enemy was attacked",
-                ()=> enemy.pokemon.hp < enemy.pokemon.maxHp),
+                ()=> enemy.Pokemon.hp < enemy.Pokemon.maxHp),
             new("Enemy partner was attacked",
-                ()=> enemyPartner.pokemon.hp < enemyPartner.pokemon.maxHp),
+                ()=> enemyPartner.Pokemon.hp < enemyPartner.Pokemon.maxHp),
         });
         
         yield return HandleBattleState();

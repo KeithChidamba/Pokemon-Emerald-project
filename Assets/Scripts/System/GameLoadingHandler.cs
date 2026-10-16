@@ -130,6 +130,7 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
             data.numBadges = 0;
             data.trainerID = Utility.Random16Bit();
             data.secretID = Utility.Random16Bit();
+           
             var gardenLocation = _areaHandler.overworldAreas
                 .First(a => a.areaName == AreaName.OpenGarden);
             data.playerPosition = gardenLocation.entranceCell;

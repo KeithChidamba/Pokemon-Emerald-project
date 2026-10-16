@@ -45,11 +45,11 @@ public class BideTest : BattleBasedTest
                 enemy.pokemonTrainerAI.SetBehavior(BattleAiBehaviorMode.Controlled);
                 enemy.pokemonTrainerAI.AssignBehaviorAction(() =>
                 {
-                    enemy.pokemon.moveSet[enemyMoveIndex].isSureHit = true;
-                    _battleHandler.UseMove(enemy.pokemon.moveSet[enemyMoveIndex], enemy, BattleParticipantKey.Player);
+                    enemy.Pokemon.moveSet[enemyMoveIndex].isSureHit = true;
+                    _battleHandler.UseMove(enemy.Pokemon.moveSet[enemyMoveIndex], enemy, BattleParticipantKey.Player);
                 });
                 var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-                player.pokemon.moveSet[0].priority = 100;
+                player.Pokemon.moveSet[0].priority = 100;
                 _sequencer.UseMove();//Bide
             });
             _sequencer.AddAction(()=>{});//cooldown turn buffer
@@ -97,8 +97,8 @@ public class BideTest : BattleBasedTest
             //prevent fainting for test reliability
             var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy); 
             var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-            player.pokemon.hp = player.pokemon.maxHp;
-            enemy.pokemon.hp = enemy.pokemon.maxHp;
+            player.Pokemon.hp = player.Pokemon.maxHp;
+            enemy.Pokemon.hp = enemy.Pokemon.maxHp;
             
             if (_sequencer.SequenceComplete())
             {

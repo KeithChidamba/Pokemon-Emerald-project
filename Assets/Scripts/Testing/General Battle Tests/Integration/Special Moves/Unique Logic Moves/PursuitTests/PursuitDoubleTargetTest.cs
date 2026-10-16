@@ -32,7 +32,7 @@ public class  PursuitDoubleTargetTest : BattleBasedTest
         _sequencer.AddAction(() =>
         {
            ForceEnemySwitch(BattleParticipantKey.Enemy);//Enemy switch out, faints from pursuit damage
-            currentEnemyID = _battleHandler.GetParticipant(BattleParticipantKey.Enemy).pokemon.pokemonID;
+            currentEnemyID = _battleHandler.GetParticipant(BattleParticipantKey.Enemy).Pokemon.pokemonID;
             
             //player use pursuit on enemy 
             _sequencer.UseMoveOnSpecific(
@@ -51,7 +51,7 @@ public class  PursuitDoubleTargetTest : BattleBasedTest
         _sequencer.AddAction(() =>
         {
             ForceEnemySwitch(BattleParticipantKey.Enemy);//Enemy switch out success
-            currentEnemyID = _battleHandler.GetParticipant(BattleParticipantKey.Enemy).pokemon.pokemonID;
+            currentEnemyID = _battleHandler.GetParticipant(BattleParticipantKey.Enemy).Pokemon.pokemonID;
              //player use pursuit on new enemy 
             _sequencer.UseMoveOnSpecific(
                 0, BattleParticipantKey.Player,
@@ -83,7 +83,7 @@ public class  PursuitDoubleTargetTest : BattleBasedTest
 
     private void TrackAttacks(BattleParticipant attacker,BattleParticipant victim,Move moveUsed,float finalDamage)
     {
-        if (victim.pokemon.pokemonID != currentEnemyID) return;
+        if (victim.Pokemon.pokemonID != currentEnemyID) return;
         numAttacksOnEnemy++;
     }
     private void ForceEnemySwitch(BattleParticipantKey enemyKey)
