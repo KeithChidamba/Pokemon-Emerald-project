@@ -183,7 +183,6 @@ public static class InstanceFactory
     {
         var newItem = ScriptableObject.CreateInstance<Item>();
         newItem.itemName = item.itemName;
-        newItem.itemID = item.itemName + Utility.Random16Bit();
         newItem.itemType = item.itemType;
         newItem.itemDescription = item.itemDescription;
         newItem.buyPrice = item.buyPrice;
@@ -199,7 +198,6 @@ public static class InstanceFactory
         newItem.canBeSold = item.canBeSold;
         newItem.canBeHeld = item.canBeHeld;
         newItem.dynamicInfoModules = item.dynamicInfoModules;
-        newItem.imageDirectory = item.imageDirectory;
         return newItem;
     }
 }

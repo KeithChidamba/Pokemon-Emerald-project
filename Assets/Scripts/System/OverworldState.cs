@@ -307,10 +307,12 @@ public class OverworldState : MonoBehaviour,IInjectable
     {
         foreach (var tree in overworldBerryTrees)
         {
-            tree.treeData.SetLastLogin(DateTime.Now);
+            var treeSave = new BerryTreeSaveData();
+            treeSave.SaveData(tree.treeData);
+           
             //prevent duplicate json file names
             var randomID = Utility.Random16Bit();
-            _saveHandler.SaveDataAsJson(tree.treeData,$"{tree.treeData.berryItem.itemName} {randomID}",SaveDataDirectory.BerryTrees);
+            _saveHandler.SaveDataAsJson(treeSave,$"{tree.treeData.berryItem.itemName} {randomID}",SaveDataDirectory.BerryTrees);
         }
        
         _saveHandler.SaveDataAsJson(_loadedPickupRegistry,"Item pickup registry",SaveDataDirectory.OverworldItemPickupRegistry);

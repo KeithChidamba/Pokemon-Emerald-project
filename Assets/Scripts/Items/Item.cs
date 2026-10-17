@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -7,7 +5,6 @@ using UnityEngine.Serialization;
 public class Item : InfoModuleHolder
 {
     [Header("Information")]
-    [FormerlySerializedAs("Item_ID")] public string itemID = "";
     [FormerlySerializedAs("Item_name")] public string itemName = "";
     public ItemType itemType;
     [FormerlySerializedAs("Item_desc")] public string itemDescription = "";
@@ -25,34 +22,6 @@ public class Item : InfoModuleHolder
     public bool canBeSold;
     public int sellPrice;
     public ItemPriceCurrency priceCurrency;
-    
-    [HideInInspector]public string imageDirectory;
-    
-    public string DetermineImageDirectory()
-    {
-        if (dynamicInfoModules.Any(m => m is MoveLearningMachineInfo))
-        {
-            var machine = GetDynamicModule<MoveLearningMachineInfo>();
-            //nameSub = tm or hm
-            string nameSub = itemName.Substring(0, 2);
-            return machine.move.type.GetTypeName.ToLower() + $" {nameSub.ToLower()}";
-        }
-        return itemName;
-    }
-    public void SetImageDirectory()
-    {
-        imageDirectory = DetermineImageDirectory();
-    }
-    public void LoadData()
-    {
-        var sourceAsset = Resources.Load<Item>(DirectoryHandler.GetDirectory(AssetDirectory.Items)+ itemName);
-        if(sourceAsset.dynamicInfoModules.Count>0){
-            dynamicInfoModules.Clear();
-            dynamicInfoModules.AddRange(sourceAsset.dynamicInfoModules);
-        }
-        
-        itemImage = AssetHealthChecks.GetValidImage(DirectoryHandler.GetDirectory(AssetDirectory.ItemUI),imageDirectory);
-    }
 }
 public enum ItemPriceCurrency
 {

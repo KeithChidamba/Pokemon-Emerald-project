@@ -164,7 +164,10 @@ public class PokemonStorageHandler : MonoBehaviour,IInjectable
     {
         foreach (var box in storageBoxes)
         {
-            _saveDataHandler.SaveDataAsJson(box,"Box "+ box.boxNumber,SaveDataDirectory.PCStorage);
+            if(box.currentNumPokemon > 0)
+            {
+                _saveDataHandler.SaveDataAsJson(box, "Box " + box.boxNumber, SaveDataDirectory.PCStorage);
+            }
         }
     }
     private IEnumerator ActivateSelectorAnimation()
