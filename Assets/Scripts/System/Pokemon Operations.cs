@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using Unity.Mathematics;
 using UnityEngine.UI;
-public enum FriendshipModifier{Fainted,LevelUp,Vitamin,Berry} 
+public enum FriendshipModifier{Fainted,LevelUp,Vitamin,Berry,XItem,GiftPokemon,CaughtPokemon} 
 public enum StatusEffect{None,Paralysis,Burn,Poison,BadlyPoison,Freeze,Sleep}
 public enum Gender{None,Male,Female}
 public enum PokemonType
@@ -28,6 +28,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     private bool _learningNewMove;
     private static ushort _trainerID;
     private static ushort _secretID;
+    private const int MaxNumMoves = 4;
     public event Action<Stat,bool> OnEvChange;
     public event Action<Pokemon,bool> OnPokeballUsed;
     /// <summary>
@@ -47,8 +48,8 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     private GameLoadingHandler _gameLoadingHandler;
     private BattleOperations _battleOperations;
     private TurnBasedCombatHandler _turnBasedCombatHandler;
-    private static PokemonOperations _instance;
     private ServiceContainer _container;
+    
     public void Inject(ServiceContainer container)
     {
         _container = container;
@@ -64,7 +65,6 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         _gameUiHandler = container.Resolve<GameUiHandler>();
         _gameLoadingHandler = container.Resolve<GameLoadingHandler>();
         _battleOperations = container.Resolve<BattleOperations>();
-        _instance = container.Resolve<PokemonOperations>();
         gameObject.SetActive(true);
     }   
 
@@ -198,9 +198,16 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     }
     public IEnumerator LearnTmOrHm(MoveLearningMachineInfo moveInfo, Pokemon currentPokemon)
     {
-        yield return LearnMove(moveInfo.move, currentPokemon,true,false);
+        if (currentPokemon.moveSet.Any(move=> move.moveName == moveInfo.move.moveName))
+        {
+            _dialogueHandler.DisplayDetails(
+                $"{currentPokemon.pokemonDisplayName} already knows {moveInfo.move.moveName}");
+            OnMoveLearnOperationComplete?.Invoke(currentPokemon,false);
+            yield break;
+        }
+        yield return PartyPokemonLearnMove(moveInfo.move, currentPokemon,false);
     }
-    public static IEnumerator WaitForNewMoveCheck(Pokemon currentPokemon, bool isPartyPokemon)
+    public IEnumerator WaitForNewMoveCheck(Pokemon currentPokemon, bool isPartyPokemon)
     {
         if (currentPokemon.currentLevel > currentPokemon.learnSet[^1].requiredLevel)
         {//No more moves to learn
@@ -217,88 +224,60 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             var moveName = move.GetName().ToLower();
             var assetPath = DirectoryHandler.GetDirectory(AssetDirectory.Moves) + moveName;
             var moveFromAsset = Resources.Load<Move>(assetPath);
+            
             if (isPartyPokemon)
             {
-                yield return LearnMove(moveFromAsset,currentPokemon,true,true);
+                if (currentPokemon.moveSet.All(m=> m.moveName != moveFromAsset.moveName))
+                {
+                    yield return PartyPokemonLearnMove(moveFromAsset,currentPokemon,true);
+                }
             }
             else
             {
                 WildPokemonLearnMove(moveFromAsset,currentPokemon);
             }
-            yield return _instance._dialogueHandler.AwaitAllDialogue();
+            yield return _dialogueHandler.AwaitAllDialogue();
         }
     }
-    private static void WildPokemonLearnMove(Move moveFromAsset,Pokemon currentPokemon)
+    private void WildPokemonLearnMove(Move moveFromAsset,Pokemon currentPokemon)
     {
         var newMove = InstanceFactory.CreateMove(moveFromAsset);
         if (currentPokemon.moveSet.Any(move => move.moveName == newMove.moveName))
         {
             return;
         }
-        var maxMoveCount = 4;
-        if (currentPokemon.moveSet.Count == maxMoveCount) 
+        if (currentPokemon.moveSet.Count == MaxNumMoves) 
         {
             //wild pokemon get generated with somewhat random moveset choices
-            currentPokemon.moveSet[Utility.RandomRange(0, maxMoveCount)]
+            currentPokemon.moveSet[Utility.RandomRange(0, MaxNumMoves)]
                 = InstanceFactory.CreateMove(moveFromAsset);
         }
         else currentPokemon.moveSet.Add(newMove);
     }
-    private static IEnumerator LearnMove(Move moveFromAsset,Pokemon currentPokemon, bool isPartyPokemon,bool removeDetailsUi)
+    private IEnumerator PartyPokemonLearnMove(Move moveFromAsset,Pokemon currentPokemon,bool removeDetailsUi)
     {
         var newMove = InstanceFactory.CreateMove(moveFromAsset);
-        
-        if (currentPokemon.moveSet.Any(move=> move.moveName == newMove.moveName))
+        if (currentPokemon.moveSet.Count == MaxNumMoves) 
         {
-            //this will only ever happen because of the player
-            //Tm move already teaching an already taught move
-            if (isPartyPokemon)
-            {
-                _instance._dialogueHandler.DisplayDetails(
-                    $"{currentPokemon.pokemonDisplayName} already knows {newMove.moveName}");
-            }
-
-            _instance.OnMoveLearnOperationComplete?.Invoke(currentPokemon,false);
-            yield break;
-        }
-
-        var maxMoveCount = 4;
-        if (currentPokemon.moveSet.Count == maxMoveCount) 
-        {
-            if (isPartyPokemon)
-            {
-                _instance._learningNewMove = true;
-                
-                _instance._dialogueHandler.DisplayCustomOptions(
-                    $"{currentPokemon.pokemonDisplayName} is trying to learn {newMove.moveName} ,do you want it to learn" +
-                    $" {newMove.moveName}?", new[] { "Yes", "No" }
-                    ,new Action[]
-                    {
-                        () => _instance.LearnMove(currentPokemon,moveFromAsset,removeDetailsUi)
-                        , () => _instance.SkipMove(currentPokemon,moveFromAsset)
-                    });
-                
-                //Await move learning events
-                yield return new WaitUntil(()=>!_instance._learningNewMove);
-            }
-            else
-            {
-                //wild pokemon get generated with somewhat random moveset choices
-                currentPokemon.moveSet[Utility.RandomRange(0, maxMoveCount)]
-                    = InstanceFactory.CreateMove(moveFromAsset);
-            }
+            _learningNewMove = true;
+            _dialogueHandler.DisplayCustomOptions(
+                $"{currentPokemon.pokemonDisplayName} is trying to learn {newMove.moveName} ,do you want it to learn" +
+                $" {newMove.moveName}?", new[] { "Yes", "No" }
+                ,new Action[]
+                {
+                    () => LearnMove(currentPokemon,moveFromAsset,removeDetailsUi)
+                    , () => SkipMove(currentPokemon,moveFromAsset)
+                });
+            //Await move learning events
+            yield return new WaitUntil(()=>!_learningNewMove);
         }
         else
         {
-            if (isPartyPokemon)
-            {
-                _instance._dialogueHandler.DisplayBattleInfo(
-                    $"{currentPokemon.pokemonDisplayName} learned {newMove.moveName}");
-                _instance.OnMoveLearnOperationComplete?.Invoke(currentPokemon,true);
-            }
+            _dialogueHandler.DisplayBattleInfo(
+                $"{currentPokemon.pokemonDisplayName} learned {newMove.moveName}");
+            OnMoveLearnOperationComplete?.Invoke(currentPokemon,true);
             currentPokemon.moveSet.Add(newMove);
         }
-        
     }
     private void LearnMove(Pokemon currentPokemon,Move newMoveAsset,bool removeDetailsUi = true)
     {        
@@ -535,7 +514,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             SetupPokemonNaming(wildPokemon, (result) => nickNameOperationComplete = true);
             yield return new WaitUntil(()=> nickNameOperationComplete);
             
-            wildPokemon.ChangeFriendshipLevel(70);
+            wildPokemon.DetermineFriendshipLevelChange(FriendshipModifier.CaughtPokemon);
             wildPokemon.pokeballName = pokeball.itemName;
             _playerParty.AddMemberAfterCatch(wildPokemon,pokeball.itemName);
             yield return _dialogueHandler.AwaitAllDialogue();
@@ -611,17 +590,12 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         newPokemon.pokemonDisplayName = newPokemon.pokemonName;
         
         var expForRequiredLevel = CalculateExpForLevel(desiredLevel, newPokemon.expGroup);
-        var newState = new PokemonStateHandler(_container)
+        var newState = new PokemonStateHandler(_container,newPokemon,false)
         {
-            pokemon = newPokemon,
             canEvolve = false//prevent evolution from artificial exp
         };
         yield return newState.ReceiveExperienceOutsideBattle(expForRequiredLevel,false);
-        
-        newState.canEvolve = true;
-        
         newPokemon.hp = newPokemon.maxHp;
-     
         creationCallBack.Invoke(newPokemon);
     }
     public IEnumerator HandlePokemonEvolution(Pokemon pokemon, int evolutionIndex)

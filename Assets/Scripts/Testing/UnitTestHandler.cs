@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class UnitTestHandler
 {
-    public enum UnitTestName{MagnitudeDamageTest,PickupAbilityItemPoolTest,AmuletCoinTest}
+    public enum UnitTestName{MagnitudeDamageTest,PickupAbilityItemPoolTest
+        ,AmuletCoinTest,RareCandyEvolution,PokemonFriendshipModifier}
 
     public Dictionary<UnitTestName, Func<IEnumerator>> unitTests = new();
 
@@ -14,18 +15,24 @@ public class UnitTestHandler
     private PokemonOperations _pokemonOperationsHandler;
     private TestingEnvironmentHandler _testingHandler;
     private BattleHandler _battleHandler;
+    private ItemHandler _itemHandler;
+    private ServiceContainer _container;
     
     private bool _currentTestPassed;
     public UnitTestHandler(ServiceContainer container)
     {
-        _moveLogicDatabase= container.Resolve<MoveLogicDatabase>();
+        _container = container;
+        _moveLogicDatabase = container.Resolve<MoveLogicDatabase>();
         _pokemonOperationsHandler = container.Resolve<PokemonOperations>();
         _testingHandler = container.Resolve<TestingEnvironmentHandler>();
-        _battleHandler = container.Resolve<BattleHandler>();    
-        
+        _battleHandler = container.Resolve<BattleHandler>();
+        _itemHandler = container.Resolve<ItemHandler>();
+      
         unitTests.Add(UnitTestName.MagnitudeDamageTest,MagnitudeDamageTest);
         unitTests.Add(UnitTestName.PickupAbilityItemPoolTest,PickupAbilityItemPoolTest);
         unitTests.Add(UnitTestName.AmuletCoinTest,AmuletCoinTest);
+        unitTests.Add(UnitTestName.RareCandyEvolution,RareCandyEvolutionTest);
+        unitTests.Add(UnitTestName.PokemonFriendshipModifier,PokemonFriendshipModifierTest);
     }
 
     public IEnumerator RunTests()
@@ -149,11 +156,73 @@ public class UnitTestHandler
         void CreateMember(Pokemon createdPokemon)
         {
             createdPokemon.GiveItem(amuletCoin);
+            participants[0].pokemonState = new PokemonStateHandler(_container,createdPokemon,false);
             participants[0].ReceivePokemon(createdPokemon);
             var moneyBonus = _battleHandler.PrizeMoneyModifier(participants);
             _testingHandler.LogMessage("Test Requires money bonus greater than 1",TestLogType.TestCase);
             _testingHandler.LogMessage($"Money bonus: {moneyBonus}",TestLogType.Calculation);
             _currentTestPassed = moneyBonus > 1f;
+            testComplete = true;
+        }
+    }
+
+    private IEnumerator RareCandyEvolutionTest()
+    {
+        bool testComplete = false;
+       
+        var pokemonAsset = Resources.Load<Pokemon>(DirectoryHandler.GetDirectory(AssetDirectory.Pokemon) + "Zubat/Zubat");
+       
+        var rareCandy = Resources.Load<Item>(DirectoryHandler.GetDirectory(AssetDirectory.Items)
+                                              + NameDB.GetItem(ItemName.RareCandy));
+       
+        yield return _pokemonOperationsHandler.HandlePokemonCreation(CreateMember,pokemonAsset,21,0);
+        yield return new WaitUntil(()=>testComplete);
+        yield break;
+        void CreateMember(Pokemon createdPokemon)
+        {
+            _testingHandler.LogMessage($"Using rare candy on {createdPokemon.pokemonName}",TestLogType.Information);
+            var testPokemonState = new PokemonStateHandler(_container,createdPokemon,false);
+            _itemHandler.OnItemUsed += CheckEvolution;
+            _itemHandler.UseItem(rareCandy,testPokemonState);
+            return;
+            void CheckEvolution(Item item,bool successful)
+            {
+                if (item.itemName == rareCandy.itemName)
+                {
+                    _itemHandler.OnItemUsed -= CheckEvolution;
+                    _testingHandler.LogMessage("Evolution Succeeded",TestLogType.Information);
+                    _currentTestPassed =  testPokemonState.pokemon.currentLevel == 22
+                                          &&  testPokemonState.pokemon.pokemonName == "Golbat";
+                    testComplete = true;
+                }
+            }
+        }
+    }
+    private IEnumerator PokemonFriendshipModifierTest()
+    {
+        bool testComplete = false;
+        var pokemonAsset = Resources.Load<Pokemon>(DirectoryHandler.GetDirectory(AssetDirectory.Pokemon) + "Zubat/Zubat");
+        
+        var sootheBell = Resources.Load<Item>(DirectoryHandler.GetDirectory(AssetDirectory.Items)
+                                              + NameDB.GetItem(ItemName.SootheBell));
+        
+        yield return _pokemonOperationsHandler.HandlePokemonCreation(CreateMember,pokemonAsset,21,0);
+        yield return new WaitUntil(()=>testComplete);
+        yield break;
+        void CreateMember(Pokemon createdPokemon)
+        {
+            createdPokemon.GiveItem(sootheBell);
+            createdPokemon.pokeballName = NameDB.GetItem(ItemName.LuxuryBall);
+            createdPokemon.friendshipLevel = 0;
+            
+            createdPokemon.DetermineFriendshipLevelChange(FriendshipModifier.Berry);
+            createdPokemon.DetermineFriendshipLevelChange(FriendshipModifier.XItem);
+            
+            _testingHandler.LogMessage($"Friendship increase from 0 to {createdPokemon.friendshipLevel}",TestLogType.Calculation);
+            //X Item = 1 , mods * 4
+            //berry = 10, mods *4 
+            //total = 44
+            _currentTestPassed =  createdPokemon.friendshipLevel == 44;
             testComplete = true;
         }
     }

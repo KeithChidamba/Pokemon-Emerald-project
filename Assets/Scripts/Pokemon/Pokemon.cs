@@ -143,44 +143,69 @@ public class Pokemon : ScriptableObject
             modifier *= pokeballFriendshipMod.modifier;
         }
         
-        return (int)math.ceil(currentIncrease + modifier);
+        return (int)math.ceil(currentIncrease * modifier);
     }
-
-    public void ChangeFriendshipLevel(int amount)
+    
+    /// <summary>
+    /// Directly Change a pokemon's frienship level
+    /// </summary>
+    private void ChangeFriendshipLevel(int amount)
     {
         friendshipLevel = Math.Clamp(friendshipLevel + amount, 0, 255);
     }
-    public void DetermineFriendshipLevelChange(bool isIncreasing, FriendshipModifier action)
+    public void LoseFriendshipFromHerbs(Herb herbType)
     {
-        if (friendshipLevel > 254 && isIncreasing) return;
-        
-        var isHighFriendship = friendshipLevel > 219;
-
+        var friendshipLoss = herbType switch
+        {
+            Herb.EnergyPowder => -5,
+            Herb.EnergyRoot => -10,
+            Herb.HealPowder => -5,
+            Herb.RevivalHerb => -15,
+            _ => 0
+        };
+        ChangeFriendshipLevel(friendshipLoss);
+    }
+    /// <summary>
+    ///Change pokemon's friendship level and consider modifiers
+    /// </summary>
+    public void DetermineFriendshipLevelChange(FriendshipModifier action)
+    {
+        if (action == FriendshipModifier.CaughtPokemon)
+        {
+            ChangeFriendshipLevel(70);
+        }
+        if (action == FriendshipModifier.GiftPokemon)
+        {
+            ChangeFriendshipLevel( 120);
+        }
+        if (action == FriendshipModifier.XItem)
+        {
+            ChangeFriendshipLevel(ApplyFriendshipModifier(1));
+        }
         if (action == FriendshipModifier.Fainted)
         {
             ChangeFriendshipLevel( friendshipLevel>99? -1 : -5 );
         }
-        
         if (action == FriendshipModifier.LevelUp)
         {
+            var isHighFriendship = friendshipLevel > 219;
             var increaseLimitLow = (isHighFriendship)? 1 : 3;
             var increaseLimitHigh = (isHighFriendship)? 3 : 6;
             var randomIncrease = Utility.RandomRange(increaseLimitLow, increaseLimitHigh);
             var amount = ApplyFriendshipModifier(randomIncrease);
-            ChangeFriendshipLevel( isIncreasing?  amount : -amount );
+            ChangeFriendshipLevel(amount);
         }
         
         if (action == FriendshipModifier.Vitamin)
         {
-            var increaseAmount = friendshipLevel switch
+            var decreaseAmount = friendshipLevel switch
             {
-                < 100 => 5,
-                < 200 => 3,
-                < 256 => 2,
+                < 100 => -5,
+                < 200 => -3,
+                < 256 => -2,
                 _ => 0
             };
-            var amount = ApplyFriendshipModifier(increaseAmount);
-            ChangeFriendshipLevel(isIncreasing?  amount: -amount );
+            ChangeFriendshipLevel(decreaseAmount);
         }
 
         if (action == FriendshipModifier.Berry)

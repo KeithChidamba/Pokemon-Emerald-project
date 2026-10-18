@@ -10,6 +10,11 @@ public class PokemonStateHandler
     public Pokemon pokemon;
     public int healthPhase;
     /// <summary>
+    /// Allows an external source like item usage to decide what happens when a
+    /// pokem on evolves [Evolving after rare candy]
+    /// </summary>
+    public bool handleEvolutionExternally;
+    /// <summary>
     /// flag for systemic leve-lup, to make specific custom pokemon
     /// </summary>
     [HideInInspector]public bool canEvolve = true;
@@ -24,19 +29,59 @@ public class PokemonStateHandler
     public event Action OnHealthChanged;
     
     private BattleHandler _battleHandler;
-    private PokemonPartyHandler _pokemonPartyHandler;
     private DialogueHandler _dialogueHandler;
+    private PokemonOperations _pokemonOperationsHandler;
     
     public PokemonStateHandler(ServiceContainer container)
     {
         _dialogueHandler = container.Resolve<DialogueHandler>();
         _battleHandler = container.Resolve<BattleHandler>();
-        _pokemonPartyHandler = container.Resolve<PokemonPartyHandler>();
- 
-        _battleHandler.OnBattleEnd += ClearEvents;
+        _pokemonOperationsHandler = container.Resolve<PokemonOperations>();
+        
+        _battleHandler.OnBattleEnd += ClearBattleState;
+        _battleHandler.OnBattleStarted += SetupBattleState;
+        return;
+        void SetupBattleState()
+        {
+            handleEvolutionExternally = true;
+        }
+        void ClearBattleState()
+        {
+            OnLevelUp = null;
+            OnNewLevel = null;
+            OnEvolutionSuccessful = null;
+            OnExpGained = null;
+            handleEvolutionExternally = false;
+        }
     }
-    
-     public IEnumerator ReceiveExperienceOutsideBattle(int amount,bool isPartPokemon)
+    /// <summary>
+    /// Short-lived version
+    /// </summary>
+    public PokemonStateHandler(ServiceContainer container,Pokemon newPokemon,bool externalEvolution)
+    {
+        _dialogueHandler = container.Resolve<DialogueHandler>();
+        _battleHandler = container.Resolve<BattleHandler>();
+        _pokemonOperationsHandler = container.Resolve<PokemonOperations>();
+        pokemon = newPokemon;
+        handleEvolutionExternally = externalEvolution;
+    }
+
+    /// <summary>
+    /// Resets move data in case of in-battle modification
+    /// </summary>
+    public void ResetMoveData()
+    {
+        List<MoveSaveData> uniqueMoveData = new ();
+        pokemon.moveSet.ForEach(move=>uniqueMoveData.Add(
+            new (move.moveName,move.powerpoints,move.maxPowerpoints)
+        ));
+        PokemonOperations.LoadMovesFromSource(uniqueMoveData,pokemon);
+    }
+    public void NotifyHealthChange()
+    {
+        OnHealthChanged?.Invoke();
+    }
+    public IEnumerator ReceiveExperienceOutsideBattle(int amount,bool isPartPokemon)
     {
         if (pokemon.currentLevel >= 100) yield break;
         int remainingExp = amount;
@@ -49,7 +94,7 @@ public class PokemonStateHandler
             if (pokemon.currentExpAmount >= pokemon.nextLevelExpAmount && pokemon.currentLevel < 100)
             {
                 LevelUp(false);
-                yield return PokemonOperations.WaitForNewMoveCheck(pokemon,isPartPokemon);
+                yield return _pokemonOperationsHandler.WaitForNewMoveCheck(pokemon,isPartPokemon);
                 pokemon.nextLevelExpAmount = PokemonOperations.CalculateExpForNextLevel(pokemon.currentLevel, pokemon.expGroup);
             }
         }
@@ -61,7 +106,7 @@ public class PokemonStateHandler
         
         if(increaseFriendship)
         {
-            pokemon.DetermineFriendshipLevelChange(true, FriendshipModifier.LevelUp);
+            pokemon.DetermineFriendshipLevelChange(FriendshipModifier.LevelUp);
         }
         pokemon.currentLevel++;
         pokemon.currentLevelExpAmount = PokemonOperations.CalculateExpForLevel(pokemon.currentLevel,pokemon.expGroup);
@@ -110,8 +155,7 @@ public class PokemonStateHandler
         return;
         void SetupEvolution()
         {
-            var isPlayerPokemon = _pokemonPartyHandler.Party.Contains(pokemon);
-            if (isPlayerPokemon && _battleHandler.BattleInProgress)
+            if (handleEvolutionExternally)
             {
                 OnEvolutionSuccessful?.Invoke(pokemon.currentEvolutionLineIndex+evoIndex);
             }
@@ -168,36 +212,12 @@ public class PokemonStateHandler
 
                 yield return _dialogueHandler.AwaitAllDialogue();
 
-                yield return PokemonOperations.WaitForNewMoveCheck(pokemon, true);
+                yield return _pokemonOperationsHandler.WaitForNewMoveCheck(pokemon, true);
 
                 pokemon.nextLevelExpAmount =
                     PokemonOperations.CalculateExpForNextLevel(pokemon.currentLevel, pokemon.expGroup);
             }
         }
-
         _dialogueHandler.DisplayBattleInfo($"{pokemon.pokemonDisplayName} gained {amount} EXP points");
-    }
-    
-    /// <summary>
-    /// Resets move data in case of in-battle modification
-    /// </summary>
-    public void ResetMoveData()
-    {
-        List<MoveSaveData> uniqueMoveData = new ();
-        pokemon.moveSet.ForEach(move=>uniqueMoveData.Add(
-            new (move.moveName,move.powerpoints,move.maxPowerpoints)
-        ));
-        PokemonOperations.LoadMovesFromSource(uniqueMoveData,pokemon);
-    }
-    public void NotifyHealthChange()
-    {
-        OnHealthChanged?.Invoke();
-    }
-    private void ClearEvents()
-    {
-        OnLevelUp = null;
-        OnNewLevel = null;
-        OnEvolutionSuccessful = null;
-        OnExpGained = null;
     }
 }

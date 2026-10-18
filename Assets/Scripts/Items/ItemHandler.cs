@@ -164,17 +164,16 @@ public class ItemHandler : MonoBehaviour,IInjectable
 
     private void HandleSpecific(Item itemInUse,PokemonStateHandler state)
     {
-        var selectedPartyPokemon = state.pokemon;
         switch (NameDB.ParseItemName(itemInUse.itemName))
         {
             case ItemName.FullRestore:
                 FullRestore(itemInUse, state);
                 break;
             case ItemName.MaxPotion:
-                RestoreHealth(selectedPartyPokemon.maxHp, itemInUse, state);
+                RestoreHealth(state.pokemon.maxHp, itemInUse, state);
                 break;
             case ItemName.FullHeal:
-                StatusFullHeal(itemInUse, selectedPartyPokemon);
+                StatusFullHeal(itemInUse, state.pokemon);
                 break;
             case ItemName.GuardSpec:
                 GuardSpecItem(itemInUse);
@@ -253,17 +252,9 @@ public class ItemHandler : MonoBehaviour,IInjectable
         void ChangeFriendship(Item itemUsed,bool successful)
         {
             OnItemUsed -= ChangeFriendship;
-            var friendshipLoss = herbInfo.herbType switch
+            if(successful)
             {
-                Herb.EnergyPowder => -5,
-                Herb.EnergyRoot => -10,
-                Herb.HealPowder => -5,
-                Herb.RevivalHerb => -15,
-                _ => 0
-            };
-            if(successful && friendshipLoss!=0)
-            {
-                selectedPartyPokemon.ChangeFriendshipLevel(friendshipLoss);
+                selectedPartyPokemon.LoseFriendshipFromHerbs(herbInfo.herbType);
             }
         }
     }
@@ -298,9 +289,35 @@ public class ItemHandler : MonoBehaviour,IInjectable
         }
         else
         {
+            //check if item will cause evolution
+            bool awaitEvolution = false;
+            int evoIndex = 0;
+            if (selectedPartyPokemon.currentEvolutionLineIndex < selectedPartyPokemon.evolutions.Count - 1)
+            {//can still evolve
+                var levelForNextEvolution =
+                    selectedPartyPokemon.evolutionLineLevels[selectedPartyPokemon.currentEvolutionLineIndex];
+                if (levelForNextEvolution == selectedPartyPokemon.currentLevel + 1)
+                {
+                    //this item will trigger evolution
+                    pokemonState.OnEvolutionSuccessful += AwaitEvolution;
+                    void AwaitEvolution(int evolutionIndex)
+                    {
+                        pokemonState.OnEvolutionSuccessful -= AwaitEvolution;
+                        awaitEvolution = true;
+                        evoIndex = evolutionIndex;
+                    }
+                }
+            }
             var expForNextLevel = PokemonOperations.CalculateExpForNextLevel(selectedPartyPokemon.currentLevel, selectedPartyPokemon.expGroup);
             var expDifferenceForLevelUp = expForNextLevel - selectedPartyPokemon.currentExpAmount;
+            
+            pokemonState.handleEvolutionExternally = true;
             yield return pokemonState.ReceiveExperienceOutsideBattle(expDifferenceForLevelUp,true);
+            if(awaitEvolution)
+            {
+                yield return _pokemonOperationsHandler.HandlePokemonEvolution(selectedPartyPokemon, evoIndex);
+            }
+            pokemonState.handleEvolutionExternally = false;
             OnItemUsed?.Invoke(itemInUse,true);
         }
     }
@@ -346,7 +363,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
             {
                 _pokemonOperationsHandler.CalculateEvForStat(statToDecrease.statName, -10, selectedPartyPokemon);
             }
-            selectedPartyPokemon.DetermineFriendshipLevelChange(true,FriendshipModifier.Berry);
+            selectedPartyPokemon.DetermineFriendshipLevelChange(FriendshipModifier.Berry);
             OnItemUsed?.Invoke(itemInUse,true);
         }
     }
@@ -365,7 +382,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
 
             if (hasChanged)
             {
-                selectedPartyPokemon.DetermineFriendshipLevelChange(false, FriendshipModifier.Vitamin);
+                selectedPartyPokemon.DetermineFriendshipLevelChange(FriendshipModifier.Vitamin);
                 OnItemUsed?.Invoke(itemInUse,true);
             }
             _dialogueHandler.DisplayDetails(message);
@@ -385,11 +402,11 @@ public class ItemHandler : MonoBehaviour,IInjectable
         if (_battleHandler.isDoubleBattle)
         {
             var partner = currentParticipant.GetPartner();
-            partner.Pokemon.ChangeFriendshipLevel(1);
+            partner.Pokemon.DetermineFriendshipLevelChange(FriendshipModifier.XItem);
             pokemonProtected = currentParticipant.Pokemon.pokemonDisplayName 
                                + " and " + partner.Pokemon.pokemonDisplayName;
         }
-        currentParticipant.Pokemon.ChangeFriendshipLevel(1);
+        currentParticipant.Pokemon.DetermineFriendshipLevelChange(FriendshipModifier.XItem);
         _dialogueHandler.DisplayDetails("A veil of light covers "+pokemonProtected);
         
         OnItemUsed?.Invoke(itemInUse,true);
@@ -420,7 +437,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
             
             _dialogueHandler.DisplayDetails($"{currentParticipant.Pokemon.pokemonDisplayName}'s " +
                                             $"{statInfo.statName} Increased");
-            currentParticipant.Pokemon.ChangeFriendshipLevel(1);
+            currentParticipant.Pokemon.DetermineFriendshipLevelChange(FriendshipModifier.XItem);
             OnItemUsed?.Invoke(itemInUse,true);
         }
     }

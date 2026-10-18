@@ -117,7 +117,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
             } 
         }
     }
-    
+
     public void UpdatePartyUsageMessage(string message)
     {
         partyUsageText.text = message;
@@ -164,13 +164,6 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
     }
     public bool IsValidSwap(int memberIndex,BattleParticipantKey participantKey,bool swappingIn,bool canDisplayMessage=true)
     {
-        if (party[memberIndex].hp <= 0)
-        {
-            _dialogueHandler.DisplayDetails(party[memberIndex].pokemonDisplayName +
-                                            " has fainted");
-            return false;
-        }
-        
         if (_turnBasedCombatHandler.ContainsSwitch(memberIndex,true))
         {
             if(canDisplayMessage)
@@ -222,6 +215,13 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
         {
             //cant swap in a member who is already fighting
             var currentParticipant = _battleHandler.GetCurrentParticipant();
+            
+            if (party[memberIndex].hp <= 0)
+            {
+                _dialogueHandler.DisplayDetails(party[memberIndex].pokemonDisplayName +
+                                                " has fainted");
+                return;
+            }
             if (!IsValidSwap(memberIndex,currentParticipant.participantKey,true))
             {
                return;
@@ -265,6 +265,12 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
         {
             case PartyUsage.SwitchOutFromBattleStyle:
             case PartyUsage.SwapOut:
+                if (party[memberIndex].hp <= 0)
+                {
+                    _dialogueHandler.DisplayDetails(party[memberIndex].pokemonDisplayName +
+                                                    " has fainted");
+                    return;
+                }
                 if (!IsValidSwap(memberIndex,_battleHandler.GetCurrentParticipant().participantKey,false))
                 {
                     return;
@@ -415,8 +421,8 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
         void GetNewMember(Pokemon newPokemon)
         {
             newPokemon.hasTrainer = true;
-            newPokemon.pokeballName = NameDB.GetItem(ItemName.Pokeball); 
-            newPokemon.ChangeFriendshipLevel(120);
+            newPokemon.pokeballName = NameDB.GetItem(ItemName.Pokeball);
+            newPokemon.DetermineFriendshipLevelChange(FriendshipModifier.GiftPokemon);
             newPokemon.captureInformation.levelCaptured = newPokemon.currentLevel;
             newPokemon.captureInformation.areaName = AreaManager.GetAreaName(_gameLoadingHandler.playerData.location);
             _pokemonOperationsHandler.SetupPokemonNaming(newPokemon, (result)=>CompletePokemonAddition(newPokemon));

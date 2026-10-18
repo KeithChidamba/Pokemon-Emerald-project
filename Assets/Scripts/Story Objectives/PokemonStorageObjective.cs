@@ -36,7 +36,7 @@ public class PokemonStorageObjective : StoryObjective
                 PokemonOperations.ResolvePokemonNickName(newPokemon);
                 newPokemon.hasTrainer = true;
                 newPokemon.pokeballName = NameDB.GetItem(ItemName.Pokeball); 
-                newPokemon.ChangeFriendshipLevel(120);
+                newPokemon.DetermineFriendshipLevelChange(FriendshipModifier.GiftPokemon);
                 newPokemon.captureInformation.levelCaptured = newPokemon.currentLevel;
                 newPokemon.captureInformation.areaName = AreaManager.GetAreaName(_gameLoadingHandler.playerData.location);
                 _pokemonStorageHandler.AddPokemonToStorage(newPokemon);

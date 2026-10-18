@@ -183,7 +183,10 @@ public static class NameDB
         { ItemName.ChoiceBand, "Choice Band" },
         { ItemName.AmuletCoin, "Amulet Coin" },
         { ItemName.WailmerPail,"Wailmer Pail" },
-        { ItemName.Pokeball, "Pokeball" }
+        { ItemName.Pokeball, "Pokeball" },
+        { ItemName.RareCandy, "Rare Candy" },
+        { ItemName.SootheBell, "Soothe Bell" },
+        { ItemName.LuxuryBall, "Luxury Ball" }
     };
     public static ItemName ParseItemName(string itemName)
     {
@@ -263,7 +266,7 @@ public enum NatureName
 public enum ItemName
 {
     FullRestore,MaxPotion,FullHeal,LeppaBerry,OranBerry,CherriBerry,PersimBerry,GuardSpec
-    ,Potion,ChoiceBand,AmuletCoin,WailmerPail,Pokeball
+    ,Potion,ChoiceBand,AmuletCoin,WailmerPail,Pokeball,RareCandy,SootheBell,LuxuryBall
 }
 
 public enum AbilityName

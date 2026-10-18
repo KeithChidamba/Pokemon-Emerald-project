@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
 
 public class ExpShareTest: EndToEndTest,IBattleTestable
 {
@@ -8,7 +8,10 @@ public class ExpShareTest: EndToEndTest,IBattleTestable
     private TestingEnvironmentHandler _testingHandler;
     private PokemonPartyHandler _pokemonPartyHandler;
     
-    private List<int> expGainedList = new();
+    private List<(long id,int exp)> expGainedList = new();
+    private List<(long id,int exp)> initialExpList = new();
+
+    private long nonExpShareId;
     
     public override IEnumerator BeginTest(EndToEndTestData testData)
     {
@@ -18,17 +21,16 @@ public class ExpShareTest: EndToEndTest,IBattleTestable
         void SetupHpAndExp()
         { 
             _battleHandler.OnBattleStarted -= SetupHpAndExp;
-            
-            var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-            player.pokemonState.OnExpGained += exp =>
+            foreach (var pokemon in _pokemonPartyHandler.Party)
             {
-                expGainedList.Add(exp);
-            };
-            
+                initialExpList.Add(new(pokemon.pokemonID,pokemon.currentExpAmount));
+            }
             var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
             enemy.Pokemon.hp = 1;
             //to help test case
             _pokemonPartyHandler.Party[2].moveSet[0].isSureHit = true;
+            //trapinch has no exp share
+            nonExpShareId = _pokemonPartyHandler.Party[2].pokemonID;
         }
         //Run test case before battle ends
         AddTestCase("Swap to pikachu then trapinch[Attack] then Validate test during battle victory message", ExpGainWorked);
@@ -38,6 +40,18 @@ public class ExpShareTest: EndToEndTest,IBattleTestable
     }
     private bool ExpGainWorked()
     {
+        foreach(var initial in initialExpList)
+        {
+            foreach (var pokemon in _pokemonPartyHandler.Party)
+            {
+                if(pokemon.pokemonID == initial.id)
+                {
+                    var diff = pokemon.currentExpAmount - initial.exp;
+                    expGainedList.Add(new(initial.id,diff));
+                }
+            }
+        }
+        
         var enemy = _battleHandler.GetParticipant(BattleParticipantKey.Enemy);
         var totalExp = enemy.Pokemon.CalculateExperience();
         _testingHandler.LogMessage($"Total exp gain: {totalExp}",TestLogType.Calculation);
@@ -46,21 +60,25 @@ public class ExpShareTest: EndToEndTest,IBattleTestable
             
         //there are 2 exp share holder in this test
         var shareExpPerHolder = expShareTotal / 2;
-         _testingHandler.LogMessage($"exp after share: {shareExpPerHolder}",TestLogType.Calculation);
+        _testingHandler.LogMessage($"exp after share: {shareExpPerHolder}",TestLogType.Calculation);
          
-        for (var i=0;i<2;i++)
+        foreach(var gained in expGainedList)
         {
-            var projectedExp = expGainedList[i];
-            _testingHandler.LogMessage($"Projected exp gain {i+1} {projectedExp}",TestLogType.Information);
+            if(gained.id == nonExpShareId)continue;
+            
+            var projectedExp = gained.exp;
+            _testingHandler.LogMessage($"Projected exp gain {projectedExp}",TestLogType.Information);
             
             var passed = projectedExp == shareExpPerHolder;
             if (!passed) return false;
         }
+         
+        var trapinchData = expGainedList.First(e => e.id == nonExpShareId);
         
-        //last pokemon is the non holder of exp share
-        //so it's exp should be half the total
-        _testingHandler.LogMessage($"Projected exp gain 3 {expGainedList[2]}",TestLogType.Information);
-        return expShareTotal == expGainedList[2];
+        //The non holder of exp share should have half the total
+        _testingHandler.LogMessage($"Projected trapinch {trapinchData.exp}",TestLogType.Information);
+        
+        return expShareTotal == trapinchData.exp;
     }
     protected override void EndTest()
     { 

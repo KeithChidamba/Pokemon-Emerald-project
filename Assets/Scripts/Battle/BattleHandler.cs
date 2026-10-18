@@ -438,7 +438,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
         wildPokemon.ReceivePokemon(enemy);
         wildPokemon.currentEnemies.Add(player);
         _wildPokemonHandler.participant = wildPokemon;
-        wildPokemon.AddToExpList(player.pokemonState);
+        wildPokemon.AddToExpList(player.Pokemon);
         //setup battle
         yield return SetValidParticipants();
         yield return new WaitForSecondsRealtime(0.55f);
@@ -465,7 +465,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
         yield return enemy.SetupEnemyAi(trainerData);
         
         enemy.ReceivePokemon(enemy.pokemonTrainerAI.TrainerParty[0]);
-        enemy.AddToExpList(player.pokemonState);
+        enemy.AddToExpList(player.Pokemon);
         //setup battle
         yield return SetValidParticipants();
         StartCoroutine(SetupBattleSequence(enemy.pokemonTrainerAI.trainerData.trainerLocationData.biome));
@@ -514,8 +514,8 @@ public class BattleHandler : MonoBehaviour, IInjectable
         //add player's pokemon to get exp from all current enemies
         foreach (var enemyParticipant in player.currentEnemies)//player and partner have same enemies
         {
-            enemyParticipant.AddToExpList(player.pokemonState);
-            if(playerPartner.activeForBattle) enemyParticipant.AddToExpList(playerPartner.pokemonState);
+            enemyParticipant.AddToExpList(player.Pokemon);
+            if(playerPartner.activeForBattle) enemyParticipant.AddToExpList(playerPartner.Pokemon);
         }
         //setup battle
         yield return SetValidParticipants();
@@ -554,7 +554,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
             //add enemies to exp list of new player pokemon
             foreach (var enemyParticipant in participant.currentEnemies)
             {
-                enemyParticipant.AddToExpList(participant.pokemonState);
+                enemyParticipant.AddToExpList(participant.Pokemon);
             }
         }
         else
@@ -567,7 +567,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
             //add player participants to get exp from switched in enemy
             foreach (var playerParticipant in participant.currentEnemies)
             {
-                participant.AddToExpList(playerParticipant.pokemonState);
+                participant.AddToExpList(playerParticipant.Pokemon);
             }
         }
         

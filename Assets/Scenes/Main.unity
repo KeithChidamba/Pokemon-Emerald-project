@@ -1229,7 +1229,11 @@ MonoBehaviour:
     evasion: 0
     crit: 0
     participant: {fileID: 0}
-  pokemon: {fileID: 0}
+  pokemonState:
+    pokemon: {fileID: 0}
+    healthPhase: 0
+    handleEvolutionExternal: 0
+    canEvolve: 0
   rawName: 
   currentEnemies: []
   pokemonImage: {fileID: 1180108332}
@@ -4193,7 +4197,11 @@ MonoBehaviour:
     evasion: 0
     crit: 0
     participant: {fileID: 0}
-  pokemon: {fileID: 0}
+  pokemonState:
+    pokemon: {fileID: 0}
+    healthPhase: 0
+    handleEvolutionExternal: 0
+    canEvolve: 0
   rawName: 
   currentEnemies: []
   pokemonImage: {fileID: 1197631754}
@@ -307713,7 +307721,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testControlsView: {fileID: 521305102}
-  environment: 1
+  environment: 0
 --- !u!1 &1321770489
 GameObject:
   m_ObjectHideFlags: 0
@@ -314040,7 +314048,11 @@ MonoBehaviour:
     evasion: 0
     crit: 0
     participant: {fileID: 0}
-  pokemon: {fileID: 0}
+  pokemonState:
+    pokemon: {fileID: 0}
+    healthPhase: 0
+    handleEvolutionExternal: 0
+    canEvolve: 0
   rawName: 
   currentEnemies: []
   pokemonImage: {fileID: 63458739}
@@ -337464,7 +337476,11 @@ MonoBehaviour:
     evasion: 0
     crit: 0
     participant: {fileID: 0}
-  pokemon: {fileID: 0}
+  pokemonState:
+    pokemon: {fileID: 0}
+    healthPhase: 0
+    handleEvolutionExternal: 0
+    canEvolve: 0
   rawName: 
   currentEnemies: []
   pokemonImage: {fileID: 1900733081}

@@ -12,27 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: rain dance
   m_EditorClassIdentifier: 
+  dynamicInfoModules:
+  - rid: 1021519288290770953
   moveName: Rain Dance
-  moveDamage: 0
-  moveAccuracy: 100
-  critModifierIndex: 0
+  description: The user creates a rain on the battlefield
   type: {fileID: 11400000, guid: ba5ca0bd34c9e7b4582e5a97734abf95, type: 2}
+  effectType: 6
   hasTypelessEffect: 1
   isSpecial: 0
   isContact: 0
-  isBuffOrDebuff: 0
+  canChangeStats: 0
   hasStatus: 0
-  effectType: 6
-  effectInfoModule: {fileID: 11400000, guid: c6809df253de07e16972276e8d6d159c, type: 2}
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0
   canInfatuate: 0
-  isConsecutive: 0
   isMultiTarget: 0
   isSelfTargeted: 0
   isSureHit: 0
   displayTargetMessage: 0
+  moveDamage: 0
+  moveAccuracy: 100
+  critModifierIndex: 0
   priority: 0
   powerpoints: 10
   basePowerpoints: 10
@@ -41,4 +42,10 @@ MonoBehaviour:
   buffOrDebuffData: []
   statusChance: 0
   buffOrDebuffChance: 0
-  description: The user creates a rain on the battlefield
+  references:
+    version: 2
+    RefIds:
+    - rid: 1021519288290770953
+      type: {class: ChangeWeatherInfo, ns: , asm: Assembly-CSharp}
+      data:
+        newWeatherCondition: 0

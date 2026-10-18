@@ -24,19 +24,19 @@ public class GuardSpecItemTest: EndToEndTest,IItemTestable,IBattleTestable
         AddTestCase(new List<TestCaseCondition>{
             new("Player's team must have immunity to stat decrease", 
                 () => player.ProtectedFromStatChange(false)),
-            new("Immunity must last 5 turns", 
-                () => playerTeam.statChangeEffects.Any(m=>m.effectDuration == 5)),
+            new("Immunity must last 5 turns(-1 from first turn)", 
+                () => playerTeam.statChangeEffects.Any(m=>m.effectDuration == 4)),
             new("Player must have no stat decrease after a full turn of attacks from enemy", 
                 () => player.Pokemon.statModifiers.Count == 0),
             new("Partner must have no stat decrease after a full turn of attacks from enemy", 
                 () => playerPartner.Pokemon.statModifiers.Count == 0),
         });
         
-        AddTestCase("Use Guard Spec to refresh protection", 
+        AddTestCase("Use Guard Spec to refresh protection[Validate immediately after item use]", 
                 ()=>  playerTeam.statChangeEffects.Any(m=>m.effectDuration == 5));
         
         AddTestCase(new List<TestCaseCondition>{
-            new("Player team must have  no immunity", 
+            new("Player team must have no immunity[Validate on turns complete]", 
                 () => playerTeam.statChangeEffects.Count == 0),
         });
         

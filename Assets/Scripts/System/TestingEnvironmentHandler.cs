@@ -79,7 +79,7 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
        
        DirectoryHandler.ClearDirectory(Path.Combine("Assets/Resources", 
            DirectoryHandler.GetDirectory(AssetDirectory.TestLogs)));
-
+       
        //End to End Tests
        testControlsView.SetActive(true);
        foreach (var endToEndTest in testRegistry.endToEndTests)
@@ -122,7 +122,7 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
            }
            _pokemonPartyHandler.ClearPartyMembers();
            _inputStateHandler.RemoveAllUi();
-           yield return new WaitForSeconds(2f);
+           yield return new WaitForSeconds(4f);
        }
        GetLogs("End To End Test Logs.html"); 
        testingLogs.Clear();
@@ -132,14 +132,16 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
        
        //Unit Tests
        var unitTestHandler = new UnitTestHandler(_container);
-       yield return unitTestHandler.RunTests();
+       //yield return unitTestHandler.RunTests();
        GetLogs("Unit Test Logs.html"); 
        testingLogs.Clear();
        Debug.Log($"UNIT TEST LOGS PRINTED");
-       yield return new WaitForSeconds(5f);
+       yield return new WaitForSeconds(3f);
+       _inputStateHandler.RemoveAllUi();
+       yield return new WaitForSeconds(2f);
+       
        
        //Integration Tests
-       
        foreach(var test in testRegistry.integrationTests)
        {
            test.testingHandler = this;

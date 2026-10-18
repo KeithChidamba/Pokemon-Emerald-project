@@ -61,7 +61,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     public Slider playerExpSlider;
     public GameObject[] singleBattleUI;
     
-    public List<PokemonStateHandler> expReceivers;
+    public List<Pokemon> expReceivers;
     [SerializeField]private bool handlingFaintEvent;
     
     public StatusEffectAnimationHandler statusAnimationHandler;
@@ -146,40 +146,22 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         }
     }
     
-    public void AddToExpList(PokemonStateHandler state)
+    public void AddToExpList(Pokemon receiver)
     {
-        if(!expReceivers.Contains(state))
-        {
-            expReceivers.Add(state);
-        }
+        expReceivers.Add(receiver);
     }
     private IEnumerator DistributeExp()
     {
-        var expFromEnemy = Pokemon.CalculateExperience();
-        
-        // Remove fainted or invalid Pokémon
-        expReceivers.RemoveAll(p => pokemonState.pokemon.hp <= 0);
-        
-        //only player pokemon receive exp
-        var filter =  new List<PokemonStateHandler>();
-        foreach (var receiver in expReceivers)
-        {
-            if (_pokemonPartyHandler.Party.Contains(receiver.pokemon))
-            {
-                filter.Add(receiver);
-            }
-        }
-        expReceivers.Clear();
-        expReceivers.AddRange(filter);
-        
+        // Remove fainted Pokémon
+        expReceivers.RemoveAll(pokemon => pokemon.hp <= 0);
         if (expReceivers.Count < 1) yield break;
 
         // Separate holders and participants
-        var expShareHolders = new List<PokemonStateHandler>();
+        var expShareHolders = new List<Pokemon>();
         foreach (var receiver in expReceivers)
         {
-            if (!receiver.pokemon.hasItem) continue;
-            var expHeldItem = receiver.pokemon.heldItem.GetDynamicModule<ExpModifierInfo>();
+            if (!receiver.hasItem) continue;
+            var expHeldItem = receiver.heldItem.GetDynamicModule<ExpModifierInfo>();
             if (expHeldItem is not null)
             {
                 var hasExpShare = expHeldItem.modifier == ExpModifier.ExpShare;
@@ -190,11 +172,11 @@ public class BattleParticipant : MonoBehaviour,IInjectable
             }
         }
         
-        var participants = expReceivers
+        var nonSharePokemon = expReceivers
             .Where(p => !expShareHolders.Contains(p))
             .ToList();
 
-        var totalExp = expFromEnemy;
+        var totalExp = Pokemon.CalculateExperience();
 
         // Distribute 50% to EXP Share holders
         var expShareTotal = totalExp / 2;
@@ -204,7 +186,17 @@ public class BattleParticipant : MonoBehaviour,IInjectable
             while (expShareHolders.Count > 0)
             {
                 var holder = expShareHolders[0];
-                yield return holder.ReceiveExperienceAndDisplay(shareExpPerHolder);
+                var participantForReceiver = _battleHandler.GetValidParticipants()
+                    .FirstOrDefault(p => p.Pokemon.pokemonID == holder.pokemonID);
+                if (participantForReceiver is not null)
+                {
+                    yield return participantForReceiver.pokemonState.ReceiveExperienceAndDisplay(shareExpPerHolder);
+                }
+                else
+                {
+                    var state = new PokemonStateHandler(_container, holder, true);
+                    yield return state.ReceiveExperienceAndDisplay(shareExpPerHolder);
+                }
                 expShareHolders.RemoveAt(0);
             }
         }
@@ -215,14 +207,24 @@ public class BattleParticipant : MonoBehaviour,IInjectable
 
         // Distribute remaining 50% among participants
         var participantTotalExp = totalExp - expShareTotal; 
-        if (participants.Count > 0)
+        if (nonSharePokemon.Count > 0)
         {
-            var shareExpPerParticipant = participantTotalExp / participants.Count;
-            while (participants.Count > 0)
+            var shareExpPerParticipant = participantTotalExp / nonSharePokemon.Count;
+            while (nonSharePokemon.Count > 0)
             {
-                var participant = participants[0];
-                yield return participant.ReceiveExperienceAndDisplay(shareExpPerParticipant);
-                participants.RemoveAt(0);
+                var pokemon = nonSharePokemon[0];
+                var participantForReceiver = _battleHandler.GetValidParticipants()
+                    .FirstOrDefault(p => p.Pokemon.pokemonID == pokemon.pokemonID);
+                if (participantForReceiver is not null)
+                {
+                    yield return participantForReceiver.pokemonState.ReceiveExperienceAndDisplay(shareExpPerParticipant);
+                }
+                else
+                {
+                    var state = new PokemonStateHandler(_container, pokemon, true);
+                    yield return state.ReceiveExperienceAndDisplay(shareExpPerParticipant);
+                }
+                nonSharePokemon.RemoveAt(0);
             }
         }
         expReceivers.Clear();
@@ -244,7 +246,7 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         
         Pokemon.statusEffect = StatusEffect.None;
         _battleHandler.AddFaintedParticipant(this);
-        Pokemon.DetermineFriendshipLevelChange(false, FriendshipModifier.Fainted);
+        Pokemon.DetermineFriendshipLevelChange(FriendshipModifier.Fainted);
     }
     public IEnumerator HandleFaintLogic()
     {
