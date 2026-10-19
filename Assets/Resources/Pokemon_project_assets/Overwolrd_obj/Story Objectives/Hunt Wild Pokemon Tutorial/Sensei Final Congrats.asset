@@ -18,16 +18,16 @@ MonoBehaviour:
     isRestricting: 1
     boundaries:
     - direction: 1
-      limit: -87
+      limit: -47
     - direction: 2
       limit: -42
     - direction: 3
-      limit: 18
+      limit: 8
     - direction: 4
       limit: 42
   npcName: Sensei
   npcData:
-    npcPosition: {x: 38, y: -43, z: 0}
+    npcPosition: {x: 11, y: -43, z: 0}
     npcAnimationData:
       spriteData: {fileID: 11400000, guid: 0d99b53ea9b32a6faaa4958ee7b17f78, type: 2}
       movementDirections: []

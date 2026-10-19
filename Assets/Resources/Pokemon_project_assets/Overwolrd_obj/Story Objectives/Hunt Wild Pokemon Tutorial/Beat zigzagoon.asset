@@ -15,7 +15,7 @@ MonoBehaviour:
   objectiveHeading: Hunt down and deferat a zigzagoon in the garden grass
   objectiveType: 2
   playerBoundary:
-    isRestricting: 0
+    isRestricting: 1
     boundaries:
     - direction: 1
       limit: -87

@@ -30,7 +30,6 @@ public class OverworldState : MonoBehaviour,IInjectable
     /// </summary>
     [SerializeField] private List<StoryObjective> currentStoryObjectives;
     
-    public event Action OnObjectivesLoaded;
     private SaveDataHandler _saveHandler;
     private DialogueHandler _dialogueHandler;
     private ServiceContainer _container;
@@ -204,13 +203,13 @@ public class OverworldState : MonoBehaviour,IInjectable
                     }
                 }
                 currentObjectiveGroup = storyProgress.lastActiveGroup;
-                _storyObjectiveGroups[currentObjectiveGroup].RemoveRange(0,storyProgress.numRemainingInGroup);
+                var maxNum = _storyObjectiveGroups[currentObjectiveGroup].Count;
+                _storyObjectiveGroups[currentObjectiveGroup].RemoveRange(0,maxNum-storyProgress.numRemainingInGroup);
             }
         }
         yield return new WaitForSeconds(0.025f);
         
         //load current objective
-        OnObjectivesLoaded?.Invoke();
         if(!storyProgress.allObjectivesComplete)
         {
             FindMainStoryAsset(_container, _storyObjectiveGroups[currentObjectiveGroup][0].name);

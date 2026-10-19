@@ -1232,7 +1232,7 @@ MonoBehaviour:
   pokemonState:
     pokemon: {fileID: 0}
     healthPhase: 0
-    handleEvolutionExternal: 0
+    handleEvolutionExternally: 0
     canEvolve: 0
   rawName: 
   currentEnemies: []
@@ -4200,7 +4200,7 @@ MonoBehaviour:
   pokemonState:
     pokemon: {fileID: 0}
     healthPhase: 0
-    handleEvolutionExternal: 0
+    handleEvolutionExternally: 0
     canEvolve: 0
   rawName: 
   currentEnemies: []
@@ -307721,7 +307721,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   testControlsView: {fileID: 521305102}
-  environment: 0
+  environment: 1
 --- !u!1 &1321770489
 GameObject:
   m_ObjectHideFlags: 0
@@ -314051,7 +314051,7 @@ MonoBehaviour:
   pokemonState:
     pokemon: {fileID: 0}
     healthPhase: 0
-    handleEvolutionExternal: 0
+    handleEvolutionExternally: 0
     canEvolve: 0
   rawName: 
   currentEnemies: []
@@ -337479,7 +337479,7 @@ MonoBehaviour:
   pokemonState:
     pokemon: {fileID: 0}
     healthPhase: 0
-    handleEvolutionExternal: 0
+    handleEvolutionExternally: 0
     canEvolve: 0
   rawName: 
   currentEnemies: []

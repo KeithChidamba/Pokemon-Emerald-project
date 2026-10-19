@@ -1,0 +1,10 @@
+{
+    "isPlanted": true,
+    "currentStageNeedsWater": false,
+    "currentStageProgress": 4,
+    "minutesSinceLastStage": 0.0,
+    "numStagesWatered": 0,
+    "itemAssetName": "Sitrus berry",
+    "soilIndex": 1,
+    "lastLogin": "2026-10-19T20:00:19.9703720+02:00"
+}

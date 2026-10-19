@@ -65,4 +65,9 @@ MonoBehaviour:
     storyObjectives:
     - {fileID: 11400000, guid: a85fc1b5e0b23823c8feb0764d3d687e, type: 2}
     - {fileID: 11400000, guid: 0c11ba833cf0977f0be9f526d4cd655b, type: 2}
+    - {fileID: 11400000, guid: f819e42cfc76ed73f9059b8ab5b06ec0, type: 2}
+    - {fileID: 11400000, guid: 5c90bc5c5956191419258a5b941deedc, type: 2}
+    - {fileID: 11400000, guid: 8d630eaa559413f8c86f9833feaee29d, type: 2}
+    - {fileID: 11400000, guid: 26888f1e7e5a88ad9a2b6d7acf9a5597, type: 2}
+    - {fileID: 11400000, guid: c38c2ea8b3b3c47e59950e9fa4d5308c, type: 2}
     - {fileID: 11400000, guid: 6b5728317481b6e13b45b777fc200829, type: 2}

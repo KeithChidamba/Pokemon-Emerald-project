@@ -1,0 +1,10 @@
+{
+    "isPlanted": true,
+    "currentStageNeedsWater": false,
+    "currentStageProgress": 4,
+    "minutesSinceLastStage": 0.0,
+    "numStagesWatered": 0,
+    "itemAssetName": "Pomeg berry",
+    "soilIndex": 7,
+    "lastLogin": "2026-10-19T20:00:19.9743150+02:00"
+}

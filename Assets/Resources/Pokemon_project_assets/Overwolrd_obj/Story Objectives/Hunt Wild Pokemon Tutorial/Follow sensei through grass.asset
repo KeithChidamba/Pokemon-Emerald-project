@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 243c2c9e54eef05698f3771ea91163fb, type: 3}
+  m_Name: Follow sensei through grass
+  m_EditorClassIdentifier: 
+  objectiveHeading: Follow sensei
+  objectiveType: 12
+  playerBoundary:
+    isRestricting: 1
+    boundaries:
+    - direction: 1
+      limit: -47
+    - direction: 2
+      limit: -42
+    - direction: 3
+      limit: 8
+    - direction: 4
+      limit: 42
+  npcName: Sensei
+  npcData:
+    npcPosition: {x: 35, y: -43, z: 0}
+    npcAnimationData:
+      spriteData: {fileID: 11400000, guid: 0d99b53ea9b32a6faaa4958ee7b17f78, type: 2}
+      movementDirections: []
+      isIdle: 0
+    npcInteraction: {fileID: 0}
+    npcInteractionMessage: 
+  removeAfterInteraction: 1
+  facePlayer: 0
+  movementDirections:
+  - direction: 3
+    numTilesToTravel: 24
+  npcSpeed: 5
+  pauseDelay: 0.25
+  waitForPlayer: 1

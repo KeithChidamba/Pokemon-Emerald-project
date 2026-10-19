@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5de6c4f45531cfbabe3a0b40548abf4, type: 3}
+  m_Name: Sensei Gives Repel
+  m_EditorClassIdentifier: 
+  objectiveHeading: 
+  objectiveType: 11
+  playerBoundary:
+    isRestricting: 1
+    boundaries:
+    - direction: 1
+      limit: -47
+    - direction: 2
+      limit: -42
+    - direction: 3
+      limit: 13
+    - direction: 4
+      limit: 42
+  npcName: Sensei
+  npcData:
+    npcPosition: {x: 38, y: -43, z: 0}
+    npcAnimationData:
+      spriteData: {fileID: 11400000, guid: 0d99b53ea9b32a6faaa4958ee7b17f78, type: 2}
+      movementDirections: []
+      isIdle: 0
+    npcInteraction: {fileID: 0}
+    npcInteractionMessage: Now that you've rumbled in the tall grass, im sure you
+      can appreciate your peace much more. Take this repel, it will ward of any pokemon
+      for about 250 steps.
+  removeAfterInteraction: 0
+  facePlayer: 1

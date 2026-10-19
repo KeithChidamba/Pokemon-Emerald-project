@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a891a9719695664808c411655ee5efc2, type: 3}
+  m_Name: Use repel
+  m_EditorClassIdentifier: 
+  objectiveHeading: Use max repel item
+  objectiveType: 3
+  playerBoundary:
+    isRestricting: 1
+    boundaries:
+    - direction: 1
+      limit: -47
+    - direction: 2
+      limit: -42
+    - direction: 3
+      limit: 35
+    - direction: 4
+      limit: 42
+  itemForObjective: {fileID: 11400000, guid: cbda8cd53a97a4ebead5a9aa832c7d88, type: 2}
+  itemObjectiveType: 1
