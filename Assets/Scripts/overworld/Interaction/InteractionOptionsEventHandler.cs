@@ -7,25 +7,22 @@ using UnityEngine.UI;
 
 public enum InteractionOptions
 {
-    None,Battle, Custom,SellItem,HealPokemon,OpenPokemonStorage,
-    OpenItemStorage, HandleInDynamicClass
+    None, Custom,SellItem,HealPokemon,
+    OpenPokemonStorage,
+    OpenItemStorage,HandleInDynamicClass
 }
 public class InteractionOptionsEventHandler : MonoBehaviour,IInjectable
 {
     [SerializeField]private GameObject pokeballPrefab;
-    
-    private Interaction _currentInteraction;
 
-    private readonly Dictionary<InteractionOptions, Action> _interactionMethods = new ();
+    private readonly Dictionary<InteractionOptions, Action<Interaction>> _interactionMethods = new ();
     public event Action<Interaction,int> OnInteractionOptionChosen;
-    public event Action<Interaction> OnEventInteraction;
     public event Action<OverworldInteractable,int> OnOverworldInteractionOptionChosen;
     
     private DialogueHandler _dialogueHandler;
     private PokemonPartyHandler _playerParty;
     private PlayerBagHandler _playerBagHandler;
-    private GameUiHandler gameUiHandler;
-    private BattleHandler _battleHandler;
+    private GameUiHandler _gameUiHandler;
     private PlayerMovementHandler _playerMovementHandler;
     
     private ServiceContainer _container;
@@ -35,29 +32,23 @@ public class InteractionOptionsEventHandler : MonoBehaviour,IInjectable
         _container = container;
         _dialogueHandler = container.Resolve<DialogueHandler>();
         _playerParty = container.Resolve<PokemonPartyHandler>();
-        gameUiHandler = container.Resolve<GameUiHandler>();
+        _gameUiHandler = container.Resolve<GameUiHandler>();
         _playerBagHandler = container.Resolve<PlayerBagHandler>();
-        _battleHandler = container.Resolve<BattleHandler>();
+      
         _playerMovementHandler = container.Resolve<PlayerMovementHandler>();
         gameObject.SetActive(true);
     }
 
     public void OnInject()
     {
-        _interactionMethods.Add(InteractionOptions.Battle,Battle);
         _interactionMethods.Add(InteractionOptions.HealPokemon,HealPokemon);
         _interactionMethods.Add(InteractionOptions.OpenPokemonStorage,OpenPokemonStorage);
         _interactionMethods.Add(InteractionOptions.SellItem,SellItem);
         _interactionMethods.Add(InteractionOptions.OpenItemStorage,OpenItemStorage);
         _interactionMethods.Add(InteractionOptions.HandleInDynamicClass,HandleInDynamicClass);
     }
-    private void Battle()
-    {
-        _dialogueHandler.EndDialogue(); 
-        StartCoroutine(_battleHandler.SetBattleTypeAndStart(
-            _currentInteraction.GetModule<TrainerData>()));
-    }
-    private void HealPokemon()
+
+    private void HealPokemon(Interaction interaction)
     {
         _playerMovementHandler.RestrictPlayerMovement(MovementRestrictor.OverworldAction);
         SoundManager.Play(JingleId.Healed);
@@ -135,36 +126,29 @@ public class InteractionOptionsEventHandler : MonoBehaviour,IInjectable
             _playerMovementHandler.AllowPlayerMovement(MovementRestrictor.OverworldAction);
         }
     }
-    private void SellItem()
+    private void SellItem(Interaction interaction)
     {
         _playerBagHandler.currentBagUsage = BagUsage.SellingView;
-        gameUiHandler.ValidateBagView();
+        _gameUiHandler.ValidateBagView();
     }
-    private void OpenPokemonStorage()
+    private void OpenPokemonStorage(Interaction interaction)
     {
         _dialogueHandler.EndDialogue(); 
         SoundManager.Play(UiId.PcOn);
-        gameUiHandler.ViewPokemonStorage();
+        _gameUiHandler.ViewPokemonStorage();
     }
-    private void OpenItemStorage()
+    private void OpenItemStorage(Interaction interaction)
     {
         _dialogueHandler.EndDialogue(); 
-        gameUiHandler.ViewItemStorage();
+        _gameUiHandler.ViewItemStorage();
     }
-    private void HandleInDynamicClass()
+    public void HandleInDynamicClass(Interaction interaction)
     {
-        _currentInteraction.dynamicInfoModules.First().HandleInternalLogic(_container);
+        interaction.dynamicInfoModules.First().HandleInternalLogic(_container);
     }
     public void AlertOverworldInteraction(OverworldInteractable interactable,int optionIndex)
     {
         OnOverworldInteractionOptionChosen?.Invoke(interactable,optionIndex);
-    }
-    public void CompleteEventInteraction(Interaction interaction)
-    {
-        var interactionOption = interaction.interactionOptions[0];
-        _currentInteraction = interaction;
-        OnEventInteraction?.Invoke(interaction);
-        if (_interactionMethods.TryGetValue(interactionOption,out var method)) method();
     }
     public void CompleteInteraction(Interaction interaction,int optionIndex)
     {
@@ -184,9 +168,8 @@ public class InteractionOptionsEventHandler : MonoBehaviour,IInjectable
         _dialogueHandler.DeletePreviousOptions();
         _dialogueHandler.AllowDialogueExit();
         
-        _currentInteraction = interaction;
         if (_interactionMethods.TryGetValue(interactionOption,out var method))
-            method();
+            method(interaction);
         else
             Debug.Log("couldn't find method for interaction: " + interactionOption);
     }

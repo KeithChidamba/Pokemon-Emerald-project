@@ -12,18 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6b41fff4906564db2330b1b297bbc9, type: 3}
   m_Name: Starter pokemon gift 1
   m_EditorClassIdentifier: 
+  dynamicInfoModules:
+  - rid: 1021519129163071488
   interactionMessage: It's a pokeball with a pokemon inside, take it?
   dialogueType: 1
   isEventTrigger: 0
-  interactionOptions: 0700000000000000
-  resultMessage: 
+  interactionOptions: 0600000000000000
   optionsUiText:
   - Yes
   - No
-  additionalInfoModules: []
   overworldInteraction: 0
-  dynamicInfoModules:
-  - rid: 1021519129163071488
+  additionalInfoModules: []
   references:
     version: 2
     RefIds:

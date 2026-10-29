@@ -12,14 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6b41fff4906564db2330b1b297bbc9, type: 3}
   m_Name: Nurse
   m_EditorClassIdentifier: 
+  dynamicInfoModules: []
   interactionMessage: Hello, would you like to heal your pokemon?
   dialogueType: 1
   isEventTrigger: 0
-  interactionOptions: 0400000000000000
-  resultMessage: Please wait a moment...
+  interactionOptions: 0300000000000000
   optionsUiText:
   - Yes
   - No
-  additionalInfo: []
-  overworldInteraction: 5
-  location: 3
+  overworldInteraction: 0
+  additionalInfoModules: []
+  references:
+    version: 2
+    RefIds: []

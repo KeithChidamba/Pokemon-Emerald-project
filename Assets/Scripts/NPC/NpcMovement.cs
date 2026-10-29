@@ -272,7 +272,9 @@ public class NpcMovement : MonoBehaviour
         currentAnimationIndex++;
 
         if (currentAnimationIndex >= animationData.movementDirections.Count)
+        {
             currentAnimationIndex = 0;
+        }
 
         _currentMovement = animationData.movementDirections[currentAnimationIndex];
         _currentSpriteData = animationData.spriteData.GetSpriteData(_currentMovement.direction);

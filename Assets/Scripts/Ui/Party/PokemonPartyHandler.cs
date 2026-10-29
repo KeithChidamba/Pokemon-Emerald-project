@@ -158,11 +158,8 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
             .Where(i => party[i].hp > 0)
             .ToList();
     }
-    public void AddMemberFromSystemProcess(Pokemon pokemon)
-    {
-        party.Add(pokemon);
-    }
-    public bool IsValidSwap(int memberIndex,BattleParticipantKey participantKey,bool swappingIn,bool canDisplayMessage=true)
+    
+    public bool IsValidSwap(int memberIndex,bool swappingIn,bool canDisplayMessage=true)
     {
         if (_turnBasedCombatHandler.ContainsSwitch(memberIndex,true))
         {
@@ -181,11 +178,9 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
         
         if (atIndexSelectionLimit)
         {
-            var swapIn = _battleHandler.GetParticipant(participantKey);
             if (canDisplayMessage)
             {
-                _dialogueHandler.DisplayDetails(swapIn.Pokemon.pokemonDisplayName +
-                                                " is already in battle");
+                _dialogueHandler.DisplayDetails(party[memberIndex].pokemonDisplayName + " is already in battle");
             }
             return false;
         }
@@ -204,7 +199,6 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
         }
         return true;
     }
-
     public void SwapToPartner()
     {
         BeginMemberSwap(1);
@@ -222,7 +216,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
                                                 " has fainted");
                 return;
             }
-            if (!IsValidSwap(memberIndex,currentParticipant.participantKey,true))
+            if (!IsValidSwap(memberIndex,true))
             {
                return;
             }
@@ -271,7 +265,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
                                                     " has fainted");
                     return;
                 }
-                if (!IsValidSwap(memberIndex,_battleHandler.GetCurrentParticipant().participantKey,false))
+                if (!IsValidSwap(memberIndex,false))
                 {
                     return;
                 }
@@ -399,11 +393,13 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
     {
         party.Clear();
     }
-    public void AddTestMember(Pokemon newPokemon)
+    /// <summary>
+    /// [Mainly For Testing] Add member in the most basic way
+    /// </summary>
+    public void AddMember(Pokemon newPokemon)
     {
         newPokemon.pokeballName = NameDB.GetItem(ItemName.Pokeball); 
         newPokemon.hasTrainer = true;
-        Debug.Log($"added test {newPokemon.pokemonName}");
         CompletePokemonAddition(newPokemon);
     }
     public void AddMemberAfterCatch(Pokemon pokemon, string pokeballType)
@@ -482,6 +478,13 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
                 memberCards[i].ResetUI();
             }
         }
+    }
+    /// <summary>
+    /// Simply add a member without doing anything else
+    /// </summary>
+    public void AddMemberFromSystemProcess(Pokemon pokemon)
+    {
+        party.Add(pokemon);
     }
     public void RemoveMember(int partyPosition)
     {

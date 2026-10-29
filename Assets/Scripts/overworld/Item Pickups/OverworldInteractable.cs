@@ -6,5 +6,4 @@ using UnityEngine;
 public class OverworldInteractable : MonoBehaviour
 {
     public Interaction interaction;
-    public AreaName location;
 }

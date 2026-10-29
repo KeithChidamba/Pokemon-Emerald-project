@@ -13,7 +13,8 @@ public enum BattleParticipantKey
 public enum BattleTeam{PlayerTeam,EnemyTeam}
 public enum BattleEndState
 {
-    PlayerRanAway,PokemonRanAway,PokemonWasCaught,PlayerLost,PlayerWon,BattleTerminated,None
+    PlayerRanAway,PokemonRanAway,PokemonWasCaught
+    ,PlayerLost,PlayerWon,BattleTerminated,None
 }
 public enum PlayerTurnUsage
 {
@@ -55,6 +56,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
     
     public bool isTrainerBattle;
     public bool isDoubleBattle;
+    public bool isBattleCompetition;
     public int validParticipantCount;
   
     public BattleEndState battleEndState;
@@ -385,8 +387,11 @@ public class BattleHandler : MonoBehaviour, IInjectable
         OnBattleStarted?.Invoke();
         _turnBasedCombatHandler.StartFreshTurn();
     }
-
-    public void StartTestBattle(TrainerData data)
+    /// <summary>
+    /// Start trainer battle without waiting on the routine
+    /// </summary>
+    /// <param name="data"></param>
+    public void StartBattle(TrainerData data)
     {
         StartCoroutine(SetBattleTypeAndStart(data));
     }
@@ -869,7 +874,10 @@ public class BattleHandler : MonoBehaviour, IInjectable
                         
                         var moneyGained = baseMoneyPayout * lastDefeatedOpponent?.currentLevel * PrizeMoneyModifier(currentParticipants) ?? 0;
                         playerData.playerMoney += (int)math.floor(moneyGained);
-                        _dialogueHandler.DisplayBattleInfo(playerName + " received P" + moneyGained);
+                        if(moneyGained>0)
+                        {
+                            _dialogueHandler.DisplayBattleInfo(playerName + " received P" + moneyGained);
+                        }
                     }
                     else
                     {
@@ -938,15 +946,16 @@ public class BattleHandler : MonoBehaviour, IInjectable
             }
         }
     }
+
     private IEnumerator ResetUiAfterBattle()
     {
         BattleInProgress = false;
         OnBattleEnd?.Invoke();
         _dialogueHandler.EndDialogue();
         _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
-        
+
         SetPlayerTurnUsage(PlayerTurnUsage.None);
-        
+
         SetBattleOptionPermission(BattleOption.Fight, true);
         SetBattleOptionPermission(BattleOption.Bag, true);
         SetBattleOptionPermission(BattleOption.Party, true);
@@ -954,24 +963,24 @@ public class BattleHandler : MonoBehaviour, IInjectable
 
         battleUI.SetActive(false);
         optionsUI.SetActive(false);
-        
-        if(isTrainerBattle)
+
+        if (isTrainerBattle)
         {
             OnTrainerBattleResult?.Invoke(battleEndState == BattleEndState.PlayerWon,
-                currentParticipants.Where(p=>!p.isPlayer && p.activeForBattle)
-                    .Select(p=>p.pokemonTrainerAI.trainerData).ToList());
+                currentParticipants.Where(p => !p.isPlayer && p.activeForBattle)
+                    .Select(p => p.pokemonTrainerAI.trainerData).ToList());
         }
         else
         {
             OnWildBattleResult?.Invoke(battleEndState == BattleEndState.PlayerWon);
         }
-        
+
         foreach (var participant in currentParticipants)
         {
             participant.ResetImagePosition();
             participant.pokemonImage.color = Color.white;
-            
-            if(participant.activeForBattle)
+
+            if (participant.activeForBattle)
             {
                 participant.DeactivateParticipant();
                 participant.ResetParticipantState();
@@ -979,28 +988,35 @@ public class BattleHandler : MonoBehaviour, IInjectable
                 participant.RemovePokemon();
                 participant.pokemonTrainerAI = null;
             }
+
             participant.activeForBattle = false;
         }
+
         foreach (var team in teamEffects)
         {
             team.ClearEffects();
         }
-        
+
         _battleIntroHandler.ResetParticipantIntroImages();
-      
-        SoundManager.PopMusicWhenFinished(); 
-        
+
+        SoundManager.PopMusicWhenFinished();
+
         overWorld.SetActive(true);
-        if(battleEndState == BattleEndState.PlayerLost)
-        {
-            _playerParty.HealPartyPokemon();
-            _areaHandler.TeleportToArea(AreaName.PokeCenter);
-        }
-        else
-        {
-            _areaHandler.SwitchToArea(_gameLoadingHandler.playerData.location);
-        }
         
+        if (!isBattleCompetition)
+        {//Post-battle state is handled normally
+            if (battleEndState == BattleEndState.PlayerLost)
+            {
+                _playerParty.HealPartyPokemon();
+                _areaHandler.TeleportToArea(AreaName.PokeCenter);
+            }
+            else
+            {
+                _areaHandler.SwitchToArea(_gameLoadingHandler.playerData.location);
+            }
+        }
+
+        isBattleCompetition = false;
         BattleOver = false;
         battleEndState = BattleEndState.None;
         yield return new WaitForSeconds(1f);

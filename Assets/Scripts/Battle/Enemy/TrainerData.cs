@@ -5,7 +5,6 @@ using UnityEngine;
 public class TrainerData : AdditionalInfoModule
 {
     public string trainerName;
-    public TrainerType trainerType;
     public int baseMoneyPayout;
     public AreaData trainerLocationData;
     public List<TrainerPokemonData> PokemonParty = new();
@@ -24,9 +23,4 @@ public enum BattleType
 public enum AiFlags
 {
     CheckBadMove,CheckViability,CheckStatus,CheckSetup,CheckSwitching,CheckPriority
-}
-
-public enum TrainerType
-{
-    None
 }

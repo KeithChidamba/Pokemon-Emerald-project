@@ -18,7 +18,7 @@ public static class BattleTestableExtensions
         testEnemy.battleType = testData.testEnemyData.battleType;
 
         test.testOperationsComplete = target.GetContainer.Resolve<BattleHandler>().AwaitBattleCompletion;
-        target.GetContainer.Resolve<BattleHandler>().StartTestBattle(testEnemy);
+        target.GetContainer.Resolve<BattleHandler>().StartBattle(testEnemy);
     }
     public static void StartWildBattle(this IBattleTestable target,BattleItemUsageEndToEndTestData testData,EndToEndTest test)
     {

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b52ef104b933d22c993d755f9cc0bf23, type: 3}
+  m_Name: Ranger
+  m_EditorClassIdentifier: 
+  spriteDataList:
+  - idleSprite: {fileID: 887205364, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    spritesForDirection:
+    - {fileID: 822633060, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: 887205364, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: -235066542, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    direction: 1
+  - idleSprite: {fileID: -2136585712, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    spritesForDirection:
+    - {fileID: 848262389, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: -2136585712, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: -1127731213, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    direction: 2
+  - idleSprite: {fileID: -988218571, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    spritesForDirection:
+    - {fileID: -1958966582, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: -988218571, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: 1211017785, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    direction: 3
+  - idleSprite: {fileID: 1136530139, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    spritesForDirection:
+    - {fileID: -1451693577, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: 1136530139, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: 503054300, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    direction: 4

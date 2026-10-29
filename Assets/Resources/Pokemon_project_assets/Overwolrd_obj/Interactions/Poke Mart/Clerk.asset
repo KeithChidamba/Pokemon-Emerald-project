@@ -12,18 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6b41fff4906564db2330b1b297bbc9, type: 3}
   m_Name: Clerk
   m_EditorClassIdentifier: 
+  dynamicInfoModules: []
   interactionMessage: Hello, what can i help you with?
   dialogueType: 1
   isEventTrigger: 0
-  interactionOptions: 0000000003000000
-  resultMessage: 
+  interactionOptions: 0000000002000000
   optionsUiText:
   - Buy
   - Sell
+  overworldInteraction: 1
   additionalInfoModules:
   - {fileID: 11400000, guid: 598e0a60a91b410d090bc3d14ab1b6b1, type: 2}
-  overworldInteraction: 1
-  dynamicInfoModules: []
   references:
     version: 2
     RefIds: []

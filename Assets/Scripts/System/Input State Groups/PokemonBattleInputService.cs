@@ -28,7 +28,6 @@ public class PokemonBattleInputService : IInputGroup
     private void SetupBattleOptions()
     {
         //this state reset is necessary because this state persists
-        //unlike [move selection] with is removed and recreated every time it's needed
         _inputStateHandler.ResetGridCoordinates();
         _inputStateHandler.currentState.currentSelectionIndex = 0;
         _inputStateHandler.currentState.persistOnExit = true;//for turn re-use logic
@@ -37,6 +36,7 @@ public class PokemonBattleInputService : IInputGroup
     
     private void SetupMoveSelection()
     {
+        _inputStateHandler.ResetGridCoordinates();
         _dialogueHandler.EndDialogue();
         ref InputState currentState = ref _inputStateHandler.currentState;
         currentState.currentSelectionIndex = 0;

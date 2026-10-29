@@ -145,7 +145,7 @@ public class TestingUtilities
                {
                    createdPokemon.GiveItem(InstanceFactory.CreateItem(member.naturalPokemonData.heldItem));
                }
-               pokemonPartyHandler.AddTestMember(createdPokemon);
+               pokemonPartyHandler.AddMember(createdPokemon);
            }
        }
        yield return new WaitForSeconds(1f);

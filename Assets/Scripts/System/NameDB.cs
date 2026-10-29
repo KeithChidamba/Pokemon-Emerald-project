@@ -253,6 +253,63 @@ public static class NameDB
         
     public static readonly List<NatureName> PokemonNatures =
         Enum.GetValues(typeof(NatureName)).Cast<NatureName>().ToList();
+    
+    private static Dictionary<PokemonName, string> _pokemonNames = new()
+    {
+        { PokemonName.Mudkip, "Mudkip" },
+        { PokemonName.Marshtomp, "Marshtomp" },
+        { PokemonName.Swampert, "Swampert" },
+
+        { PokemonName.Trapinch, "Trapinch" },
+        { PokemonName.Vibrava, "Vibrava" },
+        { PokemonName.Flygon, "Flygon" },
+
+        { PokemonName.Treecko, "Treecko" },
+        { PokemonName.Grovyle, "Grovyle" },
+        { PokemonName.Sceptile, "Sceptile" },
+
+        { PokemonName.Torchic, "Torchic" },
+        { PokemonName.Combusken, "Combusken" },
+        { PokemonName.Blaziken, "Blaziken" },
+
+        { PokemonName.Pikachu, "Pikachu" },
+        { PokemonName.Raichu, "Raichu" },
+
+        { PokemonName.Zigzagoon, "Zigzagoon" },
+        { PokemonName.Linoone, "Linoone" },
+
+        { PokemonName.Zubat, "Zubat" },
+        { PokemonName.Golbat, "Golbat" },
+        { PokemonName.Crobat, "Crobat" }
+    };
+
+    public static string GetPokemon(PokemonName pokemon)
+    {
+        return _pokemonNames[pokemon];
+    }
+}
+
+public enum PokemonName
+{
+    Mudkip,
+    Marshtomp,
+    Swampert,
+    Trapinch,
+    Vibrava,
+    Flygon,
+    Treecko,
+    Grovyle,
+    Sceptile,
+    Torchic,
+    Combusken,
+    Blaziken,
+    Pikachu,
+    Raichu,
+    Zigzagoon,
+    Linoone,
+    Zubat,
+    Golbat,
+    Crobat
 }
 
 public enum NatureName

@@ -1,0 +1,39 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b52ef104b933d22c993d755f9cc0bf23, type: 3}
+  m_Name: Hiker
+  m_EditorClassIdentifier: 
+  spriteDataList:
+  - idleSprite: {fileID: -1057886752, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    spritesForDirection:
+    - {fileID: -944816864, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: -1057886752, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: -1581782403, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    direction: 1
+  - idleSprite: {fileID: 1724926825, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    spritesForDirection:
+    - {fileID: -79993950, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: 1724926825, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: 705119657, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    direction: 2
+  - idleSprite: {fileID: -981134584, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    spritesForDirection:
+    - {fileID: 542499423, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: -981134584, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: 505694015, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    direction: 3
+  - idleSprite: {fileID: -229611720, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    spritesForDirection:
+    - {fileID: 1579512033, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: -229611720, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    - {fileID: -1604898574, guid: a36ce105515239109aba9199c8b9a8fc, type: 3}
+    direction: 4

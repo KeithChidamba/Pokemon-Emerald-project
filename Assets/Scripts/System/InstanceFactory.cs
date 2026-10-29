@@ -137,7 +137,6 @@ public static class InstanceFactory
     {
         var trainerCopy = ScriptableObject.CreateInstance<TrainerData>();
         trainerCopy.trainerName = data.trainerName;
-        trainerCopy.trainerType = data.trainerType;        
         trainerCopy.baseMoneyPayout = data.baseMoneyPayout;
         trainerCopy.trainerLocationData = data.trainerLocationData;
         trainerCopy.battleIntroSprite = data.battleIntroSprite;

@@ -41,10 +41,10 @@ public class GameInstaller : MonoBehaviour
     [SerializeField] private GameLoadingHandler gameLoadingHandler;
     [SerializeField] private OverworldActionsHandler overworldActionsHandler;
     [SerializeField] private ItemHandler itemHandler;
-    
     [SerializeField] private GameSettingsHandler gameSettingsHandler;
     [SerializeField] private TypingInterfaceHandler typingInterfaceHandler;
     [SerializeField] private TestingEnvironmentHandler testingSetupHandler;
+    [SerializeField] private BattleZoneHandler battleZoneHandler;
     
     private event Action OnServicesInjected;
     
@@ -86,6 +86,7 @@ public class GameInstaller : MonoBehaviour
         _container.RegisterSingleton(moveLogicDatabase);
         _container.RegisterSingleton(typingInterfaceHandler);
         _container.RegisterSingleton(testingSetupHandler);
+        _container.RegisterSingleton(battleZoneHandler);
         
         //Non-Mono services
         _container.RegisterSingleton(new PlayerBagInputService(_container));

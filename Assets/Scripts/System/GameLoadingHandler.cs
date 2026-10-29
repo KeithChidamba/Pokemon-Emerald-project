@@ -158,7 +158,6 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
         worldMap.SetActive(true);
         _playerMovement.ActivatePlayerFromSave(playerData.playerPosition);
         _areaHandler.SwitchToArea(playerData.location);
-        
         _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
     }
     public void StartGame(bool loadFromSave=true)

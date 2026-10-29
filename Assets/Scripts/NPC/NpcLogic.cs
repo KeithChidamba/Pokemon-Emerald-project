@@ -73,16 +73,6 @@ public class NpcLogic : MonoBehaviour
         if(!overworldData.resumeMovementAfterPause)return;
         if(interaction is null) return;
         if(interaction.GetID != npcInteractable.interaction.GetID) return;
-        if(interaction.overworldInteraction == OverworldInteractionType.Battle)
-        {
-            _battleHandler.OnBattleEnd += ResumeAfterBattle;
-            return;
-            void ResumeAfterBattle()
-            {
-                _battleHandler.OnBattleEnd -= ResumeAfterBattle;
-                movementHandler.ResumeMovement();
-            }
-        }
         movementHandler.ResumeMovement();
     }
     

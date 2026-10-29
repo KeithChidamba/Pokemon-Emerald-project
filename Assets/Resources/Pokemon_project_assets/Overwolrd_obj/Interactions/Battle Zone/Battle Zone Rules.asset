@@ -17,7 +17,7 @@ MonoBehaviour:
   interactionMessage: Would you like to know the battle rules?
   dialogueType: 1
   isEventTrigger: 0
-  interactionOptions: 0700000000000000
+  interactionOptions: 0600000000000000
   optionsUiText:
   - Yes
   - No
@@ -32,7 +32,7 @@ MonoBehaviour:
         dialogue:
         - First things first, you wont be able to save the game until the tournament
           ends.
-        - You will face a 3 opponents depending on who beats who.
+        - You will face a 4 opponents depending on who beats who.
         - The format is a classic tournament bracket.
         - You have the choice of using your own pokemon if they meet the level requiremnt,
         - or you can use the randomized set of pokemon.

@@ -12,15 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6b41fff4906564db2330b1b297bbc9, type: 3}
   m_Name: PC
   m_EditorClassIdentifier: 
+  dynamicInfoModules: []
   interactionMessage: How would you like to use the PC?
   dialogueType: 1
   isEventTrigger: 0
-  interactionOptions: 050000000600000000000000
-  resultMessage: Booted up PC!
+  interactionOptions: 050000000500000000000000
   optionsUiText:
   - Pokemon Storage
   - Item Storage
   - Cancel
-  additionalInfo: []
   overworldInteraction: 0
-  location: 3
+  additionalInfoModules: []
+  references:
+    version: 2
+    RefIds: []

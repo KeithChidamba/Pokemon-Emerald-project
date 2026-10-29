@@ -6,9 +6,9 @@
     "numBadges": 0,
     "playerPosition": {
         "x": 64.0,
-        "y": -95.0,
+        "y": -105.0,
         "z": 0.0
     },
-    "location": 0,
+    "location": 1,
     "equippedItemName": ""
 }

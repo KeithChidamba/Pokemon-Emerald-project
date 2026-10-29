@@ -6,7 +6,10 @@ using UnityEngine;
 using TMPro;
 using Unity.Mathematics;
 
-public enum DialogType {Details,Options,Event,BattleInfo,BattleDisplayMessage,CustomOptions,TextOnly}
+public enum DialogType
+{
+    Details,Options,TextOnly,BattleInfo,BattleDisplayMessage,CustomOptions,DynamicHandling
+}
 public class DialogueHandler : MonoBehaviour,IInjectable
 {
     public OverworldInteractable currentInteractable;
@@ -297,14 +300,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
     {
         interaction.SetRuntimeID();
         OnDialogueStarted?.Invoke(interaction);
-        
         _interactionHandler.DisableInteraction();
-       
-        if (interaction.dialogueType == DialogType.Event)
-        {
-            interactionOptionsHandler.CompleteEventInteraction(interaction);
-            return;
-        }
         HandleInteraction(interaction,true);
     }
     public void StartInteraction(OverworldInteractable interactable)
@@ -351,12 +347,13 @@ public class DialogueHandler : MonoBehaviour,IInjectable
         {
             dialougeText.SetText(currentInteraction.interactionMessage);
         }
+      
         OnDialogueDisplayed?.Invoke(currentInteraction.interactionMessage);
         dialougeText.ForceMeshUpdate();
         RemovePointer();
         
         int totalPages = dialougeText.textInfo.pageCount;
-
+       
         for (int page = 1; page <= totalPages; page++)
         {
             RemovePointer();
@@ -423,7 +420,10 @@ public class DialogueHandler : MonoBehaviour,IInjectable
         {
             CreateDialogueOptions(currentInteraction);
         }
-        
+        if(currentInteraction.dialogueType == DialogType.DynamicHandling)
+        {
+            interactionOptionsHandler.HandleInDynamicClass(currentInteraction);
+        }
         _typingRoutine = null;
     }
 

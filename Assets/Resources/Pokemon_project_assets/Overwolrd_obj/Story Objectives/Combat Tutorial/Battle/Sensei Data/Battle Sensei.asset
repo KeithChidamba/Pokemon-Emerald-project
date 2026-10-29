@@ -12,16 +12,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6b41fff4906564db2330b1b297bbc9, type: 3}
   m_Name: Battle Sensei
   m_EditorClassIdentifier: 
-  dynamicInfoModules: []
+  dynamicInfoModules:
+  - rid: 1021519541017247745
   interactionMessage: 
-  dialogueType: 2
+  dialogueType: 6
   isEventTrigger: 0
-  interactionOptions: 01000000
-  resultMessage: 
+  interactionOptions: 
   optionsUiText: []
   overworldInteraction: 6
-  additionalInfoModules:
-  - {fileID: 11400000, guid: bafe1d46db38920bd84b298926408368, type: 2}
+  additionalInfoModules: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1021519541017247745
+      type: {class: BattleTriggerInfo, ns: , asm: Assembly-CSharp}
+      data:
+        trainerData: {fileID: 11400000, guid: bafe1d46db38920bd84b298926408368, type: 2}

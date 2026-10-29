@@ -13,7 +13,6 @@ public class Interaction : InfoModuleHolder
     
     [FormerlySerializedAs("InteractionMsg")] public string interactionMessage = "";
     public StringBuilder interactionMessageBuilder = new();
-    
     public DialogType dialogueType;
     public bool isEventTrigger;
     public List<InteractionOptions> interactionOptions = new();
@@ -41,6 +40,5 @@ public enum OverworldInteractionType
     PokemartClerk,
     PlantBerry,
     PickBerry,
-    WaterBerryTree,
-    PokemonCenter,Battle
+    WaterBerryTree
 }

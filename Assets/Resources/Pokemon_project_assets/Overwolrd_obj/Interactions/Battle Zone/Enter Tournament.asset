@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6b41fff4906564db2330b1b297bbc9, type: 3}
   m_Name: Enter Tournament
   m_EditorClassIdentifier: 
-  dynamicInfoModules: []
+  dynamicInfoModules:
+  - rid: 1021519541017247746
   interactionMessage: Ready to battle?
   dialogueType: 1
   isEventTrigger: 0
-  interactionOptions: 0700000000000000
+  interactionOptions: 0600000000000000
   optionsUiText:
   - Let's do this!
   - No thanks
@@ -24,4 +25,7 @@ MonoBehaviour:
   additionalInfoModules: []
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1021519541017247746
+      type: {class: TriggerBattleZoneTournament, ns: , asm: Assembly-CSharp}
+      data: 

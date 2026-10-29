@@ -1,0 +1,10 @@
+{
+    "isPlanted": true,
+    "currentStageNeedsWater": false,
+    "currentStageProgress": 4,
+    "minutesSinceLastStage": 0.0,
+    "numStagesWatered": 0,
+    "itemAssetName": "Kelpsy berry",
+    "soilIndex": 2,
+    "lastLogin": "2026-10-29T21:38:32.1410800+02:00"
+}
