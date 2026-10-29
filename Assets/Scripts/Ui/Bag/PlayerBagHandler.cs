@@ -124,7 +124,7 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
         if (itemToSell.quantity == 0) RemoveItem(itemToSell);
         
         _dialogueHandler.DisplayCustomOptions("You made P"+_totalSellingAmount+ ", would you like to sell anything else?",
-              new[]{"Yes", "No"},new Action[] { SellItem, LeaveStore },"Sure, which item?");
+              new[]{"Yes", "No"},new Action[] { SellItem, LeaveStore });
         
         _inputStateHandler.ResetSpecificUi(InputStateName.PlayerBagItemSell,true);
         _inputStateHandler.ResetSpecificUi(InputStateName.PlayerBagNavigation,true);

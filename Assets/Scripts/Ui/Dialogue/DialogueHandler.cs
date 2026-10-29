@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using TMPro;
 using Unity.Mathematics;
@@ -173,20 +174,19 @@ public class DialogueHandler : MonoBehaviour,IInjectable
          foreach (var obj in dialogueOptionsManager.currentOptions)
              obj.gameObject.SetActive(display);
      }
-    Interaction NewInteraction(string info,DialogType type,string result = "")
+    Interaction NewInteraction(string info,DialogType type)
     {
         var newInteraction = ScriptableObject.CreateInstance<Interaction>();
         newInteraction.interactionMessage = info;
         newInteraction.dialogueType = type;
-        newInteraction.resultMessage = result;
         return newInteraction;
     }
-    public void DisplayCustomOptions(string info, string[]optionsText, Action[] optionEvents,string result="")
+    public void DisplayCustomOptions(string info, string[]optionsText, Action[] optionEvents)
     {
         interactionOptionsHandler.OnInteractionOptionChosen += InvokeSelectedOption;
         
         canExitDialogue = false;
-        var newInteraction = NewInteraction(info,DialogType.CustomOptions,result);
+        var newInteraction = NewInteraction(info,DialogType.CustomOptions);
         foreach (string text in optionsText) 
         {
             newInteraction.interactionOptions.Add(InteractionOptions.Custom);
@@ -203,6 +203,15 @@ public class DialogueHandler : MonoBehaviour,IInjectable
             interactionOptionsHandler.OnInteractionOptionChosen -= InvokeSelectedOption;
         }
     }
+    public void DisplayFromBuilder(StringBuilder builder,bool canExit=true)
+    {
+        canExitDialogue = canExit;
+        messagesLoading = false;
+        var newInteraction = ScriptableObject.CreateInstance<Interaction>();
+        newInteraction.interactionMessageBuilder = builder;
+        newInteraction.dialogueType = DialogType.Details;
+        HandleInteraction(newInteraction,true);
+    } 
     public void DisplaySpecific(string info, DialogType type)
     {
         messagesLoading = false;
@@ -334,7 +343,14 @@ public class DialogueHandler : MonoBehaviour,IInjectable
         ResetText();
         dialogueFinished = false;
         Displaying = true; 
-        dialougeText.text = currentInteraction.interactionMessage;
+        if(currentInteraction.interactionMessageBuilder.Length > 0)
+        {
+            dialougeText.SetText(currentInteraction.interactionMessageBuilder);
+        }
+        else
+        {
+            dialougeText.SetText(currentInteraction.interactionMessage);
+        }
         OnDialogueDisplayed?.Invoke(currentInteraction.interactionMessage);
         dialougeText.ForceMeshUpdate();
         RemovePointer();
@@ -432,7 +448,14 @@ public class DialogueHandler : MonoBehaviour,IInjectable
         else
         {
             RemovePointer();
-            dialougeText.text = currentInteraction.interactionMessage;
+            if(currentInteraction.interactionMessageBuilder.Length > 0)
+            {
+                dialougeText.SetText(currentInteraction.interactionMessageBuilder);
+            }
+            else
+            {
+                dialougeText.SetText(currentInteraction.interactionMessage);
+            }
             dialougeText.maxVisibleCharacters = dialougeText.text.Length;
         }
     }

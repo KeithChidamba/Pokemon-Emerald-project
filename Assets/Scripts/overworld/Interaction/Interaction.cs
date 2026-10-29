@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -11,10 +12,11 @@ public class Interaction : InfoModuleHolder
     private string runtimeID = "";
     
     [FormerlySerializedAs("InteractionMsg")] public string interactionMessage = "";
+    public StringBuilder interactionMessageBuilder = new();
+    
     public DialogType dialogueType;
     public bool isEventTrigger;
     public List<InteractionOptions> interactionOptions = new();
-    [FormerlySerializedAs("ResultMessage")] public string resultMessage = "";
     [FormerlySerializedAs("OptionsUiText")] public List<string> optionsUiText= new();
     
     public OverworldInteractionType overworldInteraction;

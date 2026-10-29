@@ -7,8 +7,8 @@ using UnityEngine.UI;
 
 public enum InteractionOptions
 {
-    None,Battle, Interact,SellItem,HealPokemon,OpenPokemonStorage,
-    OpenItemStorage, HandleInDynamicClass,Custom
+    None,Battle, Custom,SellItem,HealPokemon,OpenPokemonStorage,
+    OpenItemStorage, HandleInDynamicClass
 }
 public class InteractionOptionsEventHandler : MonoBehaviour,IInjectable
 {
@@ -45,7 +45,6 @@ public class InteractionOptionsEventHandler : MonoBehaviour,IInjectable
     public void OnInject()
     {
         _interactionMethods.Add(InteractionOptions.Battle,Battle);
-        _interactionMethods.Add(InteractionOptions.Interact,Interact);
         _interactionMethods.Add(InteractionOptions.HealPokemon,HealPokemon);
         _interactionMethods.Add(InteractionOptions.OpenPokemonStorage,OpenPokemonStorage);
         _interactionMethods.Add(InteractionOptions.SellItem,SellItem);
@@ -155,10 +154,6 @@ public class InteractionOptionsEventHandler : MonoBehaviour,IInjectable
     private void HandleInDynamicClass()
     {
         _currentInteraction.dynamicInfoModules.First().HandleInternalLogic(_container);
-    }
-    private void Interact()
-    {
-        _dialogueHandler.DisplayDetails(_currentInteraction.resultMessage);
     }
     public void AlertOverworldInteraction(OverworldInteractable interactable,int optionIndex)
     {

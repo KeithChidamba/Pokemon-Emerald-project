@@ -15,4 +15,30 @@ MonoBehaviour:
   areaName: 1
   entranceCell: {x: 64, y: -105, z: 0}
   biome: 3
-  npcList: []
+  npcList:
+  - npcData:
+      npcPosition: {x: 62, y: -101, z: 0}
+      npcAnimationData:
+        spriteData: {fileID: 11400000, guid: 66c5f3493ab4ed2d9b6add8cd7a06f48, type: 2}
+        movementDirections:
+        - direction: 4
+          numTilesToTravel: 1
+        isIdle: 1
+      npcInteraction: {fileID: 11400000, guid: 84dcb13d52fa1bd7da80dc24d2d35f61, type: 2}
+      npcInteractionMessage: 
+    autoDetectPlayer: 1
+    resumeMovementAfterPause: 0
+    detectDistance: 4
+  - npcData:
+      npcPosition: {x: 62, y: -107, z: 0}
+      npcAnimationData:
+        spriteData: {fileID: 11400000, guid: 66c5f3493ab4ed2d9b6add8cd7a06f48, type: 2}
+        movementDirections:
+        - direction: 4
+          numTilesToTravel: 1
+        isIdle: 1
+      npcInteraction: {fileID: 11400000, guid: ec990e77fb04f7656b801dfaaefdf964, type: 2}
+      npcInteractionMessage: 
+    autoDetectPlayer: 1
+    resumeMovementAfterPause: 0
+    detectDistance: 4

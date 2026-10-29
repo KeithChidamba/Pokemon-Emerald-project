@@ -9,14 +9,14 @@
         },
         {
             "pickup": {
-                "instanceID": 27830
+                "instanceID": 27840
             },
             "pickupId": "Max Ether Pickup",
             "hasBeenPicked": false
         },
         {
             "pickup": {
-                "instanceID": 26746
+                "instanceID": 26752
             },
             "pickupId": "Rare Candy Pickup",
             "hasBeenPicked": false
