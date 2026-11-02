@@ -603,7 +603,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
     }
     public void CountValidParticipants()
     {
-        validParticipantCount = currentParticipants.Count(p=>p.Pokemon is not null);
+        validParticipantCount = currentParticipants.Count(p=>p.isActive);
     }
 
     public void ReviveParticipant()

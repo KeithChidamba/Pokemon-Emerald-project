@@ -64,13 +64,24 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
       gameObject.SetActive(true);
       allPokemon = Resources.LoadAll<Pokemon>(DirectoryHandler.GetDirectory(AssetDirectory.Pokemon));
       allMoves = Resources.LoadAll<Move>(DirectoryHandler.GetDirectory(AssetDirectory.Moves));
+      _battleHandler.OnBattleStarted += () => AlterExpGain(false);
+      _battleHandler.OnBattleEnd += () => AlterExpGain(true);
    }
-
+   
+   private void AlterExpGain(bool canGain)
+   {
+       var participants = _battleHandler.GetParticipants;
+       foreach (var participant in participants)
+       {
+           participant.pokemonState.canGainExp = canGain;
+       }
+   }
+   
    public void BeginTournament()
    {
        _gameUi.SetMenuAccessibility(false);
        _battleHandler.OnTrainerBattleResult += DetermineNextBracket;
-      
+       
        leftBracket.Clear();
        rightBracket.Clear();
        leftContestants.Clear();
@@ -149,8 +160,8 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
                void GetPokemonCopy(Pokemon pokemonCopy)
                {
                    PokemonOperations.ResolvePokemonNickName(pokemonCopy);
-                   _partyHandler.AddMember(pokemonCopy);
                    pokemonCopy.moveSet = GetRandomFromLearnSet(pokemonCopy.learnSet);
+                   _partyHandler.AddMember(pokemonCopy);
                }
            }
        }

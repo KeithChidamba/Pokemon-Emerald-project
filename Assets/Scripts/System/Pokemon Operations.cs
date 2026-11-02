@@ -598,75 +598,101 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         newPokemon.hp = newPokemon.maxHp;
         creationCallBack.Invoke(newPokemon);
     }
+
+    private static IEnumerator WaitUntilMusicTime(float musicStart, float target)
+    {
+        float remaining = (musicStart + target) - Time.time;
+        if (remaining > 0f) yield return new WaitForSeconds(remaining);
+    }
     public IEnumerator HandlePokemonEvolution(Pokemon pokemon, int evolutionIndex)
     {
+        // Seconds from the moment the music starts
+        const float IntroEnd = 5.0f;
+        const float BgFadeEnd = 7.0f;
+        const float MaskFadeEnd = 9.0f;
+        const float FlickerEnd = 30.0f;
+        const float RevealEnd = 32.5f;
+        const float CongratsEnd = 38.0f;
+        // 0.2s lead-in + 0.5s final hold inside PokemonEvolutionAnimation
+        const float FlickerOverhead = 0.7f;
+        
         _inputStateHandler.AddPlaceHolderState();
         yield return _gameUiHandler.FadeInBlackScreen();
         _gameUiHandler.RemoveColorScreen();
-        
-        evolutionImage.sprite = pokemon.frontPicture;
-        
-        evolutionUi.SetActive(true);
-        
-        _dialogueHandler.DisplayTextOnly("What? "+pokemon.pokemonDisplayName+" is evolving!",false);
-        StartCoroutine(Utility.PokemonIntroAnimation(evolutionImage, pokemon));
-        
-        if (_battleHandler.BattleInProgress)
-        {
-            yield return _dialogueHandler.AwaitAllDialogue();
-        }
-        else
-        {
-            yield return _dialogueHandler.WaitForDialogueCompletion();
-        }
-        yield return Utility.FadeImage(evolutionBackground,Color.white,new Color(255,255,255,0));
-        
-        evolutionImageMask.gameObject.SetActive(true);
-        yield return Utility.FadeImage(evolutionImageMask,Color.white);
-        
-        var evoSprite = pokemon.evolutions[evolutionIndex].frontPicture;
-        yield return Utility.PokemonEvolutionAnimation(evolutionImage, pokemon.frontPicture, evoSprite);
 
+        evolutionImage.sprite = pokemon.frontPicture;
+        evolutionUi.SetActive(true);
+
+        SoundManager.PushMusic(MusicId.Evolution);
+        float musicStart = Time.time;
+
+        // ---- Intro (0 -> 5s) ----
+        _dialogueHandler.DisplayTextOnly("What? " + pokemon.pokemonDisplayName + " is evolving!", false);
+        StartCoroutine(Utility.PokemonIntroAnimation(evolutionImage, pokemon));
+
+        if (_battleHandler.BattleInProgress)
+            yield return _dialogueHandler.AwaitAllDialogue();
+        else
+            yield return _dialogueHandler.WaitForDialogueCompletion();
+
+        yield return WaitUntilMusicTime(musicStart, IntroEnd);
+
+        // ---- Background fade (5 -> 7s) ----
+        yield return Utility.FadeImage(evolutionBackground, Color.white, new Color(1f, 1f, 1f, 0f),
+            BgFadeEnd - IntroEnd);
+
+        // ---- Mask fade in (7 -> 9s) ----
+        evolutionImageMask.gameObject.SetActive(true);
+        yield return Utility.FadeImage(evolutionImageMask, Color.white, MaskFadeEnd - BgFadeEnd);
+
+        // ---- Flicker (9 -> 30s) ----
+        var evoSprite = pokemon.evolutions[evolutionIndex].frontPicture;
+        yield return Utility.PokemonEvolutionAnimation(
+            evolutionImage,
+            pokemon.frontPicture,
+            evoSprite,
+            totalDuration: (FlickerEnd - MaskFadeEnd) - FlickerOverhead);
+        yield return WaitUntilMusicTime(musicStart, FlickerEnd);
+
+        // ---- Evolve + reveal (30 -> 32.5s) ----
         var previousName = pokemon.pokemonDisplayName;
-        
         pokemon.Evolve(pokemon.evolutions[evolutionIndex]);
-        
-        StartCoroutine(Utility.FadeImage(evolutionImageMask,Color.white,new Color(255,255,255,0)));
+
+        StartCoroutine(Utility.FadeImage(evolutionImageMask, Color.white, new Color(1f, 1f, 1f, 0f),
+            RevealEnd - FlickerEnd));
         yield return _gameUiHandler.FadeInColorScreen(Color.white);
         evolutionImageMask.gameObject.SetActive(false);
         _gameUiHandler.RemoveColorScreen();
-        
+        yield return WaitUntilMusicTime(musicStart, RevealEnd);
+
+        // ---- Congratulations (32.5 -> 38s) ----
         StartCoroutine(Utility.PokemonIntroAnimation(evolutionImage, pokemon));
+
+        string congrats = $"Congratulations! Your {previousName} evolved into {pokemon.pokemonName}";
         if (_battleHandler.BattleInProgress)
-        {
-            _dialogueHandler.DisplayBattleInfo($"Congratulations! Your {previousName} evolved into {pokemon.pokemonName}");
-        }
+            _dialogueHandler.DisplayBattleInfo(congrats);
         else
-        {
-            _dialogueHandler.DisplayTextOnly($"Congratulations! Your {previousName} evolved into {pokemon.pokemonName}",
-                false);
-        }
-        
+            _dialogueHandler.DisplayTextOnly(congrats, false);
+
         if (_battleHandler.BattleInProgress)
         {
             var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-            if(player.isActive)player.pokemonImage.sprite = pokemon.backPicture;
+            if (player.isActive) player.pokemonImage.sprite = pokemon.backPicture;
             var partner = _battleHandler.GetParticipant(BattleParticipantKey.PlayerPartner);
-            if(partner.isActive)partner.pokemonImage.sprite = pokemon.backPicture;
-        }
-        
-        if (_battleHandler.BattleInProgress)
-        {
+            if (partner.isActive) partner.pokemonImage.sprite = pokemon.backPicture;
+
             yield return _dialogueHandler.AwaitAllDialogue();
         }
         else
         {
             yield return _dialogueHandler.WaitForDialogueCompletion();
-            yield return new WaitForSecondsRealtime(1f);
         }
         
+        yield return WaitUntilMusicTime(musicStart, CongratsEnd);
+
         _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
         yield return _gameUiHandler.FadeInBlackScreen();
+        SoundManager.PopMusic();  
         _dialogueHandler.EndDialogue();
         evolutionUi.SetActive(false);
         evolutionImageMask.gameObject.SetActive(false);
@@ -689,8 +715,6 @@ public class PokemonOperations : MonoBehaviour,IInjectable
             newPokemon.nickName = newPokemon.pokemonName;
         }
     }
-    
-
 }
 
 

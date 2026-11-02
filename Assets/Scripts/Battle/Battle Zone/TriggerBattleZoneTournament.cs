@@ -8,6 +8,7 @@ public class TriggerBattleZoneTournament : DynamicAdditionalInfo
         var dialogueHandler = container.Resolve<DialogueHandler>();
         var battleZone = container.Resolve<BattleZoneHandler>();
         dialogueHandler.EndDialogue();
+        //custom options, set battle difficulty
         battleZone.BeginTournament();
     }
 }

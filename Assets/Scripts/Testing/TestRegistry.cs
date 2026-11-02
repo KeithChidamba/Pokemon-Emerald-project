@@ -71,7 +71,7 @@ public class TestRegistry
         //  new FlinchEffectTest(),
         //  new StruggleTest(),
         //  new StatChangeApplicationTest(),
-        //  new StatusEffectTest(),
+        // new StatusEffectTest(),
         // new WeatherDamageTest(),
         //  new OnFieldDamageModificationTest(),
         // // Move Based Tests

@@ -55,6 +55,7 @@ public class PokeballRolloutUI : MonoBehaviour,IInjectable
         gameObject.SetActive(true);
         
         _finishedDisplaying = false;
+        SoundManager.Play(JingleId.PokeballCount);
         for (var i = 0; i < pokeballs.Count; i++)
         {
             var pokeballImage = pokeballs[i].GetComponent<Image>();

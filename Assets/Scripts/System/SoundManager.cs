@@ -61,6 +61,7 @@ public enum MusicId
     May,
     TrainerEyesMeetYoungster,
     TrainerEyesMeetLass,
+    Evolution
 }
 
 /// <summary>Short stingers that interrupt/duck music but don't replace it long-term.</summary>
@@ -70,7 +71,9 @@ public enum JingleId
     ObtainedBadge,
     ObtainedItem,
     Healed,
-    EvolutionComplete,
+    SendOutPokemon,
+    WithdrawPokemon,
+    PokeballCount
 }
 
 /// <summary>Menu/UI sounds. Always instant, no fading, can overlap.</summary>
@@ -439,25 +442,30 @@ public class SoundManager : MonoBehaviour
 
     private void PlayMusicInternal(MusicId id, float startTime = 0f)
     {
-        if (id == _currentMusic) return; // already playing, mirrors Emerald not restarting a track that's already looping
+        if (id == _currentMusic) return; // already playing (or already silent)
+
+        // None = fade out to silence. This is what StopMusic() and a PopMusic()
+        // back to "nothing was playing" both rely on.
         if (id == MusicId.None)
         {
-            Debug.LogWarning($"[SoundManager] Tried playing Id None");
-            return;
-        }
-        
-        if (_musicMap.TryGetValue(id, out var data))
-        {
-            _currentMusic = id;
-            _musicBaseVolume = data?.volume ?? 1f;
+            _currentMusic = MusicId.None;
 
             if (_musicFadeRoutine != null) StopCoroutine(_musicFadeRoutine);
-            _musicFadeRoutine = StartCoroutine(CrossfadeMusicRoutine(data, startTime));
+            _musicFadeRoutine = StartCoroutine(CrossfadeMusicRoutine(null, 0f));
+            return;
         }
-        else
+
+        if (!_musicMap.TryGetValue(id, out var data))
         {
             Debug.LogWarning($"[SoundManager] No SoundData mapped for MusicId.{id}");
+            return;
         }
+
+        _currentMusic = id;
+        _musicBaseVolume = data.volume;
+
+        if (_musicFadeRoutine != null) StopCoroutine(_musicFadeRoutine);
+        _musicFadeRoutine = StartCoroutine(CrossfadeMusicRoutine(data, startTime));
     }
 
     private IEnumerator CrossfadeMusicRoutine(SoundData data, float startTime)

@@ -351,7 +351,7 @@ public class BattleVisuals : MonoBehaviour,IInjectable
         var targetForUI = new Vector2(participantUIRect.anchoredPosition.x+direction, participantUIRect.anchoredPosition.y);
         
         yield return SlideRect(participantUIRect,participantUIRect.anchoredPosition, targetForUI, 900f);
-   
+        
         if (!participant.isPlayer)
         {
             yield return new WaitForSeconds(0.05f);

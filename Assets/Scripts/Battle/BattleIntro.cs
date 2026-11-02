@@ -361,6 +361,8 @@ public class BattleIntro : MonoBehaviour,IInjectable
             yield return _battleVisualsHandler.SendOutEnemyPokemon(swapParticipant);
         }
         
+        SoundManager.Play(JingleId.SendOutPokemon);
+
         yield return _battleVisualsHandler.RevealPokemonAfterWithdraw(swapParticipant,normalIntentionalSwitch);
         
         if (!swapParticipant.isPlayer)
@@ -371,6 +373,7 @@ public class BattleIntro : MonoBehaviour,IInjectable
     
     private IEnumerator PokemonIntroAnimationMovement(BattleParticipant participant)
     {
+        SoundManager.Play(JingleId.SendOutPokemon);
         if (participant.Pokemon.statusEffect == StatusEffect.Sleep)
         {
             yield break;

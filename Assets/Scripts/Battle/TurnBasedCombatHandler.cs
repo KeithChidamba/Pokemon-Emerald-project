@@ -549,6 +549,8 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         yield return _dialogueHandler.AwaitAllDialogue();
         
         //Complete the swap
+        if (!forcedSwap)SoundManager.Play(JingleId.WithdrawPokemon);
+        
         if (swap.participant.isPlayer || forcedSwap)
         {
             yield return _battleVisualsHandler.WithdrawPokemon(swap.participant);
@@ -630,8 +632,17 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                 yield break;
             }
             if (currentParticipant.isSemiInvulnerable)
-            {
-                yield break;
+            { 
+                //Account for semi-invulnerable turn skip
+                if (_turnHistory.Count == _battleHandler.validParticipantCount)
+                {
+                    BeginTurnExecution();
+                }
+                else
+                {
+                    NextTurn();
+                    yield break;
+                }
             }
             if (currentParticipant.isPlayer)
             {
@@ -713,7 +724,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             currentTurnIndex+=step;
         else
             currentTurnIndex = 0;
-
+        
         var currentParticipant = _battleHandler.GetCurrentParticipant();
         if (!currentParticipant.isActive && !currentParticipant.awaitingRevival)
         {

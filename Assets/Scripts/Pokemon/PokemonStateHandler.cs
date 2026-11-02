@@ -10,6 +10,10 @@ public class PokemonStateHandler
     public Pokemon pokemon;
     public int healthPhase;
     /// <summary>
+    /// Mainly for preventing exp gain in competitions
+    /// </summary>
+    public bool canGainExp;
+    /// <summary>
     /// Allows an external source like item usage to decide what happens when a
     /// pokem on evolves [Evolving after rare candy]
     /// </summary>
@@ -172,6 +176,7 @@ public class PokemonStateHandler
     /// <returns></returns>
     public IEnumerator ReceiveExperienceAndDisplay(int amount)
     {
+        if(!canGainExp) yield break;
         if (pokemon.currentLevel >= 100) yield break;
 
         int remainingExp = Mathf.FloorToInt(pokemon.AccountForExpGainModifier() * amount);

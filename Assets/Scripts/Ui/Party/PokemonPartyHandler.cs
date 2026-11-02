@@ -400,7 +400,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
     {
         newPokemon.pokeballName = NameDB.GetItem(ItemName.Pokeball); 
         newPokemon.hasTrainer = true;
-        CompletePokemonAddition(newPokemon);
+        party.Add(newPokemon);
     }
     public void AddMemberAfterCatch(Pokemon pokemon, string pokeballType)
     {

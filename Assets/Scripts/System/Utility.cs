@@ -100,38 +100,40 @@ public static class Utility
         yield return new WaitForSeconds(0.45f);
         pokemonImage.sprite = pokemon.frontPicture;
     }
-    
     public static IEnumerator PokemonEvolutionAnimation(
         Image pokemonImage,
         Sprite oldSprite,
         Sprite newSprite,
-        int flickerCycles = 15,      // how many old/new swaps before settling
-        float startInterval = 0.35f, // wait time between swaps at the start (slow)
-        float endInterval = 0.015f    // wait time between swaps by the end (fast)
+        float totalDuration = 20f,     // length of the flicker loop
+        float startInterval = 0.5f,    // slow swap speed at the start
+        float endInterval = 0.04f,     // fast swap speed at the end
+        float steadyFraction = 0.5f,   // portion of the duration held at startInterval before accelerating
+        float finalHold = 0.5f
     )
     {
-        // Initial beat on the old sprite before anything starts happening
         pokemonImage.sprite = oldSprite;
         yield return new WaitForSeconds(0.2f);
 
-        // Flicker back and forth: flat pace for the first half, then eases into acceleration
-        for (int i = 0; i < flickerCycles; i++)
+        float start = Time.time;
+        bool showNew = true;
+
+        while (true)
         {
-            float t = (float)i / Mathf.Max(1, flickerCycles - 1); // 0 -> 1
+            float elapsed = Time.time - start;
+            if (elapsed >= totalDuration) break;
 
-            // Hold steady until the midpoint, then ease-in from there to the end
-            float localT = Mathf.Clamp01((t - 0.5f) / 0.5f); // 0 for t<0.5, ramps 0->1 after
-            float eased = localT * localT;                    // ease-in curve for the back half
+            float t = elapsed / totalDuration;
+            float localT = Mathf.Clamp01((t - steadyFraction) / (1f - steadyFraction));
+            float interval = Mathf.Lerp(startInterval, endInterval, localT * localT);
 
-            float interval = Mathf.Lerp(startInterval, endInterval, eased);
+            pokemonImage.sprite = showNew ? newSprite : oldSprite;
+            showNew = !showNew;
 
-            pokemonImage.sprite = (i % 2 == 0) ? newSprite : oldSprite;
             yield return new WaitForSeconds(interval);
         }
 
-        // Final hold on the fully evolved sprite
         pokemonImage.sprite = newSprite;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(finalHold);
     }
     
     public static IEnumerator FadeImage(Image image,Color endColor,float duration=1f)

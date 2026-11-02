@@ -1232,6 +1232,7 @@ MonoBehaviour:
   pokemonState:
     pokemon: {fileID: 0}
     healthPhase: 0
+    canGainExp: 0
     handleEvolutionExternally: 0
     canEvolve: 0
   rawName: 
@@ -4284,6 +4285,7 @@ MonoBehaviour:
   pokemonState:
     pokemon: {fileID: 0}
     healthPhase: 0
+    canGainExp: 0
     handleEvolutionExternally: 0
     canEvolve: 0
   rawName: 
@@ -6325,6 +6327,16 @@ MonoBehaviour:
       duckMusicInstead: 1
       loop: 1
       lastClipIndex: -1
+  - id: 17
+    data:
+      clips:
+      - {fileID: 8300000, guid: f3e962a817e3f7f21ae23aa1e2d2f158, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 1
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
   jingleSounds:
   - id: 3
     data:
@@ -6340,6 +6352,36 @@ MonoBehaviour:
     data:
       clips:
       - {fileID: 8300000, guid: 861d145e5e6bb23cdb79803bf093197b, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 4
+    data:
+      clips:
+      - {fileID: 8300000, guid: 5fd54db38cf6ea96586581b35b3d222d, type: 3}
+      volume: 0.5
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 5
+    data:
+      clips:
+      - {fileID: 8300000, guid: 5544c6d1cd9b3459f841c71b1a451d8b, type: 3}
+      volume: 1
+      pitchVariance: 0
+      fadeSeconds: 0
+      duckMusicInstead: 1
+      loop: 0
+      lastClipIndex: -1
+  - id: 6
+    data:
+      clips:
+      - {fileID: 8300000, guid: 201e0e7cb7d25ef44a09c6e145bba2c2, type: 3}
       volume: 1
       pitchVariance: 0
       fadeSeconds: 0
@@ -327548,6 +327590,7 @@ MonoBehaviour:
   pokemonState:
     pokemon: {fileID: 0}
     healthPhase: 0
+    canGainExp: 0
     handleEvolutionExternally: 0
     canEvolve: 0
   rawName: 
@@ -351070,6 +351113,7 @@ MonoBehaviour:
   pokemonState:
     pokemon: {fileID: 0}
     healthPhase: 0
+    canGainExp: 0
     handleEvolutionExternally: 0
     canEvolve: 0
   rawName: 
