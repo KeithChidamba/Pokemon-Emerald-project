@@ -90,7 +90,23 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         //Debug.Log("turn cleared");
         _turnHistory.Clear();
     }
-
+    private bool IsLastToAct()
+    {
+        return (_battleHandler.isDoubleBattle && IsLastParticipant())
+               || currentTurnIndex == _battleHandler.validParticipantCount;
+    }
+    private void AdvanceAfterAutomaticTurn()
+    {
+        if (IsLastToAct())
+            BeginTurnExecution();
+        else
+            NextTurn();
+    }
+    private static void AbortSemiInvulnerableState(BattleParticipant participant)
+    {
+        participant.isSemiInvulnerable = false;
+        participant.semiInvulnerabilityData?.ResetState();
+    }
     private void BeginTurnExecution()
     {
         _inputStateHandler.AddPlaceHolderState();
@@ -99,16 +115,15 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     public void SaveTurn(Turn turn)
     {
         if (_turnHistory.Any(t => t.attackerID == turn.attackerID
-            || turn.attackerKey == t.attackerKey))
+                                  || turn.attackerKey == t.attackerKey))
         {
             //for testing incase new bug
-            Debug.Log("duplicate detected, index of : "+turn.attackerKey);
+            Debug.Log("duplicate detected, index of : " + turn.attackerKey);
             return;
         }
         AddTurn(turn);
         _battleHandler.SetPlayerTurnUsage(PlayerTurnUsage.Fight);
-        if ((_battleHandler.isDoubleBattle && IsLastParticipant())
-            || currentTurnIndex == _battleHandler.validParticipantCount)
+        if (IsLastToAct())
         {
             BeginTurnExecution();
         }
@@ -119,6 +134,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             NextTurn();
         }
     }
+
     public void SaveStruggleTurn(BattleParticipant attacker)
     {
         var struggle = ScriptableObject.CreateInstance<Move>();
@@ -190,10 +206,10 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         _moveExecutionHandlers.Clear();
         StopAllCoroutines();
     }
-    
-    private IEnumerator CheckAttackSuccess(Turn turn, BattleParticipant attacker,BattleParticipant victim)
+
+    private IEnumerator CheckAttackSuccess(Turn turn, BattleParticipant attacker, BattleParticipant victim)
     {
-        if(attacker.Pokemon.hp<=0)
+        if (attacker.Pokemon.hp <= 0)
         {
             OnAttackAttempted?.Invoke(false);
             yield break;
@@ -206,7 +222,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                 yield return _battleVisualsHandler.DisplayConfusionVisuals(attacker);
                 if (attacker.statusHandler.AffectedByMinorStatus())
                 {
-                    _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName+" hurt itself in its confusion");
+                    _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName + " hurt itself in its confusion");
                     yield return _moveUsageHandler.DealConfusionDamage(attacker);
                     OnAttackAttempted?.Invoke(false);
                     yield break;
@@ -217,17 +233,29 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                 _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName + " is in love ");
                 if (attacker.statusHandler.AffectedByMinorStatus())
                 {
-                    _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName+" can’t move because of love");
+                    _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName + " can’t move because of love");
                     OnAttackAttempted?.Invoke(false);
                     yield break;
                 }
             }
-            
-            if(!attacker.semiInvulnerabilityData.executionTurn && !attacker.currentCoolDown.isCoolingDown)
+
+            var onSemiHitTurn = attacker.semiInvulnerabilityData.executionTurn;
+
+            if (!onSemiHitTurn && !attacker.currentCoolDown.isCoolingDown)
             {
-                _dialogueHandler.DisplayBattleInfo(GetMoveUsageText(turn.move,attacker, victim));
+                _dialogueHandler.DisplayBattleInfo(GetMoveUsageText(turn.move, attacker, victim));
             }
-            
+
+            //charge turn: always succeeds, target/accuracy are only checked on the hit turn
+            var isChargeTurn = turn.move.effectType == EffectType.SemiInvulnerable && !onSemiHitTurn;
+            if (isChargeTurn)
+            {
+                OnAttackAttempted?.Invoke(true);
+                yield break;
+            }
+
+            var isSureHit = turn.move.isSureHit;
+
             if (victim.isSemiInvulnerable)
             {
                 if (turn.move.isSelfTargeted)
@@ -235,26 +263,25 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                     OnAttackAttempted?.Invoke(true);
                     yield break;
                 }
-                if (victim.semiInvulnerabilityData.IsInvulnerableTo(turn.move))
+                if (victim.semiInvulnerabilityData.IsInvulnerableTo(turn.move, out isSureHit))
                 {
                     _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName +
-                                                                victim.semiInvulnerabilityData.displayMessage);
+                                                       victim.semiInvulnerabilityData.displayMessage);
                     OnAttackAttempted?.Invoke(false);
                     yield break;
                 }
             }
 
-            if (!turn.move.isSureHit)
+            if (!isSureHit)
             {
                 if (!MoveSuccessful(turn))
                 {
-
                     if (attacker.Pokemon.accuracy >= victim.Pokemon.evasion)
                         _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName +
-                                                                    " missed the attack");
+                                                           " missed the attack");
                     else
                         _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName +
-                                                                    " dodged the attack");
+                                                           " dodged the attack");
                 }
                 else
                 {
@@ -267,15 +294,14 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                 OnAttackAttempted?.Invoke(true);
                 yield break;
             }
-            
         }
         else
         {
             if (attacker.isFlinched)
-                _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName+" flinched!");
+                _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName + " flinched!");
             else if (attacker.Pokemon.statusEffect != StatusEffect.None)
             {
-                _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName+" is affected by "+ attacker.Pokemon.statusEffect);
+                _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName + " is affected by " + attacker.Pokemon.statusEffect);
                 yield return _battleVisualsHandler.DisplayStatusEffectVisuals(attacker);
             }
         }
@@ -283,22 +309,22 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     }
     
     private IEnumerator ExecuteMoves()
-    {   
+    {
         //Set priority (switch turns treated as priority 0), speed as tiebreaker
         var priorityList = _turnHistory
             .OrderByDescending(turn => turn.move?.priority ?? 0)
-            .ThenByDescending(turn => 
+            .ThenByDescending(turn =>
                 _battleHandler.GetParticipant(turn.attackerKey).Pokemon.speed)
             .ToList();
-    
+
         ClearTurn();
         _turnHistory.AddRange(priorityList);
-    
+
         //handle all swaps turns
         var switchTurns = new List<int>();
-    
-        for(var i = 0;i < _turnHistory.Count;i++)
-        { 
+
+        for (var i = 0; i < _turnHistory.Count; i++)
+        {
             if (_turnHistory[i].turnUsage == TurnUsage.SwitchOut)
             {
                 switchTurns.Add(i);
@@ -311,39 +337,53 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         if (switchTurns.Count > 0)
         {
             //use ordering to prevent [index out of range] when removing turns
-            var orderTurns = switchTurns.OrderByDescending(itemIndex=>itemIndex).ToList();
+            var orderTurns = switchTurns.OrderByDescending(itemIndex => itemIndex).ToList();
             orderTurns.ForEach(RemoveTurn);
         }
-    
-        //handle all attack turns
-        foreach (var currentTurn in _turnHistory )
+
+        //handle all attack turns (snapshot so nothing mutating the history can break the loop)
+        foreach (var currentTurn in _turnHistory.ToList())
         {
             if (_battleHandler.BattleOver) break;
-            
+
             if (currentTurn.isCancelled) continue;
-            
+
             currentTurn.turnExecuted = true;
-            
-            var attacker=_battleHandler.GetParticipant(currentTurn.attackerKey);
-            var victim=_battleHandler.GetParticipant(currentTurn.victimKey);
-            
-            attacker.isSemiInvulnerable = false;
-            
+
+            var attacker = _battleHandler.GetParticipant(currentTurn.attackerKey);
+            var victim = _battleHandler.GetParticipant(currentTurn.victimKey);
+
             //check on participants
-            if (!IsValidParticipantState(attacker)) continue;
-            
-            if (!IsValidParticipant(currentTurn,attacker)) continue;
-            
+            if (!IsValidParticipantState(attacker))
+            {
+                //attacker fainted / left: nothing may linger from a half-finished semi move
+                AbortSemiInvulnerableState(attacker);
+                continue;
+            }
+
+            //slot now holds a different pokemon (forced swap). The swap already reset the slot,
+            //so there is nothing of ours to clear here
+            if (!IsValidParticipant(currentTurn, attacker)) continue;
+
+            //this attacker's own turn is executing, so it stops being semi-invulnerable now
+            attacker.isSemiInvulnerable = false;
+
             yield return attacker.heldItemHandler.CheckForConsumableItem();
             yield return victim.heldItemHandler.CheckForConsumableItem();
-            
+
             if (!IsValidParticipantState(victim))
             {
-                _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName+" missed the attack");
+                //target is gone: the attack fizzles, and a pending semi-invulnerable
+                //hit turn must be cancelled or the next Fly would skip its charge turn
+                AbortSemiInvulnerableState(attacker);
+                if (attacker.previousMoveData != null)
+                    attacker.previousMoveData.failedAttempt = true;
+
+                _dialogueHandler.DisplayBattleInfo("But there was no target...");
                 yield return _dialogueHandler.AwaitAllDialogue();
                 continue;
             }
-            
+
             foreach (var handler in _moveExecutionHandlers)
             {
                 //handle all event subscribers for [Move Execution]
@@ -353,7 +393,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                     yield return StartCoroutine(routine);
                 }
             }
-            
+
             yield return _dialogueHandler.AwaitAllDialogue();
 
             if (currentTurn.turnUsage == TurnUsage.UseStruggle)
@@ -361,12 +401,22 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                 _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName + " is out of moves");
                 yield return _dialogueHandler.AwaitAllDialogue();
                 _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName + " used struggle");
-                yield return _moveUsageHandler.DealStruggleDamage(victim,attacker,currentTurn.move);
+
+                //struggle cannot reach a Fly / Dig / Dive user
+                if (victim.isSemiInvulnerable)
+                {
+                    _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName +
+                                                       victim.semiInvulnerabilityData.displayMessage);
+                    yield return _dialogueHandler.AwaitAllDialogue();
+                    continue;
+                }
+
+                yield return _moveUsageHandler.DealStruggleDamage(victim, attacker, currentTurn.move);
                 yield return _battleHandler.AwaitFaintQueue();
                 yield return _dialogueHandler.AwaitAllDialogue();
                 continue;
             }
-            
+
             bool successfulAttack = false;
             OnAttackAttempted += GetAttackResult;
             void GetAttackResult(bool result)
@@ -374,12 +424,12 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                 OnAttackAttempted -= GetAttackResult;
                 successfulAttack = result;
             }
-            
-            yield return CheckAttackSuccess(currentTurn,attacker,victim);
+
+            yield return CheckAttackSuccess(currentTurn, attacker, victim);
             yield return _dialogueHandler.AwaitAllDialogue();
-            
+
             yield return _battleHandler.AwaitFaintQueue();
-            CheckRepeatedMove(attacker,currentTurn.move);
+            CheckRepeatedMove(attacker, currentTurn.move);
             if (successfulAttack)
             {
                 _moveUsageHandler.BeginMoveExecution(currentTurn);
@@ -393,28 +443,29 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             }
             else
             {
-                attacker.previousMoveData.failedAttempt = true;
-                attacker.semiInvulnerabilityData.ResetState();
+                if (attacker.previousMoveData != null)
+                    attacker.previousMoveData.failedAttempt = true;
+                AbortSemiInvulnerableState(attacker);
             }
         }
-        
+
         yield return _battleHandler.AwaitFaintQueue();
         yield return _dialogueHandler.AwaitAllDialogue();
-        
+
         ClearTurn();
         OnTurnsCompleted?.Invoke();
-        
+
         if (_battleHandler.BattleOver) yield break;
-        
+
         //check held item and status effect
-        var validList = _battleHandler.GetValidParticipants();
-        foreach (var participant in validList)
+        var statusCheckList = _battleHandler.GetValidParticipants();
+        foreach (var participant in statusCheckList)
         {
             yield return participant.heldItemHandler.CheckForConsumableItem();
             yield return participant.statusHandler.CheckStatus();
         }
         yield return _battleHandler.AwaitFaintQueue();
-        
+
         //damage from weather
         if (CurrentWeather.weather != Weather.Clear)
         {
@@ -422,11 +473,23 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             yield return ExecuteWeatherEffect();
         }
         yield return _battleHandler.AwaitFaintQueue();
-        
+
         yield return _dialogueHandler.AwaitAllDialogue();
-        
+
+        //anything that fainted (and was not replaced) during this round must not keep
+        //semi-invulnerable / cooldown state, or it will pre-add a turn for a dead slot
+        foreach (var participant in _battleHandler.GetParticipants)
+        {
+            if (IsValidParticipantState(participant)) continue;
+
+            AbortSemiInvulnerableState(participant);
+            if (participant.currentCoolDown != null && participant.currentCoolDown.isCoolingDown)
+                participant.currentCoolDown.ResetState();
+        }
+
         //semi-invulnerability turn logic and cooldown check
-        foreach(var participant in validList)
+        //(fresh list: the one used for status checks is stale after faints / replacements)
+        foreach (var participant in _battleHandler.GetValidParticipants())
         {
             if (participant.currentCoolDown.isCoolingDown)
             {
@@ -442,17 +505,26 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                     }
                 }
             }
-            
+
             participant.pokemonState.ResetMoveData();
-            
-            if(!participant.isSemiInvulnerable)continue;
-            
+
+            if (!participant.isSemiInvulnerable) continue;
+
+            //flag without data would pre-add a null turn, so clear the flag instead
+            if (participant.semiInvulnerabilityData.turnData == null)
+            {
+                participant.isSemiInvulnerable = false;
+                continue;
+            }
+
             AddTurn(new Turn(participant.semiInvulnerabilityData.turnData));
         }
         OnTurnEventsCompleted?.Invoke();
         yield return _dialogueHandler.AwaitAllDialogue();
         NextTurn();
     }
+
+   
     public IEnumerator AllowPlayerSwitchIn(string trainerName,string pokemonName)
     {
         if (_battleHandler.currentBattleStyle != BattleHandler.BattlesStyle.Switch) yield break;
@@ -603,47 +675,46 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
                                                 + move.moveName + " on " + victim.Pokemon.pokemonDisplayName + "!";
         return attacker.Pokemon.pokemonDisplayName + " used " + move.moveName + "!";
     }
+   
     private void ResolveTurnStateForParticipants()
     {
         if (_battleHandler.BattleOver) return;
         var currentParticipant = _battleHandler.GetCurrentParticipant();
-        if(!currentParticipant.isActive) return;
-        
+        if (!currentParticipant.isActive) return;
+
         StartCoroutine(DetermineTurnHandling());
         return;
+
         IEnumerator DetermineTurnHandling()
         {
-            if (currentParticipant.currentCoolDown.isCoolingDown)
+            var coolDown = currentParticipant.currentCoolDown;
+            if (coolDown.isCoolingDown)
             {
-                if (currentParticipant.currentCoolDown.isExecutionTurn)
+                if (coolDown.isExecutionTurn)
                 {
-                    SaveTurn(new(currentParticipant.currentCoolDown.turnData));
+                    SaveTurn(new(coolDown.turnData));
                     yield break;
                 }
-            
-                if (currentParticipant.currentCoolDown.canDisplayMessage)
+
+                if (coolDown.canDisplayMessage)
                 {
                     _dialogueHandler.DisplayBattleInfo(currentParticipant.Pokemon.pokemonDisplayName
-                                                       +currentParticipant.currentCoolDown.coolDownMessage);
+                                                       + coolDown.coolDownMessage);
                     yield return _dialogueHandler.AwaitAllDialogue();
+                    if (_battleHandler.BattleOver) yield break;
                 }
-                currentParticipant.currentCoolDown.numTurns--;
-                NextTurn();
+                coolDown.numTurns--;
+                AdvanceAfterAutomaticTurn();
                 yield break;
             }
+
             if (currentParticipant.isSemiInvulnerable)
-            { 
-                //Account for semi-invulnerable turn skip
-                if (_turnHistory.Count == _battleHandler.validParticipantCount)
-                {
-                    BeginTurnExecution();
-                }
-                else
-                {
-                    NextTurn();
-                    yield break;
-                }
+            {
+                //their turn was pre-added at the end of the last round, no input needed
+                AdvanceAfterAutomaticTurn();
+                yield break;
             }
+
             if (currentParticipant.isPlayer)
             {
                 //allow player input
@@ -655,7 +726,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             else
             {
                 //allow enemy AI decision
-                if(_battleHandler.isTrainerBattle)
+                if (_battleHandler.isTrainerBattle)
                 {
                     currentParticipant.pokemonTrainerAI.MakeBattleDecision();
                 }
@@ -666,6 +737,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             }
         }
     }
+    
     private void CheckRepeatedMove(BattleParticipant attacker, Move move)
     {
         if (attacker.previousMoveData is null)
@@ -714,10 +786,17 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
     public void RemoveTurn()
     {
         //player wants to change their turn usage
-        RemoveTurn(currentTurnIndex-1);
-        currentTurnIndex --;
+        var step = _battleHandler.isDoubleBattle ? 1 : 2;
+        var previousKey = (BattleParticipantKey)(currentTurnIndex - step);
+
+        var historyIndex = _turnHistory.FindIndex(t => t.attackerKey == previousKey);
+        if (historyIndex >= 0)
+            RemoveTurn(historyIndex);
+
+        currentTurnIndex -= step;
         _inputStateHandler.OnStateRemoved += _battleHandler.SetupOptionsAfterTurnReset;
     }
+    
     private void ChangeTurn(int maxParticipantIndex,int step)
     {
         if (currentTurnIndex < maxParticipantIndex)

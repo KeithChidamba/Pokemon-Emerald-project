@@ -268,32 +268,37 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
             victim.immunityNegations.Add(newImmunityNegation);
         }
     }
-    private IEnumerator ExecuteSemiInvulnerableMove(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
+    private IEnumerator ExecuteSemiInvulnerableMove(Turn currentTurn, BattleParticipant attacker, BattleParticipant victim)
     {
         var move = currentTurn.move;
+
+        //hit turn
         if (attacker.semiInvulnerabilityData.executionTurn)
         {
             _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName
-                                                        + attacker.semiInvulnerabilityData.onHitMessage);
-            _moveUsageHandler.DisplayMoveDamage(move,attacker,victim);
-            attacker.semiInvulnerabilityData.executionTurn = false;
+                                               + attacker.semiInvulnerabilityData.onHitMessage);
+            _moveUsageHandler.DisplayMoveDamage(move, attacker, victim);
+
+            attacker.isSemiInvulnerable = false;
+            attacker.semiInvulnerabilityData.ResetState();
             yield break;
         }
 
+        //charge turn
         var semiInvulnerableData = move.GetDynamicModule<SemiInvulnerabilityInfo>();
-        
+
+        attacker.semiInvulnerabilityData.ResetState(); //clears any stale entries
         attacker.semiInvulnerabilityData.displayMessage = semiInvulnerableData.displayMessage;
         attacker.semiInvulnerabilityData.onHitMessage = semiInvulnerableData.onHitMessage;
         attacker.semiInvulnerabilityData.turnData = new Turn(currentTurn);
-
         attacker.semiInvulnerabilityData.semiInvulnerabilities
             .AddRange(semiInvulnerableData.semiInvulnerabilities);
 
         attacker.isSemiInvulnerable = true;
-        move.isSureHit = false;
         attacker.semiInvulnerabilityData.executionTurn = true;
-        _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName+semiInvulnerableData.executionMessage);
+        _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName + semiInvulnerableData.executionMessage);
     }
+
     
     IEnumerator ChangeWeather(Move move)
     {

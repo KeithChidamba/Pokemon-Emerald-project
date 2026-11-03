@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 725247cf13cf23248b7b0f1b93c618c0, type: 3}
+  m_Name: Play Test Enemy
+  m_EditorClassIdentifier: 
+  trainerName: Test Enemy
+  baseMoneyPayout: 0
+  trainerLocationData: {fileID: 11400000, guid: 7313abad95799272cbf6b7ccdd21a708, type: 2}
+  PokemonParty: []
+  battleType: 0
+  trainerAiFlags: 
+  battleIntroSprite: {fileID: 1807993842, guid: e38499f365b8f475a87d7cfe7c294970, type: 3}
+  battleLossMessage: Test Battle Over!
+  battleIntroMessage: Test Battle Begins!

@@ -15,6 +15,7 @@ public enum DevelopmentEnvironment
 public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
 { 
    public GameObject testControlsView;
+   [SerializeField]private PlayTestHandler playTestHandler;
    public DevelopmentEnvironment environment;
    private Dictionary<int, MessageLog> testingLogs = new();
    private int NextLogID => testingLogs.Count+1;
@@ -54,6 +55,10 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
        }
    }
 
+   public void TerminateBattle()
+   {
+       _container.Resolve<BattleHandler>().EndBattle(BattleEndState.BattleTerminated);
+   }
    public void ValidateEndToEndTestCase()
    {
        if (currenEndToEndTest is null)
@@ -79,6 +84,11 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
        
        DirectoryHandler.ClearDirectory(Path.Combine("Assets/Resources", 
            DirectoryHandler.GetDirectory(AssetDirectory.TestLogs)));
+       
+       //Play Test
+       yield return playTestHandler.BeginTest(_container);
+       yield return new WaitForSeconds(2f);//Allow battle sequence to start
+       yield return _container.Resolve<BattleHandler>().AwaitBattleCompletion();
        
        //End to End Tests
        testControlsView.SetActive(true);

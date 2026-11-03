@@ -200,7 +200,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
         if (currentMove.isSelfTargeted || currentMove.isMultiTarget)
         {
             //then the enemy targeted doesn't matter so select any active one
-            var currentPlayerEnemy = currentParticipants.First(a => a.isActive & !a.isPlayer);
+            var currentPlayerEnemy = currentParticipants.First(a => a.isActive && !a.isPlayer);
             ExecutePlayersMove(currentMoveIndex,currentPlayerEnemy.participantKey);
             return;
         }
@@ -651,7 +651,6 @@ public class BattleHandler : MonoBehaviour, IInjectable
     }
     public void LoadMoveInputAndText()
     { 
-        
         var currentPlayerParticipant = GetCurrentParticipant();
         bool emptyMoves = currentPlayerParticipant.Pokemon.moveSet.Count(m=>m.powerpoints > 0) == 0;
         if (emptyMoves)
@@ -728,7 +727,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
     public float PrizeMoneyModifier(List<BattleParticipant> participants)
     {
         var playerParticipants = participants
-            .Where(p => p.isActive & p.isPlayer).ToList();
+            .Where(p => p.isActive && p.isPlayer).ToList();
         foreach(var participant in playerParticipants)
         {
             if (!participant.Pokemon.hasItem)continue;
@@ -894,7 +893,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
                         
                         var baseMoneyPayout = enemy.pokemonTrainerAI.trainerData.baseMoneyPayout;
                         
-                        var playersLastParticipant = currentParticipants.First(p => p.isActive & p.isPlayer);
+                        var playersLastParticipant = currentParticipants.First(p => p.isActive && p.isPlayer);
                         
                         var victoriousOpponent = playersLastParticipant.currentEnemies
                             .First(p=>p.isActive).Pokemon;

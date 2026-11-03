@@ -41,9 +41,7 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
     private const int PlayerPartyCount = 3;
     private int opponentLevelGap;
     private const int RequiredPokemonLevel = 65;
-    
-    private IReadOnlyList<Move> allMoves;
-    
+
     public List<TournamentBracket> leftBracket = new();
     public List<TournamentContestant> leftContestants = new();
     public List<TournamentBracket> rightBracket = new();
@@ -81,7 +79,6 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
    public void OnInject()
    {
       gameObject.SetActive(true);
-      allMoves = Resources.LoadAll<Move>(DirectoryHandler.GetDirectory(AssetDirectory.Moves));
       _battleHandler.OnBattleStarted += () => AlterExpGain(false);
       _battleHandler.OnBattleEnd += () => AlterExpGain(true);
    }

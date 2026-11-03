@@ -173,7 +173,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     }
     private bool CanUpdateSelector(InputDirection direction)
     {
-        return currentState.displayingSelector &
+        return currentState.displayingSelector &&
                currentState.stateDirection == direction;
     }
     private void InvokeSelectedEvent()

@@ -29,7 +29,7 @@ MonoBehaviour:
   canInfatuate: 0
   isMultiTarget: 0
   isSelfTargeted: 0
-  isSureHit: 1
+  isSureHit: 0
   displayTargetMessage: 0
   moveDamage: 75
   moveAccuracy: 65
