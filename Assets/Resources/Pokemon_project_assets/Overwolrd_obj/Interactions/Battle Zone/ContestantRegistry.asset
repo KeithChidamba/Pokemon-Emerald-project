@@ -16,90 +16,621 @@ MonoBehaviour:
   - trainerName: Mad Scientist Lex
     battleIntroSprite: {fileID: -87446354, guid: e38499f365b8f475a87d7cfe7c294970, type: 3}
     spriteData: {fileID: 11400000, guid: 5d2902ff292ece80f90ed839d4ce45b4, type: 2}
+    pokemonPartyData:
+    - pokemon: {fileID: 11400000, guid: 9ef1cbf09edb55843ab7139bb2b68992, type: 2}
+      evolutionStageNumber: 1
+      moveSet:
+      - {fileID: 11400000, guid: b3f0196b5669dc2949185e8d17e0cb7f, type: 2}
+      - {fileID: 11400000, guid: 5cb5fab7367326d76bbe93d14f50aff1, type: 2}
+      - {fileID: 11400000, guid: e152121c319c551f3851f17b6a0e2a30, type: 2}
+    - pokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
+      evolutionStageNumber: 2
+      moveSet:
+      - {fileID: 11400000, guid: 2cd67b76891307349b0ee315a2a7b669, type: 2}
+      - {fileID: 11400000, guid: ec2bd2bdc632c79beb9ef8d4c422f5bf, type: 2}
+      - {fileID: 11400000, guid: 2b31d8109d88a540bae4e94af03c833c, type: 2}
+      - {fileID: 11400000, guid: 79109d5108afce337bd7dcb23c674224, type: 2}
+    - pokemon: {fileID: 11400000, guid: 22e35517851a9644f97a479913d30735, type: 2}
+      evolutionStageNumber: 2
+      moveSet:
+      - {fileID: 11400000, guid: f2814938786e248d3a21fbbfc3050632, type: 2}
+      - {fileID: 11400000, guid: c7d43dcc896f14a279fc8f692215abfc, type: 2}
     logic: {fileID: 0}
-    pokemonParty: []
     bracketIndex: 0
   - trainerName: Ranger Kevin
     battleIntroSprite: {fileID: -136727581, guid: e38499f365b8f475a87d7cfe7c294970, type: 3}
     spriteData: {fileID: 11400000, guid: a2d72e01941e020fb93cf255455cd54b, type: 2}
+    pokemonPartyData:
+    - pokemon: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
+      evolutionStageNumber: 0
+      moveSet:
+      - {fileID: 11400000, guid: 267ab4e1ebd598540951809a1e2b4823, type: 2}
+      - {fileID: 11400000, guid: c29c54abeb6ad2ab7bc9e33a9da01fb9, type: 2}
+      - {fileID: 11400000, guid: c2b6a0e356c4efb848f5211a0460dbbc, type: 2}
+      - {fileID: 11400000, guid: e334298b16ee16f5d96623b46b08ad90, type: 2}
+    - pokemon: {fileID: 11400000, guid: 98b7f24f10fddb540975bbad318be6c3, type: 2}
+      evolutionStageNumber: 2
+      moveSet:
+      - {fileID: 11400000, guid: 15c9a89a77a1b92bc83e0e22667bed6c, type: 2}
+      - {fileID: 11400000, guid: e152121c319c551f3851f17b6a0e2a30, type: 2}
+      - {fileID: 11400000, guid: 7cf91084bc2b5e6eaad517815ba5b8bb, type: 2}
+      - {fileID: 11400000, guid: bec17202b9e1e5d429f6d064467dc625, type: 2}
+    - pokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
+      evolutionStageNumber: 2
+      moveSet:
+      - {fileID: 11400000, guid: 598968aad070bee23b2b9e6dea464e8d, type: 2}
+      - {fileID: 11400000, guid: 88bd6685312db15438e092430c87989c, type: 2}
     logic: {fileID: 0}
-    pokemonParty: []
     bracketIndex: 0
   - trainerName: Gentleman Edward
     battleIntroSprite: {fileID: -533539037, guid: e38499f365b8f475a87d7cfe7c294970, type: 3}
     spriteData: {fileID: 11400000, guid: cddb600415bf7eead95df8e407ae2150, type: 2}
+    pokemonPartyData:
+    - pokemon: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}
+      evolutionStageNumber: 0
+      moveSet:
+      - {fileID: 11400000, guid: 267ab4e1ebd598540951809a1e2b4823, type: 2}
+      - {fileID: 11400000, guid: 53fed834b2f80124ba1a685c0ffcbe2b, type: 2}
+      - {fileID: 11400000, guid: b777dec5f205a61448873e7760324510, type: 2}
+    - pokemon: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}
+      evolutionStageNumber: 1
+      moveSet:
+      - {fileID: 11400000, guid: 267ab4e1ebd598540951809a1e2b4823, type: 2}
+      - {fileID: 11400000, guid: 53fed834b2f80124ba1a685c0ffcbe2b, type: 2}
+      - {fileID: 11400000, guid: b777dec5f205a61448873e7760324510, type: 2}
+      - {fileID: 11400000, guid: 312137888a92a95e59d8a8ce6b213e95, type: 2}
+    - pokemon: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}
+      evolutionStageNumber: 1
+      moveSet:
+      - {fileID: 11400000, guid: 77bad51db86eb51408c3f8a653c81377, type: 2}
+      - {fileID: 11400000, guid: 5acb2240365dea748b8538ff9318ccab, type: 2}
+      - {fileID: 11400000, guid: 88bd6685312db15438e092430c87989c, type: 2}
+      - {fileID: 11400000, guid: 312137888a92a95e59d8a8ce6b213e95, type: 2}
     logic: {fileID: 0}
-    pokemonParty: []
     bracketIndex: 0
   - trainerName: Hiker Greg
     battleIntroSprite: {fileID: 1452824258, guid: e38499f365b8f475a87d7cfe7c294970, type: 3}
     spriteData: {fileID: 11400000, guid: 6a6cbb6ceee3918e48206c4705e3ef7d, type: 2}
+    pokemonPartyData:
+    - pokemon: {fileID: 11400000, guid: 9ef1cbf09edb55843ab7139bb2b68992, type: 2}
+      evolutionStageNumber: 0
+      moveSet:
+      - {fileID: 11400000, guid: cd532e9f9a9c2f8008895e71ea969940, type: 2}
+      - {fileID: 11400000, guid: 156e672646d23cabeb51cfa224ec2045, type: 2}
+      - {fileID: 11400000, guid: 5cb5fab7367326d76bbe93d14f50aff1, type: 2}
+    - pokemon: {fileID: 11400000, guid: 22e35517851a9644f97a479913d30735, type: 2}
+      evolutionStageNumber: 2
+      moveSet:
+      - {fileID: 11400000, guid: aaa51ed69436f4d4c8025aecfdd30c7c, type: 2}
+      - {fileID: 11400000, guid: 3fc4f8de5bc58824d940ff29a52a24ab, type: 2}
+      - {fileID: 11400000, guid: c965c685cf276a756962f0e80782ef1d, type: 2}
+    - pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+      evolutionStageNumber: 1
+      moveSet:
+      - {fileID: 11400000, guid: b3c1c6daa55f139cc977ad6d10957113, type: 2}
+      - {fileID: 11400000, guid: f397667296c72b94fafa4d62db35535a, type: 2}
+      - {fileID: 11400000, guid: aaa51ed69436f4d4c8025aecfdd30c7c, type: 2}
+      - {fileID: 11400000, guid: 4a5a6346535b797f893a7057ab0b4baf, type: 2}
     logic: {fileID: 0}
-    pokemonParty: []
     bracketIndex: 0
   - trainerName: Ace Trainer Jane
     battleIntroSprite: {fileID: -1284072260, guid: e38499f365b8f475a87d7cfe7c294970, type: 3}
     spriteData: {fileID: 11400000, guid: fa9c5f13013042542ab774fe178f0964, type: 2}
+    pokemonPartyData:
+    - pokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
+      evolutionStageNumber: 2
+      moveSet:
+      - {fileID: 11400000, guid: 598968aad070bee23b2b9e6dea464e8d, type: 2}
+      - {fileID: 11400000, guid: 91a1ef078648c0de2af2c3aea5c97448, type: 2}
+      - {fileID: 11400000, guid: f80851af6a89932e9aeb2b66af674345, type: 2}
+      - {fileID: 11400000, guid: 359e5c8587c85634d826bfeca51ae78e, type: 2}
+    - pokemon: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}
+      evolutionStageNumber: 0
+      moveSet:
+      - {fileID: 11400000, guid: 312137888a92a95e59d8a8ce6b213e95, type: 2}
+      - {fileID: 11400000, guid: 79109d5108afce337bd7dcb23c674224, type: 2}
+      - {fileID: 11400000, guid: c91be8b80ec1736ac80d7e41b6801ade, type: 2}
+    - pokemon: {fileID: 11400000, guid: b7f2b56e327076f4da62d619e125dd49, type: 2}
+      evolutionStageNumber: 2
+      moveSet:
+      - {fileID: 11400000, guid: 64e968ad1abbb3f3988d087e443c89f7, type: 2}
+      - {fileID: 11400000, guid: aabea0c5799a559ea85d7f906e739090, type: 2}
+      - {fileID: 11400000, guid: 783b769c6720c575daac04e35c48095a, type: 2}
     logic: {fileID: 0}
-    pokemonParty: []
     bracketIndex: 0
   - trainerName: Bug Catcher Fred
     battleIntroSprite: {fileID: 716581656, guid: e38499f365b8f475a87d7cfe7c294970, type: 3}
     spriteData: {fileID: 11400000, guid: 9aaa88e4a275158f4b55fb942b2074db, type: 2}
+    pokemonPartyData:
+    - pokemon: {fileID: 11400000, guid: 98b7f24f10fddb540975bbad318be6c3, type: 2}
+      evolutionStageNumber: 0
+      moveSet:
+      - {fileID: 11400000, guid: aa3fa284caeebfc4a83126eccd5be8da, type: 2}
+      - {fileID: 11400000, guid: d99a410915ce463339cf77ff4f0b7413, type: 2}
+      - {fileID: 11400000, guid: e94a4909f96225e48b0b4d18cb1fca9c, type: 2}
+      - {fileID: 11400000, guid: c91be8b80ec1736ac80d7e41b6801ade, type: 2}
+    - pokemon: {fileID: 11400000, guid: 98b7f24f10fddb540975bbad318be6c3, type: 2}
+      evolutionStageNumber: 1
+      moveSet:
+      - {fileID: 11400000, guid: 42d9568f55b98da4cac3a7ad520617cd, type: 2}
+      - {fileID: 11400000, guid: 7a19dc867aad2ed4faaf1e7bac06304f, type: 2}
+      - {fileID: 11400000, guid: d4c7877feefd026949072bf2d7d6503e, type: 2}
+      - {fileID: 11400000, guid: e94a4909f96225e48b0b4d18cb1fca9c, type: 2}
+    - pokemon: {fileID: 11400000, guid: 98b7f24f10fddb540975bbad318be6c3, type: 2}
+      evolutionStageNumber: 2
+      moveSet:
+      - {fileID: 11400000, guid: 5cb5fab7367326d76bbe93d14f50aff1, type: 2}
+      - {fileID: 11400000, guid: e152121c319c551f3851f17b6a0e2a30, type: 2}
+      - {fileID: 11400000, guid: aa3fa284caeebfc4a83126eccd5be8da, type: 2}
+      - {fileID: 11400000, guid: 76328b52a3e79ebd18cbdf4a047356fd, type: 2}
     logic: {fileID: 0}
-    pokemonParty: []
     bracketIndex: 0
   - trainerName: Prof. Bart
     battleIntroSprite: {fileID: 999271557, guid: e38499f365b8f475a87d7cfe7c294970, type: 3}
     spriteData: {fileID: 11400000, guid: 5399167829ea2b502b9857b3291771a6, type: 2}
+    pokemonPartyData:
+    - pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+      evolutionStageNumber: 0
+      moveSet:
+      - {fileID: 11400000, guid: 802d8ae7a39e9ef4cab4322f312fe0db, type: 2}
+      - {fileID: 11400000, guid: 37d12cb1bc0332d429d388ad6d37b17f, type: 2}
+    - pokemon: {fileID: 11400000, guid: b7f2b56e327076f4da62d619e125dd49, type: 2}
+      evolutionStageNumber: 0
+      moveSet:
+      - {fileID: 11400000, guid: f0692df27620a0f4eb138d4c0063f186, type: 2}
+      - {fileID: 11400000, guid: 37d12cb1bc0332d429d388ad6d37b17f, type: 2}
+    - pokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
+      evolutionStageNumber: 0
+      moveSet:
+      - {fileID: 11400000, guid: 10a375b8cb263ba55ac9313920089a98, type: 2}
+      - {fileID: 11400000, guid: 37d12cb1bc0332d429d388ad6d37b17f, type: 2}
     logic: {fileID: 0}
-    pokemonParty: []
     bracketIndex: 0
   - trainerName: Rival Oluwa Chikamu
     battleIntroSprite: {fileID: -1281135253, guid: e38499f365b8f475a87d7cfe7c294970, type: 3}
     spriteData: {fileID: 11400000, guid: 9bea254fcb98118c4a5d93967d943c36, type: 2}
+    pokemonPartyData:
+    - pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+      evolutionStageNumber: 1
+      moveSet:
+      - {fileID: 11400000, guid: beb61cb5f2214f554875a8af28849a7b, type: 2}
+      - {fileID: 11400000, guid: aaa51ed69436f4d4c8025aecfdd30c7c, type: 2}
+      - {fileID: 11400000, guid: 06e84a4a3f982024aa61d9f4898ded85, type: 2}
+      - {fileID: 11400000, guid: 5acb2240365dea748b8538ff9318ccab, type: 2}
+    - pokemon: {fileID: 11400000, guid: 22e35517851a9644f97a479913d30735, type: 2}
+      evolutionStageNumber: 2
+      moveSet:
+      - {fileID: 11400000, guid: f2814938786e248d3a21fbbfc3050632, type: 2}
+      - {fileID: 11400000, guid: aaa51ed69436f4d4c8025aecfdd30c7c, type: 2}
+      - {fileID: 11400000, guid: fd214687fae854b16b48b3bd78ded1ef, type: 2}
+      - {fileID: 11400000, guid: c965c685cf276a756962f0e80782ef1d, type: 2}
+    - pokemon: {fileID: 11400000, guid: 9ef1cbf09edb55843ab7139bb2b68992, type: 2}
+      evolutionStageNumber: 2
+      moveSet:
+      - {fileID: 11400000, guid: a8e9b95d00b622decabd1362c035c113, type: 2}
+      - {fileID: 11400000, guid: 156e672646d23cabeb51cfa224ec2045, type: 2}
+      - {fileID: 11400000, guid: e152121c319c551f3851f17b6a0e2a30, type: 2}
     logic: {fileID: 0}
-    pokemonParty: []
     bracketIndex: 0
   - trainerName: Karate Kid
     battleIntroSprite: {fileID: -1639878714, guid: e38499f365b8f475a87d7cfe7c294970, type: 3}
     spriteData: {fileID: 11400000, guid: 0d99b53ea9b32a6faaa4958ee7b17f78, type: 2}
+    pokemonPartyData:
+    - pokemon: {fileID: 11400000, guid: b7f2b56e327076f4da62d619e125dd49, type: 2}
+      evolutionStageNumber: 2
+      moveSet:
+      - {fileID: 11400000, guid: aabea0c5799a559ea85d7f906e739090, type: 2}
+      - {fileID: 11400000, guid: 64e968ad1abbb3f3988d087e443c89f7, type: 2}
+      - {fileID: 11400000, guid: 5acb2240365dea748b8538ff9318ccab, type: 2}
+      - {fileID: 11400000, guid: e765a12434f712492a6ed74f21ef259e, type: 2}
+    - pokemon: {fileID: 11400000, guid: b7f2b56e327076f4da62d619e125dd49, type: 2}
+      evolutionStageNumber: 2
+      moveSet:
+      - {fileID: 11400000, guid: aabea0c5799a559ea85d7f906e739090, type: 2}
+      - {fileID: 11400000, guid: 64e968ad1abbb3f3988d087e443c89f7, type: 2}
+      - {fileID: 11400000, guid: 5acb2240365dea748b8538ff9318ccab, type: 2}
+      - {fileID: 11400000, guid: e765a12434f712492a6ed74f21ef259e, type: 2}
     logic: {fileID: 0}
-    pokemonParty: []
     bracketIndex: 0
   - trainerName: Kriminal??
     battleIntroSprite: {fileID: 1807993842, guid: e38499f365b8f475a87d7cfe7c294970, type: 3}
     spriteData: {fileID: 11400000, guid: f7d1263152928bb618a7a923040f3045, type: 2}
+    pokemonPartyData:
+    - pokemon: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
+      evolutionStageNumber: 1
+      moveSet:
+      - {fileID: 11400000, guid: 8c822e62346e2da088a7e2f47b6dfb10, type: 2}
+      - {fileID: 11400000, guid: 267ab4e1ebd598540951809a1e2b4823, type: 2}
+      - {fileID: 11400000, guid: b04f3b4b7d66f9c5f8f97d31bcdd878a, type: 2}
+      - {fileID: 11400000, guid: 77bad51db86eb51408c3f8a653c81377, type: 2}
+    - pokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
+      evolutionStageNumber: 1
+      moveSet:
+      - {fileID: 11400000, guid: 90238634db29d7fd4a2ac25996e0e971, type: 2}
+      - {fileID: 11400000, guid: 88cac14242bc21209852a788e4ab1780, type: 2}
+      - {fileID: 11400000, guid: 2d03686e73c8a174e8f1dd31d6ebdc76, type: 2}
+      - {fileID: 11400000, guid: 27c77bfc93d86768083012ce4de56a08, type: 2}
     logic: {fileID: 0}
-    pokemonParty: []
     bracketIndex: 0
   - trainerName: Ace Trainer Maddy
     battleIntroSprite: {fileID: -1284072260, guid: e38499f365b8f475a87d7cfe7c294970, type: 3}
     spriteData: {fileID: 11400000, guid: fa9c5f13013042542ab774fe178f0964, type: 2}
+    pokemonPartyData:
+    - pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+      evolutionStageNumber: 2
+      moveSet:
+      - {fileID: 11400000, guid: 0ecc5cd1f1d37c05eb99521167ac943d, type: 2}
+      - {fileID: 11400000, guid: 802d8ae7a39e9ef4cab4322f312fe0db, type: 2}
+      - {fileID: 11400000, guid: aaa51ed69436f4d4c8025aecfdd30c7c, type: 2}
+      - {fileID: 11400000, guid: d4c7877feefd026949072bf2d7d6503e, type: 2}
+    - pokemon: {fileID: 11400000, guid: 9ef1cbf09edb55843ab7139bb2b68992, type: 2}
+      evolutionStageNumber: 2
+      moveSet:
+      - {fileID: 11400000, guid: b3f0196b5669dc2949185e8d17e0cb7f, type: 2}
+      - {fileID: 11400000, guid: 156e672646d23cabeb51cfa224ec2045, type: 2}
+      - {fileID: 11400000, guid: bec17202b9e1e5d429f6d064467dc625, type: 2}
+    - pokemon: {fileID: 11400000, guid: b7f2b56e327076f4da62d619e125dd49, type: 2}
+      evolutionStageNumber: 2
+      moveSet:
+      - {fileID: 11400000, guid: 783b769c6720c575daac04e35c48095a, type: 2}
+      - {fileID: 11400000, guid: ba7227d3cd2a00f4ca02f38ded4a2e32, type: 2}
     logic: {fileID: 0}
-    pokemonParty: []
     bracketIndex: 0
-  - trainerName: Ace Trainer Maddy
+  - trainerName: Ace Trainer Raechel
     battleIntroSprite: {fileID: -1284072260, guid: e38499f365b8f475a87d7cfe7c294970, type: 3}
     spriteData: {fileID: 11400000, guid: fa9c5f13013042542ab774fe178f0964, type: 2}
+    pokemonPartyData:
+    - pokemon: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
+      evolutionStageNumber: 1
+      moveSet:
+      - {fileID: 11400000, guid: 27c77bfc93d86768083012ce4de56a08, type: 2}
+      - {fileID: 11400000, guid: 7a19dc867aad2ed4faaf1e7bac06304f, type: 2}
+      - {fileID: 11400000, guid: c7d43dcc896f14a279fc8f692215abfc, type: 2}
+      - {fileID: 11400000, guid: c91be8b80ec1736ac80d7e41b6801ade, type: 2}
+    - pokemon: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
+      evolutionStageNumber: 1
+      moveSet:
+      - {fileID: 11400000, guid: aaa51ed69436f4d4c8025aecfdd30c7c, type: 2}
+      - {fileID: 11400000, guid: 802d8ae7a39e9ef4cab4322f312fe0db, type: 2}
+      - {fileID: 11400000, guid: 15c9a89a77a1b92bc83e0e22667bed6c, type: 2}
+      - {fileID: 11400000, guid: 06e84a4a3f982024aa61d9f4898ded85, type: 2}
     logic: {fileID: 0}
-    pokemonParty: []
     bracketIndex: 0
-  - trainerName: Ranger WillFord
+  - trainerName: Ranger Will-Ford
     battleIntroSprite: {fileID: -136727581, guid: e38499f365b8f475a87d7cfe7c294970, type: 3}
     spriteData: {fileID: 11400000, guid: a2d72e01941e020fb93cf255455cd54b, type: 2}
+    pokemonPartyData:
+    - pokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
+      evolutionStageNumber: 1
+      moveSet:
+      - {fileID: 11400000, guid: 90238634db29d7fd4a2ac25996e0e971, type: 2}
+      - {fileID: 11400000, guid: c7d43dcc896f14a279fc8f692215abfc, type: 2}
+      - {fileID: 11400000, guid: 359e5c8587c85634d826bfeca51ae78e, type: 2}
+    - pokemon: {fileID: 11400000, guid: 98b7f24f10fddb540975bbad318be6c3, type: 2}
+      evolutionStageNumber: 2
+      moveSet:
+      - {fileID: 11400000, guid: aa3fa284caeebfc4a83126eccd5be8da, type: 2}
+      - {fileID: 11400000, guid: dd313f675f4b2be028c38ff2cb08e711, type: 2}
+      - {fileID: 11400000, guid: bec17202b9e1e5d429f6d064467dc625, type: 2}
+      - {fileID: 11400000, guid: 7cf91084bc2b5e6eaad517815ba5b8bb, type: 2}
+    - pokemon: {fileID: 11400000, guid: 98b7f24f10fddb540975bbad318be6c3, type: 2}
+      evolutionStageNumber: 2
+      moveSet:
+      - {fileID: 11400000, guid: aa3fa284caeebfc4a83126eccd5be8da, type: 2}
+      - {fileID: 11400000, guid: dd313f675f4b2be028c38ff2cb08e711, type: 2}
+      - {fileID: 11400000, guid: bec17202b9e1e5d429f6d064467dc625, type: 2}
+      - {fileID: 11400000, guid: 7cf91084bc2b5e6eaad517815ba5b8bb, type: 2}
     logic: {fileID: 0}
-    pokemonParty: []
     bracketIndex: 0
-  - trainerName: You?????
+  - trainerName: Champion!!!
     battleIntroSprite: {fileID: 76149903, guid: e38499f365b8f475a87d7cfe7c294970, type: 3}
     spriteData: {fileID: 11400000, guid: 903dc3fb71c92d3d3b1bd0e1962fca8d, type: 2}
+    pokemonPartyData:
+    - pokemon: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}
+      evolutionStageNumber: 0
+      moveSet:
+      - {fileID: 11400000, guid: 53fed834b2f80124ba1a685c0ffcbe2b, type: 2}
+      - {fileID: 11400000, guid: 267ab4e1ebd598540951809a1e2b4823, type: 2}
+      - {fileID: 11400000, guid: 312137888a92a95e59d8a8ce6b213e95, type: 2}
+      - {fileID: 11400000, guid: c7d43dcc896f14a279fc8f692215abfc, type: 2}
+    - pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+      evolutionStageNumber: 2
+      moveSet:
+      - {fileID: 11400000, guid: 06e84a4a3f982024aa61d9f4898ded85, type: 2}
+      - {fileID: 11400000, guid: 5acb2240365dea748b8538ff9318ccab, type: 2}
+      - {fileID: 11400000, guid: f2814938786e248d3a21fbbfc3050632, type: 2}
+      - {fileID: 11400000, guid: 802d8ae7a39e9ef4cab4322f312fe0db, type: 2}
+    - pokemon: {fileID: 11400000, guid: 9ef1cbf09edb55843ab7139bb2b68992, type: 2}
+      evolutionStageNumber: 2
+      moveSet:
+      - {fileID: 11400000, guid: 156e672646d23cabeb51cfa224ec2045, type: 2}
+      - {fileID: 11400000, guid: e152121c319c551f3851f17b6a0e2a30, type: 2}
+      - {fileID: 11400000, guid: b3f0196b5669dc2949185e8d17e0cb7f, type: 2}
+      - {fileID: 11400000, guid: bec17202b9e1e5d429f6d064467dc625, type: 2}
     logic: {fileID: 0}
-    pokemonParty: []
     bracketIndex: 0
   - trainerName: Mr Capital
     battleIntroSprite: {fileID: -533539037, guid: e38499f365b8f475a87d7cfe7c294970, type: 3}
     spriteData: {fileID: 11400000, guid: cddb600415bf7eead95df8e407ae2150, type: 2}
+    pokemonPartyData:
+    - pokemon: {fileID: 11400000, guid: 22e35517851a9644f97a479913d30735, type: 2}
+      evolutionStageNumber: 2
+      moveSet:
+      - {fileID: 11400000, guid: aaa51ed69436f4d4c8025aecfdd30c7c, type: 2}
+      - {fileID: 11400000, guid: 3fc4f8de5bc58824d940ff29a52a24ab, type: 2}
+      - {fileID: 11400000, guid: d4c7877feefd026949072bf2d7d6503e, type: 2}
+      - {fileID: 11400000, guid: e152121c319c551f3851f17b6a0e2a30, type: 2}
+    - pokemon: {fileID: 11400000, guid: 22e35517851a9644f97a479913d30735, type: 2}
+      evolutionStageNumber: 2
+      moveSet:
+      - {fileID: 11400000, guid: aaa51ed69436f4d4c8025aecfdd30c7c, type: 2}
+      - {fileID: 11400000, guid: f0692df27620a0f4eb138d4c0063f186, type: 2}
+      - {fileID: 11400000, guid: d4c7877feefd026949072bf2d7d6503e, type: 2}
+      - {fileID: 11400000, guid: e152121c319c551f3851f17b6a0e2a30, type: 2}
+    - pokemon: {fileID: 11400000, guid: 22e35517851a9644f97a479913d30735, type: 2}
+      evolutionStageNumber: 1
+      moveSet:
+      - {fileID: 11400000, guid: aaa51ed69436f4d4c8025aecfdd30c7c, type: 2}
+      - {fileID: 11400000, guid: f2814938786e248d3a21fbbfc3050632, type: 2}
+      - {fileID: 11400000, guid: f0692df27620a0f4eb138d4c0063f186, type: 2}
+      - {fileID: 11400000, guid: 06e84a4a3f982024aa61d9f4898ded85, type: 2}
     logic: {fileID: 0}
-    pokemonParty: []
     bracketIndex: 0
+  playerPokemonPool:
+  - pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+    evolutionStageNumber: 1
+    moveSet:
+    - {fileID: 11400000, guid: 06e84a4a3f982024aa61d9f4898ded85, type: 2}
+    - {fileID: 11400000, guid: 5acb2240365dea748b8538ff9318ccab, type: 2}
+    - {fileID: 11400000, guid: aaa51ed69436f4d4c8025aecfdd30c7c, type: 2}
+  - pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+    evolutionStageNumber: 2
+    moveSet:
+    - {fileID: 11400000, guid: d4c7877feefd026949072bf2d7d6503e, type: 2}
+    - {fileID: 11400000, guid: 802d8ae7a39e9ef4cab4322f312fe0db, type: 2}
+    - {fileID: 11400000, guid: 3fc4f8de5bc58824d940ff29a52a24ab, type: 2}
+    - {fileID: 11400000, guid: bbc2c73c9dd236c6d884c666a685bd6a, type: 2}
+  - pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
+    evolutionStageNumber: 2
+    moveSet:
+    - {fileID: 11400000, guid: 347e8d6b509bd8a49b47824d6d6ca87c, type: 2}
+    - {fileID: 11400000, guid: 802d8ae7a39e9ef4cab4322f312fe0db, type: 2}
+    - {fileID: 11400000, guid: beb61cb5f2214f554875a8af28849a7b, type: 2}
+    - {fileID: 11400000, guid: 0ecc5cd1f1d37c05eb99521167ac943d, type: 2}
+  - pokemon: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}
+    evolutionStageNumber: 1
+    moveSet:
+    - {fileID: 11400000, guid: 312137888a92a95e59d8a8ce6b213e95, type: 2}
+    - {fileID: 11400000, guid: b777dec5f205a61448873e7760324510, type: 2}
+    - {fileID: 11400000, guid: 53fed834b2f80124ba1a685c0ffcbe2b, type: 2}
+    - {fileID: 11400000, guid: 267ab4e1ebd598540951809a1e2b4823, type: 2}
+  - pokemon: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}
+    evolutionStageNumber: 0
+    moveSet:
+    - {fileID: 11400000, guid: c7d43dcc896f14a279fc8f692215abfc, type: 2}
+    - {fileID: 11400000, guid: 77bad51db86eb51408c3f8a653c81377, type: 2}
+    - {fileID: 11400000, guid: 156e672646d23cabeb51cfa224ec2045, type: 2}
+    - {fileID: 11400000, guid: 27c77bfc93d86768083012ce4de56a08, type: 2}
+  - pokemon: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}
+    evolutionStageNumber: 0
+    moveSet:
+    - {fileID: 11400000, guid: 2b31d8109d88a540bae4e94af03c833c, type: 2}
+    - {fileID: 11400000, guid: b04f3b4b7d66f9c5f8f97d31bcdd878a, type: 2}
+    - {fileID: 11400000, guid: 90238634db29d7fd4a2ac25996e0e971, type: 2}
+    - {fileID: 11400000, guid: 7a19dc867aad2ed4faaf1e7bac06304f, type: 2}
+  - pokemon: {fileID: 11400000, guid: b7f2b56e327076f4da62d619e125dd49, type: 2}
+    evolutionStageNumber: 1
+    moveSet:
+    - {fileID: 11400000, guid: 783b769c6720c575daac04e35c48095a, type: 2}
+    - {fileID: 11400000, guid: 5acb2240365dea748b8538ff9318ccab, type: 2}
+    - {fileID: 11400000, guid: 64e968ad1abbb3f3988d087e443c89f7, type: 2}
+    - {fileID: 11400000, guid: 88bd6685312db15438e092430c87989c, type: 2}
+  - pokemon: {fileID: 11400000, guid: b7f2b56e327076f4da62d619e125dd49, type: 2}
+    evolutionStageNumber: 1
+    moveSet:
+    - {fileID: 11400000, guid: aabea0c5799a559ea85d7f906e739090, type: 2}
+    - {fileID: 11400000, guid: e589d376f63838b43abf8c4492ec17ce, type: 2}
+    - {fileID: 11400000, guid: e58fbcbb099efd0dd82768d0020bc484, type: 2}
+    - {fileID: 11400000, guid: 267ab4e1ebd598540951809a1e2b4823, type: 2}
+  - pokemon: {fileID: 11400000, guid: b7f2b56e327076f4da62d619e125dd49, type: 2}
+    evolutionStageNumber: 0
+    moveSet:
+    - {fileID: 11400000, guid: d4c7877feefd026949072bf2d7d6503e, type: 2}
+    - {fileID: 11400000, guid: f0692df27620a0f4eb138d4c0063f186, type: 2}
+    - {fileID: 11400000, guid: 267ab4e1ebd598540951809a1e2b4823, type: 2}
+    - {fileID: 11400000, guid: ec2bd2bdc632c79beb9ef8d4c422f5bf, type: 2}
+  - pokemon: {fileID: 11400000, guid: b7f2b56e327076f4da62d619e125dd49, type: 2}
+    evolutionStageNumber: 2
+    moveSet:
+    - {fileID: 11400000, guid: e765a12434f712492a6ed74f21ef259e, type: 2}
+    - {fileID: 11400000, guid: 587287dff7e14084a93b6e42b9bd945f, type: 2}
+    - {fileID: 11400000, guid: 5f1e44b2abf2dc5b284c84c196825587, type: 2}
+    - {fileID: 11400000, guid: 027b3d737071f4c69aab08f80a2abf48, type: 2}
+  - pokemon: {fileID: 11400000, guid: b7f2b56e327076f4da62d619e125dd49, type: 2}
+    evolutionStageNumber: 2
+    moveSet:
+    - {fileID: 11400000, guid: ba7227d3cd2a00f4ca02f38ded4a2e32, type: 2}
+    - {fileID: 11400000, guid: f0692df27620a0f4eb138d4c0063f186, type: 2}
+    - {fileID: 11400000, guid: e904c83e43fd8a1349436a16eb18e610, type: 2}
+    - {fileID: 11400000, guid: cd31b23d8bd9decc0a4f154ad223423f, type: 2}
+  - pokemon: {fileID: 11400000, guid: 22e35517851a9644f97a479913d30735, type: 2}
+    evolutionStageNumber: 0
+    moveSet:
+    - {fileID: 11400000, guid: fd214687fae854b16b48b3bd78ded1ef, type: 2}
+    - {fileID: 11400000, guid: c965c685cf276a756962f0e80782ef1d, type: 2}
+    - {fileID: 11400000, guid: 2d03686e73c8a174e8f1dd31d6ebdc76, type: 2}
+    - {fileID: 11400000, guid: e43bbff887f85434aaefcdb9c220fc13, type: 2}
+  - pokemon: {fileID: 11400000, guid: 22e35517851a9644f97a479913d30735, type: 2}
+    evolutionStageNumber: 1
+    moveSet:
+    - {fileID: 11400000, guid: e152121c319c551f3851f17b6a0e2a30, type: 2}
+    - {fileID: 11400000, guid: c965c685cf276a756962f0e80782ef1d, type: 2}
+    - {fileID: 11400000, guid: aaa51ed69436f4d4c8025aecfdd30c7c, type: 2}
+    - {fileID: 11400000, guid: f2814938786e248d3a21fbbfc3050632, type: 2}
+  - pokemon: {fileID: 11400000, guid: 22e35517851a9644f97a479913d30735, type: 2}
+    evolutionStageNumber: 1
+    moveSet:
+    - {fileID: 11400000, guid: e152121c319c551f3851f17b6a0e2a30, type: 2}
+    - {fileID: 11400000, guid: c91be8b80ec1736ac80d7e41b6801ade, type: 2}
+    - {fileID: 11400000, guid: 91a1ef078648c0de2af2c3aea5c97448, type: 2}
+    - {fileID: 11400000, guid: f2814938786e248d3a21fbbfc3050632, type: 2}
+  - pokemon: {fileID: 11400000, guid: 22e35517851a9644f97a479913d30735, type: 2}
+    evolutionStageNumber: 2
+    moveSet:
+    - {fileID: 11400000, guid: e152121c319c551f3851f17b6a0e2a30, type: 2}
+    - {fileID: 11400000, guid: aaa51ed69436f4d4c8025aecfdd30c7c, type: 2}
+    - {fileID: 11400000, guid: d4c7877feefd026949072bf2d7d6503e, type: 2}
+    - {fileID: 11400000, guid: f2814938786e248d3a21fbbfc3050632, type: 2}
+  - pokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
+    evolutionStageNumber: 0
+    moveSet:
+    - {fileID: 11400000, guid: 10a375b8cb263ba55ac9313920089a98, type: 2}
+    - {fileID: 11400000, guid: 76328b52a3e79ebd18cbdf4a047356fd, type: 2}
+    - {fileID: 11400000, guid: 267ab4e1ebd598540951809a1e2b4823, type: 2}
+  - pokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
+    evolutionStageNumber: 1
+    moveSet:
+    - {fileID: 11400000, guid: 10a375b8cb263ba55ac9313920089a98, type: 2}
+    - {fileID: 11400000, guid: 76328b52a3e79ebd18cbdf4a047356fd, type: 2}
+    - {fileID: 11400000, guid: 598968aad070bee23b2b9e6dea464e8d, type: 2}
+    - {fileID: 11400000, guid: 267ab4e1ebd598540951809a1e2b4823, type: 2}
+  - pokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
+    evolutionStageNumber: 2
+    moveSet:
+    - {fileID: 11400000, guid: 10a375b8cb263ba55ac9313920089a98, type: 2}
+    - {fileID: 11400000, guid: 76328b52a3e79ebd18cbdf4a047356fd, type: 2}
+    - {fileID: 11400000, guid: 598968aad070bee23b2b9e6dea464e8d, type: 2}
+    - {fileID: 11400000, guid: 267ab4e1ebd598540951809a1e2b4823, type: 2}
+  - pokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
+    evolutionStageNumber: 2
+    moveSet:
+    - {fileID: 11400000, guid: f80851af6a89932e9aeb2b66af674345, type: 2}
+    - {fileID: 11400000, guid: 267ab4e1ebd598540951809a1e2b4823, type: 2}
+    - {fileID: 11400000, guid: 90238634db29d7fd4a2ac25996e0e971, type: 2}
+    - {fileID: 11400000, guid: 7a19dc867aad2ed4faaf1e7bac06304f, type: 2}
+  - pokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
+    evolutionStageNumber: 1
+    moveSet:
+    - {fileID: 11400000, guid: 91a1ef078648c0de2af2c3aea5c97448, type: 2}
+    - {fileID: 11400000, guid: 90238634db29d7fd4a2ac25996e0e971, type: 2}
+    - {fileID: 11400000, guid: 88cac14242bc21209852a788e4ab1780, type: 2}
+    - {fileID: 11400000, guid: 267ab4e1ebd598540951809a1e2b4823, type: 2}
+  - pokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
+    evolutionStageNumber: 2
+    moveSet:
+    - {fileID: 11400000, guid: d4c7877feefd026949072bf2d7d6503e, type: 2}
+    - {fileID: 11400000, guid: 598968aad070bee23b2b9e6dea464e8d, type: 2}
+    - {fileID: 11400000, guid: 88cac14242bc21209852a788e4ab1780, type: 2}
+    - {fileID: 11400000, guid: 76071502450a3fbcf8f1cd61b1f35332, type: 2}
+  - pokemon: {fileID: 11400000, guid: 98b7f24f10fddb540975bbad318be6c3, type: 2}
+    evolutionStageNumber: 2
+    moveSet:
+    - {fileID: 11400000, guid: bec17202b9e1e5d429f6d064467dc625, type: 2}
+    - {fileID: 11400000, guid: 5dd6f376614217631b4de43865226d00, type: 2}
+    - {fileID: 11400000, guid: f363f84f929dd2e7195997ecb73c6f46, type: 2}
+    - {fileID: 11400000, guid: 7a19dc867aad2ed4faaf1e7bac06304f, type: 2}
+  - pokemon: {fileID: 11400000, guid: 98b7f24f10fddb540975bbad318be6c3, type: 2}
+    evolutionStageNumber: 2
+    moveSet:
+    - {fileID: 11400000, guid: 5cb5fab7367326d76bbe93d14f50aff1, type: 2}
+    - {fileID: 11400000, guid: e152121c319c551f3851f17b6a0e2a30, type: 2}
+    - {fileID: 11400000, guid: aa3fa284caeebfc4a83126eccd5be8da, type: 2}
+    - {fileID: 11400000, guid: 10a375b8cb263ba55ac9313920089a98, type: 2}
+  - pokemon: {fileID: 11400000, guid: 98b7f24f10fddb540975bbad318be6c3, type: 2}
+    evolutionStageNumber: 2
+    moveSet:
+    - {fileID: 11400000, guid: 15c9a89a77a1b92bc83e0e22667bed6c, type: 2}
+    - {fileID: 11400000, guid: e94a4909f96225e48b0b4d18cb1fca9c, type: 2}
+    - {fileID: 11400000, guid: aa3fa284caeebfc4a83126eccd5be8da, type: 2}
+    - {fileID: 11400000, guid: b04f3b4b7d66f9c5f8f97d31bcdd878a, type: 2}
+  - pokemon: {fileID: 11400000, guid: 98b7f24f10fddb540975bbad318be6c3, type: 2}
+    evolutionStageNumber: 2
+    moveSet:
+    - {fileID: 11400000, guid: dcb89a088b4a3d61d87164f0a80cd456, type: 2}
+    - {fileID: 11400000, guid: fa20c81c0974b47ef8883906ac1e8f32, type: 2}
+    - {fileID: 11400000, guid: aa3fa284caeebfc4a83126eccd5be8da, type: 2}
+    - {fileID: 11400000, guid: 5cb5fab7367326d76bbe93d14f50aff1, type: 2}
+  - pokemon: {fileID: 11400000, guid: 98b7f24f10fddb540975bbad318be6c3, type: 2}
+    evolutionStageNumber: 2
+    moveSet:
+    - {fileID: 11400000, guid: dcb89a088b4a3d61d87164f0a80cd456, type: 2}
+    - {fileID: 11400000, guid: fa20c81c0974b47ef8883906ac1e8f32, type: 2}
+    - {fileID: 11400000, guid: aa3fa284caeebfc4a83126eccd5be8da, type: 2}
+    - {fileID: 11400000, guid: 5cb5fab7367326d76bbe93d14f50aff1, type: 2}
+  - pokemon: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
+    evolutionStageNumber: 0
+    moveSet:
+    - {fileID: 11400000, guid: c2b6a0e356c4efb848f5211a0460dbbc, type: 2}
+    - {fileID: 11400000, guid: 8c822e62346e2da088a7e2f47b6dfb10, type: 2}
+    - {fileID: 11400000, guid: c29c54abeb6ad2ab7bc9e33a9da01fb9, type: 2}
+    - {fileID: 11400000, guid: 7a19dc867aad2ed4faaf1e7bac06304f, type: 2}
+  - pokemon: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
+    evolutionStageNumber: 0
+    moveSet:
+    - {fileID: 11400000, guid: 802d8ae7a39e9ef4cab4322f312fe0db, type: 2}
+    - {fileID: 11400000, guid: d99a410915ce463339cf77ff4f0b7413, type: 2}
+    - {fileID: 11400000, guid: c92d7c6120c4b974dbea981d61d79b73, type: 2}
+    - {fileID: 11400000, guid: 77bad51db86eb51408c3f8a653c81377, type: 2}
+  - pokemon: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
+    evolutionStageNumber: 1
+    moveSet:
+    - {fileID: 11400000, guid: ddbf5455dec93675c85feb5130d51197, type: 2}
+    - {fileID: 11400000, guid: 36740bb1feebb84b9a3625e06382a3f1, type: 2}
+    - {fileID: 11400000, guid: 7a19dc867aad2ed4faaf1e7bac06304f, type: 2}
+    - {fileID: 11400000, guid: 0aac5090c3c75541b8bc227b0a35291e, type: 2}
+  - pokemon: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}
+    evolutionStageNumber: 1
+    moveSet:
+    - {fileID: 11400000, guid: 2b31d8109d88a540bae4e94af03c833c, type: 2}
+    - {fileID: 11400000, guid: 015f1ea4c097c461fb727bd253f2f399, type: 2}
+    - {fileID: 11400000, guid: bf6910db525a07c5aae49ce2a3ae2ab7, type: 2}
+    - {fileID: 11400000, guid: 0aac5090c3c75541b8bc227b0a35291e, type: 2}
+  - pokemon: {fileID: 11400000, guid: 9ef1cbf09edb55843ab7139bb2b68992, type: 2}
+    evolutionStageNumber: 0
+    moveSet:
+    - {fileID: 11400000, guid: cd532e9f9a9c2f8008895e71ea969940, type: 2}
+    - {fileID: 11400000, guid: 015f1ea4c097c461fb727bd253f2f399, type: 2}
+    - {fileID: 11400000, guid: 5cb5fab7367326d76bbe93d14f50aff1, type: 2}
+    - {fileID: 11400000, guid: a8e9b95d00b622decabd1362c035c113, type: 2}
+  - pokemon: {fileID: 11400000, guid: 9ef1cbf09edb55843ab7139bb2b68992, type: 2}
+    evolutionStageNumber: 1
+    moveSet:
+    - {fileID: 11400000, guid: cd532e9f9a9c2f8008895e71ea969940, type: 2}
+    - {fileID: 11400000, guid: 156e672646d23cabeb51cfa224ec2045, type: 2}
+    - {fileID: 11400000, guid: 5cb5fab7367326d76bbe93d14f50aff1, type: 2}
+    - {fileID: 11400000, guid: 2e60bcfe1431e981fab9ce9c8bcffc17, type: 2}
+  - pokemon: {fileID: 11400000, guid: 9ef1cbf09edb55843ab7139bb2b68992, type: 2}
+    evolutionStageNumber: 1
+    moveSet:
+    - {fileID: 11400000, guid: cd532e9f9a9c2f8008895e71ea969940, type: 2}
+    - {fileID: 11400000, guid: 156e672646d23cabeb51cfa224ec2045, type: 2}
+    - {fileID: 11400000, guid: 5cb5fab7367326d76bbe93d14f50aff1, type: 2}
+    - {fileID: 11400000, guid: 2e60bcfe1431e981fab9ce9c8bcffc17, type: 2}
+  - pokemon: {fileID: 11400000, guid: 9ef1cbf09edb55843ab7139bb2b68992, type: 2}
+    evolutionStageNumber: 1
+    moveSet:
+    - {fileID: 11400000, guid: e152121c319c551f3851f17b6a0e2a30, type: 2}
+    - {fileID: 11400000, guid: 156e672646d23cabeb51cfa224ec2045, type: 2}
+    - {fileID: 11400000, guid: e904c83e43fd8a1349436a16eb18e610, type: 2}
+    - {fileID: 11400000, guid: 93363496eae0aa1fab4f72d174684a77, type: 2}
+  - pokemon: {fileID: 11400000, guid: 9ef1cbf09edb55843ab7139bb2b68992, type: 2}
+    evolutionStageNumber: 1
+    moveSet:
+    - {fileID: 11400000, guid: e152121c319c551f3851f17b6a0e2a30, type: 2}
+    - {fileID: 11400000, guid: 156e672646d23cabeb51cfa224ec2045, type: 2}
+    - {fileID: 11400000, guid: e904c83e43fd8a1349436a16eb18e610, type: 2}
+    - {fileID: 11400000, guid: 93363496eae0aa1fab4f72d174684a77, type: 2}
+  - pokemon: {fileID: 11400000, guid: 9ef1cbf09edb55843ab7139bb2b68992, type: 2}
+    evolutionStageNumber: 2
+    moveSet:
+    - {fileID: 11400000, guid: e152121c319c551f3851f17b6a0e2a30, type: 2}
+    - {fileID: 11400000, guid: 156e672646d23cabeb51cfa224ec2045, type: 2}
+    - {fileID: 11400000, guid: b3f0196b5669dc2949185e8d17e0cb7f, type: 2}
+    - {fileID: 11400000, guid: 93363496eae0aa1fab4f72d174684a77, type: 2}
+  - pokemon: {fileID: 11400000, guid: 9ef1cbf09edb55843ab7139bb2b68992, type: 2}
+    evolutionStageNumber: 2
+    moveSet:
+    - {fileID: 11400000, guid: e152121c319c551f3851f17b6a0e2a30, type: 2}
+    - {fileID: 11400000, guid: 156e672646d23cabeb51cfa224ec2045, type: 2}
+    - {fileID: 11400000, guid: b3f0196b5669dc2949185e8d17e0cb7f, type: 2}
+    - {fileID: 11400000, guid: 93363496eae0aa1fab4f72d174684a77, type: 2}

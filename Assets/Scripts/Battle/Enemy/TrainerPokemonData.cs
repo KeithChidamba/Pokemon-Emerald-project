@@ -11,9 +11,9 @@ public class TrainerPokemonData : ScriptableObject
 public struct NaturalPokemonCreationData
 {
     public Pokemon pokemon;
-    public int pokemonLevel;
     public int evolutionStageNumber;
+    public List<Move> moveSet;
+    public int pokemonLevel;
     public bool hasItem;
     public Item heldItem;
-    public List<Move> moveSet;
 }

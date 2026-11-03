@@ -5,6 +5,7 @@ using UnityEngine;
 public class BattleZoneContestantRegistry : ScriptableObject
 {
     public List<TournamentContestant> contestants = new();
+    public List<ContestantPokemonData> playerPokemonPool = new();
 }
 [Serializable]
 public class TournamentContestant
@@ -12,7 +13,15 @@ public class TournamentContestant
     public string trainerName;
     public Sprite battleIntroSprite;
     public SpriteDataForNpc spriteData;
+    public List<ContestantPokemonData> pokemonPartyData = new();
     [HideInInspector] public NpcLogic logic;
-    [HideInInspector] public List<Pokemon> pokemonParty = new();
     [HideInInspector]public int bracketIndex;
+}
+[Serializable]
+public class ContestantPokemonData
+{
+    public Pokemon pokemon;
+    [Range(0,2)]
+    public int evolutionStageNumber;
+    public List<Move> moveSet;
 }

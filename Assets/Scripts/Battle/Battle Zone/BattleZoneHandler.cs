@@ -10,19 +10,38 @@ public class TournamentBracket
     public TournamentContestant firstContestant;
     public TournamentContestant secondContestant;
 }
+
+public enum BattleCompetitionDifficulty
+{
+    Easy,Hard,Crazy
+}
 public class BattleZoneHandler : MonoBehaviour,IInjectable
 {
+    public BattleCompetitionDifficulty currentDifficulty;
+    private AiFlags[] easyModeFlags =
+    {
+        AiFlags.CheckBadMove
+    };
+    private AiFlags[] hardModeFlags =
+    {
+        AiFlags.CheckBadMove,AiFlags.CheckViability,AiFlags.CheckPriority
+    };
+    private AiFlags[] crazyModeFlags =
+    {
+        AiFlags.CheckBadMove,AiFlags.CheckViability,AiFlags.CheckStatus,
+        AiFlags.CheckSetup,AiFlags.CheckSwitching,AiFlags.CheckPriority
+    };
+    
     public BattleZoneContestantRegistry contestantRegistry;
     public TrainerData npcTrainer;
     public Interaction battleInteraction;
     public Vector3 npcIntroPosition;
     public Vector3 playerBattlePosition;
-    private const int ContestantPartyCount = 3;
     private const int ContestantCount = 16;
+    private const int PlayerPartyCount = 3;
+    private int opponentLevelGap;
     private const int RequiredPokemonLevel = 65;
-    private const int MovesPerPokemon = 4;
-
-    private IReadOnlyList<Pokemon> allPokemon;
+    
     private IReadOnlyList<Move> allMoves;
     
     public List<TournamentBracket> leftBracket = new();
@@ -62,7 +81,6 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
    public void OnInject()
    {
       gameObject.SetActive(true);
-      allPokemon = Resources.LoadAll<Pokemon>(DirectoryHandler.GetDirectory(AssetDirectory.Pokemon));
       allMoves = Resources.LoadAll<Move>(DirectoryHandler.GetDirectory(AssetDirectory.Moves));
       _battleHandler.OnBattleStarted += () => AlterExpGain(false);
       _battleHandler.OnBattleEnd += () => AlterExpGain(true);
@@ -76,8 +94,30 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
            participant.pokemonState.canGainExp = canGain;
        }
    }
-   
-   public void BeginTournament()
+
+   public void SetDifficultyAndStart(BattleCompetitionDifficulty difficulty)
+   {
+       _dialogueHandler.EndDialogue();
+       currentDifficulty = difficulty;
+       npcTrainer.trainerAiFlags.Clear();
+       switch (currentDifficulty)
+       {
+           case BattleCompetitionDifficulty.Easy:
+               opponentLevelGap = 15;
+               npcTrainer.trainerAiFlags = easyModeFlags.ToList();
+               break;
+           case BattleCompetitionDifficulty.Hard:
+               opponentLevelGap = 8;
+               npcTrainer.trainerAiFlags = hardModeFlags.ToList();
+               break;
+           case BattleCompetitionDifficulty.Crazy:
+               opponentLevelGap = 0;
+               npcTrainer.trainerAiFlags = crazyModeFlags.ToList();
+               break;
+       }
+       BeginTournament();
+   }
+   private void BeginTournament()
    {
        _gameUi.SetMenuAccessibility(false);
        _battleHandler.OnTrainerBattleResult += DetermineNextBracket;
@@ -96,22 +136,32 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
 
        var numBracketsPerColumn = ContestantCount / 4;
        var npcListCopy = new List<TournamentContestant>(contestantRegistry.contestants);
-
+       
        playerContestant = new TournamentContestant
        {
            trainerName = _gameLoader.playerData.playerName,
            bracketIndex = 0
        };
-
+       //give payer some pokemon from a preset pool
+       var membersFromPool = contestantRegistry.playerPokemonPool;
+       playerContestant.pokemonPartyData.Clear();
+       for (int i = 0; i < PlayerPartyCount; i++)
+       {
+           var randomPartyIndex = Utility.RandomRange(0, membersFromPool.Count);
+           
+           while (playerContestant.pokemonPartyData.Contains(membersFromPool[randomPartyIndex]))
+           {
+               randomPartyIndex = Utility.RandomRange(0, membersFromPool.Count);
+           }
+           playerContestant.pokemonPartyData.Add(membersFromPool[randomPartyIndex]);
+       }
+       
        leftBracket.Add(new TournamentBracket
        {
            firstContestant = playerContestant,
            secondContestant = GetRandomContestant(0)
        });
-       
-       //Give player random pokemon
-       SetContestantParty(leftBracket[0].firstContestant);
-       
+  
        rightBracket.Add(new TournamentBracket
        {
            firstContestant = GetRandomContestant(0),
@@ -142,7 +192,6 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
            var random = Utility.RandomRange(0, npcListCopy.Count);
            var contestant = npcListCopy[random];
            npcListCopy.RemoveAt(random);
-           SetContestantParty(contestant);
            contestant.bracketIndex = bracketIndex;
            return contestant;
        }
@@ -150,22 +199,25 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
        StartCoroutine(SetPokemonData());
        IEnumerator SetPokemonData()
        {
-           foreach (var member in leftBracket.First().firstContestant.pokemonParty)
+           foreach (var member in leftBracket.First().firstContestant.pokemonPartyData)
            {
                yield return _pokemonOperations.HandlePokemonCreation(GetPokemonCopy
-                   ,member
-                   ,RequiredPokemonLevel,
-                   Utility.RandomRange(0, member.evolutions.Count + 1));
+                   , member.pokemon
+                   , RequiredPokemonLevel,
+                   member.evolutionStageNumber);
                continue;
                void GetPokemonCopy(Pokemon pokemonCopy)
                {
                    PokemonOperations.ResolvePokemonNickName(pokemonCopy);
-                   pokemonCopy.moveSet = GetRandomFromLearnSet(pokemonCopy.learnSet);
+                   pokemonCopy.moveSet.Clear();
+                   foreach (var move in member.moveSet)
+                   {
+                       pokemonCopy.moveSet.Add(InstanceFactory.CreateMove(move));
+                   }
                    _partyHandler.AddMember(pokemonCopy);
                }
            }
        }
-      
        BeginNewRound(leftBracket.First());
    }
    
@@ -309,23 +361,8 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
 
         foreach (var contestant in contestantRegistry.contestants)
         {
-            contestant.pokemonParty.Clear();
             contestant.bracketIndex = 0;
             contestant.logic = null;
-        }
-    }
-    private void SetContestantParty(TournamentContestant contestant)
-    {
-        contestant.pokemonParty.Clear();
-        for (int i = 0; i < ContestantPartyCount; i++)
-        {
-            var randomPartyIndex = Utility.RandomRange(0, allPokemon.Count);
-            while (contestant.pokemonParty.Contains(allPokemon[randomPartyIndex]))
-            {
-                randomPartyIndex = Utility.RandomRange(0, allPokemon.Count);
-            }
-
-            contestant.pokemonParty.Add(allPokemon[randomPartyIndex]);
         }
     }
 
@@ -347,15 +384,15 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
                npcTrainer.PokemonParty.Clear();
                npcTrainer.trainerName = npcContestant.trainerName;
                npcTrainer.battleIntroSprite = npcContestant.battleIntroSprite;
-               foreach (var member in npcContestant.pokemonParty)
+               foreach (var member in npcContestant.pokemonPartyData)
                {
                    var newData = ScriptableObject.CreateInstance<TrainerPokemonData>();
                    newData.data = new NaturalPokemonCreationData
                    {
-                       pokemon = member,
-                       pokemonLevel = RequiredPokemonLevel,
-                       evolutionStageNumber = Utility.RandomRange(0, member.evolutions.Count + 1),
-                       moveSet = GetRandomFromLearnSet(member.learnSet)
+                       pokemon = member.pokemon,
+                       pokemonLevel = RequiredPokemonLevel - opponentLevelGap,
+                       evolutionStageNumber = member.evolutionStageNumber,
+                       moveSet = member.moveSet
                    };
                    npcTrainer.PokemonParty.Add(newData);
                }
@@ -368,27 +405,6 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
            }  
        }
    }
-    private List<Move> GetRandomFromLearnSet(LearnSetMove[] learnset)
-    {
-        var availableMoves = learnset
-            .GroupBy(m => m.GetName())
-            .Select(group => group.First())
-            .ToList();
-
-        var moveCount = Mathf.Min(MovesPerPokemon, availableMoves.Count);
-        var moveList = new List<Move>();
-
-        for (int i = 0; i < moveCount; i++)
-        {
-            var random = Utility.RandomRange(0, availableMoves.Count);
-            var learnSetMove = availableMoves[random];
-            availableMoves.RemoveAt(random);
-
-            moveList.Add(allMoves.First(m => m.moveName == learnSetMove.GetName()));
-        }
-        return moveList;
-    }
-   
    private NpcLogic CreateNpcContestant(TournamentContestant contestant)
    {
        var npcInstance = Instantiate(_areaManager.npcPrefab, npcIntroPosition, _areaManager.npcPrefab.transform.rotation,

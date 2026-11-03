@@ -42,30 +42,26 @@ public class BattleOperations : MonoBehaviour,IInjectable
     
     public bool IsStab(Pokemon pokemon,PokemonTypeData moveType)
     {
-        foreach(PokemonTypeData t in pokemon.types)
-            if (t == moveType)
-                return true;
-        return false;
+        return pokemon.types.Contains(moveType);
     }
-    public float CheckTypeEffectiveness(BattleParticipant victim,PokemonTypeData moveType)
+    public float CheckTypeEffectiveness(BattleParticipant victim, PokemonTypeData moveType)
     {
-        if (victim.additionalTypeImmunity is not null)
+        // Extra immunity granted by ability/move (Levitate, etc.)
+        if (victim.additionalTypeImmunity is not null &&
+            victim.additionalTypeImmunity.typeEnum == moveType.typeEnum)
+            return 0;
+
+        // Natural immunities, unless negated (Foresight, Odor Sleuth, etc.)
+        if (HasImmunity(victim.Pokemon, moveType))
         {
-            if (victim.additionalTypeImmunity.typeEnum == moveType.typeEnum)
-                return 0;
+            bool negated = victim.immunityNegations
+                .Any(n => n.ImmunityNegationTypes.Any(t => t == moveType.typeEnum));
+
+            if (!negated) return 0;
+            // negated: fall through and calculate normally
         }
-        else
-        {
-            if (HasImmunity(victim.Pokemon, moveType)) 
-            {
-                //if victim had their immunity altered by moves, like foresight
-                return victim.immunityNegations
-                    .Any(negation => negation.ImmunityNegationTypes
-                        .Any(type=>type == moveType.typeEnum)) ? 1 : 0;
-            }
-            return GetTypeEffectiveness(victim.Pokemon, moveType);
-        }
-        return 1;
+
+        return GetTypeEffectiveness(victim.Pokemon, moveType);
     }
     public float GetTypeEffectiveness(Pokemon victim,PokemonTypeData enemyType)
     {
