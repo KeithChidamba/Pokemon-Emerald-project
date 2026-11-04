@@ -156,18 +156,16 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         }
         return baseDamage;
     }
-    private IEnumerator Magnitude(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
+    private IEnumerator Magnitude(Turn currentTurn, BattleParticipant attacker, BattleParticipant victim)
     {
         int magnitudeStrength = Utility.RandomRange(4, 11);
 
         var baseDamage = MagnitudeDamageEffect(magnitudeStrength);
-        
-        _dialogueHandler.DisplayBattleInfo("Magnitude level "+magnitudeStrength);
+
+        _dialogueHandler.DisplayBattleInfo("Magnitude level " + magnitudeStrength);
         currentTurn.move.moveDamage = baseDamage;
-        
-        yield return _moveLogicHandler.ApplyMultiTargetDamage(
-            _moveLogicHandler.TargetAllExceptSelf(attacker)
-            ,currentTurn.move,attacker);
+
+        yield return _moveLogicHandler.HandleMultiTargetDamage(currentTurn.move, attacker);
     }
 
     private IEnumerator Endeavor(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)

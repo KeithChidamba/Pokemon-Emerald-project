@@ -396,7 +396,13 @@ public class BattleParticipant : MonoBehaviour,IInjectable
     {
         return _battleHandler.GetParticipant(GetPartnerKey());
     }
+    public bool IsReachableBy(Move move, out bool isSureHit)
+    {
+        isSureHit = move.isSureHit;
+        if (!isSemiInvulnerable || move.isSelfTargeted) return true;
 
+        return !semiInvulnerabilityData.IsInvulnerableTo(move, out isSureHit);
+    }
     public bool ProtectedFromStatChange(bool isIncrease)
     {
         var protection = isIncrease? StatChangeability.ImmuneToIncrease

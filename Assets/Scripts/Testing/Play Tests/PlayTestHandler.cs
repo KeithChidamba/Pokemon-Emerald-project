@@ -25,4 +25,9 @@ public class PlayTestHandler : MonoBehaviour
         testEnemy.trainerAiFlags.AddRange(currentPlayTest.trainerAiFlags);
         container.Resolve<BattleHandler>().StartBattle(testEnemy);
     }
+    public void ClearState()
+    {
+        testEnemy.PokemonParty.Clear();
+        testEnemy.trainerAiFlags.Clear();
+    }
 }

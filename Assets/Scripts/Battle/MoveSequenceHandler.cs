@@ -152,6 +152,7 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         doingMove = false;
         _cancelMove = false;
     }
+
     public void AllowMoveRepeat()
     {
         repeatingMoveCycle = true;
@@ -550,16 +551,69 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
         _processingOrder = false;
     } 
     
-    private void CheckVictimVulnerabilityToStatus(Move move,BattleParticipant attacker, BattleParticipant victim)
+    private List<BattleParticipant> GetReachableMultiTargets(Move move, BattleParticipant attacker)
     {
+        var reachable = new List<BattleParticipant>();
+        foreach (var enemy in attacker.currentEnemies.ToList())
+        {
+            if (!enemy.isActive || enemy.Pokemon is not { hp: > 0 }) continue;
+
+            if (enemy.IsReachableBy(move, out _))
+            {
+                reachable.Add(enemy);
+            }
+            else
+            {
+                _dialogueHandler.DisplayBattleInfo(enemy.Pokemon.pokemonDisplayName +
+                                                   enemy.semiInvulnerabilityData.displayMessage);
+            }
+        }
+        return reachable;
+    }
+    private void CheckVictimVulnerabilityToStatus(Move move, BattleParticipant attacker, BattleParticipant victim)
+    {
+        if (move.isMultiTarget && !move.isSelfTargeted)
+        {
+            var targets = GetReachableMultiTargets(move, attacker);
+
+            if (Utility.RandomRange100() <= move.statusChance)
+            {
+                foreach (var enemy in targets)
+                {
+                    if (enemy.Pokemon.statusEffect != StatusEffect.None)
+                    {
+                        if (move.moveDamage == 0)
+                        {
+                            var rejection = move.statusEffect == enemy.Pokemon.statusEffect
+                                ? $"{enemy.Pokemon.pokemonDisplayName} already has a {enemy.Pokemon.statusEffect} effect!"
+                                : "but it failed!";
+                            _dialogueHandler.DisplayBattleInfo(rejection);
+                        }
+                        continue;
+                    }
+
+                    if (!enemy.canBeDamaged)
+                    {
+                        _dialogueHandler.DisplayBattleInfo(enemy.Pokemon.pokemonDisplayName + " protected itself");
+                        continue;
+                    }
+
+                    HandleStatusApplication(enemy, move, true);
+                }
+            }
+            _processingOrder = false;
+            return;
+        }
+
+        //---- single-target path, unchanged ----
         if (victim.Pokemon.statusEffect != StatusEffect.None)
         {
             if (move.moveDamage == 0)
             {
                 //only display message for status-condition-only moves
-                var statusRejectionMessage = move.statusEffect == victim.Pokemon.statusEffect?
+                var statusRejectionMessage = move.statusEffect == victim.Pokemon.statusEffect ?
                     $"{victim.Pokemon.pokemonDisplayName} already has a {victim.Pokemon.statusEffect} effect!"
-                    :"but it failed!";
+                    : "but it failed!";
                 _dialogueHandler.DisplayBattleInfo(statusRejectionMessage);
             }
             _processingOrder = false;
@@ -568,32 +622,23 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
 
         if (victim.Pokemon.hp <= 0)
         {
-            _processingOrder = false; 
+            _processingOrder = false;
             return;
         }
-        
+
         if (!victim.canBeDamaged)
         {
-            _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName+" protected itself");
+            _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName + " protected itself");
             _processingOrder = false;
             return;
         }
         if (Utility.RandomRange100() <= move.statusChance)
         {
-            if (move.isMultiTarget)
-            {
-                foreach (BattleParticipant enemy in attacker.currentEnemies)
-                {
-                    HandleStatusApplication(enemy, move, true);
-                }
-            }
-            else
-            {
-                HandleStatusApplication(victim, move, true);
-            }
+            HandleStatusApplication(victim, move, true);
         }
         _processingOrder = false;
     }
+    
     private bool CheckInvalidStatusEffect(StatusEffect status,PokemonType typeName,Move move)
     {
         List<(StatusEffect status, PokemonType type)> invalidCombinations = new()
@@ -788,20 +833,27 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
             _processingOrder = false; 
         }
     }
-    private IEnumerator HandleStatChangeApplication(Move move,BattleParticipant attacker, BattleParticipant victim)
+    private IEnumerator HandleStatChangeApplication(Move move, BattleParticipant attacker, BattleParticipant victim)
     {
+        List<BattleParticipant> multiTargets = null;
+        if (!move.isSelfTargeted && move.isMultiTarget)
+        {
+            multiTargets = GetReachableMultiTargets(move, attacker);
+            yield return _dialogueHandler.AwaitAllDialogue();
+        }
+
         foreach (var buffData in move.buffOrDebuffData)
         {
-            if(move.isSelfTargeted)
+            if (move.isSelfTargeted)
             {
                 var data = new StatChangeTransitData(attacker, buffData.stat, buffData.isIncreasing, buffData.amount);
                 yield return ExecuteSequentialStatChange(data);
             }
             else
             {
-                if (move.isMultiTarget)
+                if (multiTargets != null)
                 {
-                    foreach (var enemy in attacker.currentEnemies)
+                    foreach (var enemy in multiTargets)
                     {
                         yield return HandleStatChange(enemy, buffData.stat, buffData.isIncreasing, buffData.amount);
                         yield return _dialogueHandler.AwaitAllDialogue();
@@ -811,11 +863,11 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
                 {
                     yield return HandleStatChange(victim, buffData.stat, buffData.isIncreasing, buffData.amount);
                 }
-                
             }
         }
         _processingOrder = false;
     }
+    
     private IEnumerator HandleStatChange(BattleParticipant enemy,Stat stat, bool isIncreasing,int changeAmount)
     {
         if (!enemy.canBeDamaged)

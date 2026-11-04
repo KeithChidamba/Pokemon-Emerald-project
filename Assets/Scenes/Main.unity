@@ -237243,7 +237243,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &521305103
 RectTransform:
   m_ObjectHideFlags: 0
@@ -321055,7 +321055,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   testControlsView: {fileID: 521305102}
   playTestHandler: {fileID: 972106321}
-  environment: 0
+  environment: 1
 --- !u!1 &1321770489
 GameObject:
   m_ObjectHideFlags: 0

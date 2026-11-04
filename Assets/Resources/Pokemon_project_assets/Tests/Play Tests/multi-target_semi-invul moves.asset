@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 196047d55fb331cab90d747b8934b8cd, type: 3}
-  m_Name: Dig Double battle Test
+  m_Name: multi-target_semi-invul moves
   m_EditorClassIdentifier: 
   battleType: 1
   trainerAiFlags: 000000000200000001000000
@@ -36,6 +36,7 @@ MonoBehaviour:
       moveSet:
       - {fileID: 11400000, guid: 77bad51db86eb51408c3f8a653c81377, type: 2}
       - {fileID: 11400000, guid: dd313f675f4b2be028c38ff2cb08e711, type: 2}
+      - {fileID: 11400000, guid: 8df410dfa64e2594998df7fbc0252d0c, type: 2}
       pokemonLevel: 55
       hasItem: 0
       heldItem: {fileID: 0}
@@ -49,7 +50,8 @@ MonoBehaviour:
       moveSet:
       - {fileID: 11400000, guid: 77bad51db86eb51408c3f8a653c81377, type: 2}
       - {fileID: 11400000, guid: aaa51ed69436f4d4c8025aecfdd30c7c, type: 2}
-      pokemonLevel: 60
+      - {fileID: 11400000, guid: 3fc4f8de5bc58824d940ff29a52a24ab, type: 2}
+      pokemonLevel: 50
       hasItem: 0
       heldItem: {fileID: 0}
     specificNature: {fileID: 0}

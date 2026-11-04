@@ -16,8 +16,8 @@ MonoBehaviour:
   baseMoneyPayout: 0
   trainerLocationData: {fileID: 11400000, guid: 7313abad95799272cbf6b7ccdd21a708, type: 2}
   PokemonParty: []
-  battleType: 0
-  trainerAiFlags: 
+  battleType: 1
+  trainerAiFlags: 000000000200000001000000
   battleIntroSprite: {fileID: 1807993842, guid: e38499f365b8f475a87d7cfe7c294970, type: 3}
   battleLossMessage: Test Battle Over!
   battleIntroMessage: Test Battle Begins!

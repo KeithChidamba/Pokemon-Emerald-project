@@ -206,7 +206,10 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         _moveExecutionHandlers.Clear();
         StopAllCoroutines();
     }
-
+    public bool CanMoveReachTarget(Move move, BattleParticipant target, out bool isSureHit)
+    {
+        return target.IsReachableBy(move, out isSureHit);
+    }
     private IEnumerator CheckAttackSuccess(Turn turn, BattleParticipant attacker, BattleParticipant victim)
     {
         if (attacker.Pokemon.hp <= 0)
@@ -255,8 +258,37 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             }
 
             var isSureHit = turn.move.isSureHit;
+            var accuracyTarget = victim;
 
-            if (victim.isSemiInvulnerable)
+            if (turn.move.isMultiTarget)
+            {
+                //MULTI-TARGET FIX: for these moves `victim` is just whichever enemy the target
+                //selection auto-picked, so it must not decide the outcome on its own.
+                //The move works if it can reach at least one of its real targets.
+                var candidates = GetMultiTargetCandidates(turn.move, attacker);
+                var reachable = candidates.Where(t => CanMoveReachTarget(turn.move, t, out _)).ToList();
+
+                if (reachable.Count == 0)
+                {
+                    foreach (var candidate in candidates)
+                    {
+                        _dialogueHandler.DisplayBattleInfo(candidate.Pokemon.pokemonDisplayName +
+                                                           candidate.semiInvulnerabilityData.displayMessage);
+                    }
+                    OnAttackAttempted?.Invoke(false);
+                    yield break;
+                }
+
+                //accuracy is rolled against a target the move can really hit
+                accuracyTarget = reachable[0];
+                isSureHit = reachable.Any(t =>
+                {
+                    CanMoveReachTarget(turn.move, t, out var targetSureHit);
+                    return targetSureHit;
+                });
+                //unreachable targets are reported per target in ApplyMultiTargetDamage
+            }
+            else if (victim.isSemiInvulnerable)
             {
                 if (turn.move.isSelfTargeted)
                 {
@@ -274,13 +306,13 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
 
             if (!isSureHit)
             {
-                if (!MoveSuccessful(turn))
+                if (!MoveSuccessful(turn.move, attacker, accuracyTarget))
                 {
-                    if (attacker.Pokemon.accuracy >= victim.Pokemon.evasion)
+                    if (attacker.Pokemon.accuracy >= accuracyTarget.Pokemon.evasion)
                         _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName +
                                                            " missed the attack");
                     else
-                        _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName +
+                        _dialogueHandler.DisplayBattleInfo(accuracyTarget.Pokemon.pokemonDisplayName +
                                                            " dodged the attack");
                 }
                 else
@@ -307,7 +339,22 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         }
         OnAttackAttempted?.Invoke(false);
     }
-    
+    public List<BattleParticipant> GetMultiTargetCandidates(Move move, BattleParticipant attacker)
+    {
+        var info = move.GetDynamicModule<MultiTargetDamageInfo>();
+
+        if (info != null && info.target == Target.AllExceptSelf)
+        {
+            return _battleHandler.GetParticipants
+                .Where(p => p.isActive && p.participantKey != attacker.participantKey)
+                .ToList();
+        }
+
+        //AllEnemies, or a pipeline multi-target move (Growl etc.) that has no module
+        return attacker.currentEnemies
+            .Where(p => p.isActive)
+            .ToList();
+    }
     private IEnumerator ExecuteMoves()
     {
         //Set priority (switch turns treated as priority 0), speed as tiebreaker
@@ -370,6 +417,19 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
 
             yield return attacker.heldItemHandler.CheckForConsumableItem();
             yield return victim.heldItemHandler.CheckForConsumableItem();
+
+            //MULTI-TARGET FIX: the stored victim is only an arbitrary pick for these moves.
+            //If it is gone, retarget to any real target that is still standing
+            if (currentTurn.move.isMultiTarget && !IsValidParticipantState(victim))
+            {
+                var replacement = GetMultiTargetCandidates(currentTurn.move, attacker)
+                    .FirstOrDefault(IsValidParticipantState);
+                if (replacement != null)
+                {
+                    victim = replacement;
+                    currentTurn.victimKey = replacement.participantKey;
+                }
+            }
 
             if (!IsValidParticipantState(victim))
             {
@@ -482,8 +542,12 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         {
             if (IsValidParticipantState(participant)) continue;
 
+            //keep the original behaviour: dead / deactivated slots still get their moves reloaded
+            if (participant.Pokemon != null)
+                participant.pokemonState.ResetMoveData();
+
             AbortSemiInvulnerableState(participant);
-            if (participant.currentCoolDown != null && participant.currentCoolDown.isCoolingDown)
+            if (participant.currentCoolDown is {isCoolingDown:true})
                 participant.currentCoolDown.ResetState();
         }
 
@@ -523,7 +587,6 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         yield return _dialogueHandler.AwaitAllDialogue();
         NextTurn();
     }
-
    
     public IEnumerator AllowPlayerSwitchIn(string trainerName,string pokemonName)
     {
@@ -737,7 +800,6 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             }
         }
     }
-    
     private void CheckRepeatedMove(BattleParticipant attacker, Move move)
     {
         if (attacker.previousMoveData is null)
@@ -794,6 +856,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             RemoveTurn(historyIndex);
 
         currentTurnIndex -= step;
+        _inputStateHandler.OnStateRemoved -= _battleHandler.SetupOptionsAfterTurnReset;
         _inputStateHandler.OnStateRemoved += _battleHandler.SetupOptionsAfterTurnReset;
     }
     
@@ -821,15 +884,13 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             OnNewTurn?.Invoke();
         }
     }
-    private bool MoveSuccessful(Turn turn)
+    private bool MoveSuccessful(Move move, BattleParticipant attacker, BattleParticipant target)
     {
         var random = Utility.RandomRange100();
-        var hitChance = turn.move.moveAccuracy *
-                           (_battleHandler.GetParticipant(turn.attackerKey).Pokemon.accuracy / 
-                            _battleHandler.GetParticipant(turn.victimKey).Pokemon.evasion);
-        return hitChance>random;
+        var hitChance = move.moveAccuracy *
+                        (attacker.Pokemon.accuracy / target.Pokemon.evasion);
+        return hitChance > random;
     }
-
     public void ChangeWeather(WeatherCondition newWeather,bool fromAbility=false)
     {
         OnWeatherEffect -= CurrentWeather.weatherEffect;

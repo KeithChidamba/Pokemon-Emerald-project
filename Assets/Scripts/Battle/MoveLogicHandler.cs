@@ -111,33 +111,43 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         }
         yield return _dialogueHandler.AwaitAllDialogue();
     } 
-    public IEnumerator ApplyMultiTargetDamage(List<BattleParticipant> targets,Move move,BattleParticipant attacker)
+    public IEnumerator ApplyMultiTargetDamage(List<BattleParticipant> targets, Move move, BattleParticipant attacker)
     {
         yield return _dialogueHandler.AwaitAllDialogue();
         foreach (var enemy in targets)
         {
             if (!enemy.isActive) continue;
-            _moveUsageHandler.DisplayMoveDamage(move,attacker,enemy);
+
+            if (!enemy.IsReachableBy(move, out _))
+            {
+                _dialogueHandler.DisplayBattleInfo(enemy.Pokemon.pokemonDisplayName +
+                                                   enemy.semiInvulnerabilityData.displayMessage);
+                yield return _dialogueHandler.AwaitAllDialogue();
+                continue;
+            }
+
+            _moveUsageHandler.DisplayMoveDamage(move, attacker, enemy);
             yield return _moveUsageHandler.AwaitDamageDisplay();
             yield return _battleHandler.AwaitFaintQueue();
             yield return _dialogueHandler.AwaitAllDialogue();
         }
         yield return _dialogueHandler.AwaitAllDialogue();
     }
-    IEnumerator HandleMultiTargetDamage(Move move,BattleParticipant attacker)
+    
+    public IEnumerator HandleMultiTargetDamage(Move move, BattleParticipant attacker)
     {
         var multiTargetInfo = move.GetDynamicModule<MultiTargetDamageInfo>();
         var targets = new List<BattleParticipant>();
         switch (multiTargetInfo.target)
         {
-            case Target.AllEnemies :
-                targets = attacker.currentEnemies;
+            case Target.AllEnemies:
+                targets = attacker.currentEnemies.ToList();
                 break;
-            case Target.AllExceptSelf :
+            case Target.AllExceptSelf:
                 targets = TargetAllExceptSelf(attacker);
                 break;
         }
-        yield return ApplyMultiTargetDamage(targets,move,attacker);
+        yield return ApplyMultiTargetDamage(targets, move, attacker);
     }
 
     IEnumerator DrainHealth(Move move,BattleParticipant attacker, BattleParticipant victim)

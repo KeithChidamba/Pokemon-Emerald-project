@@ -266,10 +266,11 @@ public class BattleHandler : MonoBehaviour, IInjectable
         
         OnEnemySelected?.Invoke(currentEnemyIndex);
     }
-    public void SetupOptionsAfterTurnReset(InputState currentState)
+    public void SetupOptionsAfterTurnReset(InputState removedState)
     {
-        if (currentState.stateName != InputStateName.PokemonBattleOptions) return;
+        if (removedState.stateName != InputStateName.PokemonBattleOptions) return;
         _inputStateHandler.OnStateRemoved -= SetupOptionsAfterTurnReset;
+        if (BattleOver) return;// this removal is the end-of-battle cleanup, don't rebuild
         SetupOptionsInput();
     }
     private void SetupOptionsInput()
@@ -295,29 +296,18 @@ public class BattleHandler : MonoBehaviour, IInjectable
             optionsUI, InputDirection.Grid, battleOptionSelectables,
             optionSelector,true,true
             ,onExit:_turnBasedCombatHandler.RemoveTurn, updateExit:ConditionsForExit));
-        
-        _inputStateHandler.OnStateLoaded += HideDuringDialogue;
-        _inputStateHandler.OnStateRemoved += CleanEvents;
         return;
-        void CleanEvents(InputState oldState)
-        {
-            if (oldState.stateName == InputStateName.PokemonBattleOptions)
-            {
-                _inputStateHandler.OnStateLoaded -= HideDuringDialogue;
-                _inputStateHandler.OnStateRemoved -= CleanEvents;
-            }
-        }
-        void HideDuringDialogue(InputState newState)
-        {
-            if (newState.stateName == InputStateName.BattleDialoguePlaceHolder)
-            {
-                optionsUI.SetActive(false);
-            }
-        }
         void RemoveBattleTextAndInvoke(Action callBack)
         {
             _dialogueHandler.DisplaySpecific(string.Empty,DialogType.BattleDisplayMessage);
             callBack.Invoke();
+        }
+    }
+    private void HideOptionsDuringDialogue(InputState newState)
+    {
+        if (newState.stateName == InputStateName.BattleDialoguePlaceHolder)
+        {
+            optionsUI.SetActive(false);
         }
     }
     private bool ConditionsForExit()
@@ -381,6 +371,8 @@ public class BattleHandler : MonoBehaviour, IInjectable
         
         _gameLoadingHandler.playerData.playerPosition = _playerMovementHandler.GetPlayerPosition();
         _inputStateHandler.OnStateChanged += EnableBattleMessage;
+        _inputStateHandler.OnStateLoaded -= HideOptionsDuringDialogue;
+        _inputStateHandler.OnStateLoaded += HideOptionsDuringDialogue;
         
         SetupOptionsInput();
         _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
@@ -919,6 +911,8 @@ public class BattleHandler : MonoBehaviour, IInjectable
             
             yield return _dialogueHandler.AwaitAllDialogue();
             _dialogueHandler.EndDialogue();
+            _inputStateHandler.OnStateRemoved -= SetupOptionsAfterTurnReset;
+            _inputStateHandler.OnStateLoaded -= HideOptionsDuringDialogue;
             _inputStateHandler.ResetGroupUi(InputStateGroup.PokemonBattle);
             yield return _battleIntroHandler.BlackFade();
             yield return ResetUiAfterBattle();

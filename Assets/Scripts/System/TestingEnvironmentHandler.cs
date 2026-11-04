@@ -89,6 +89,7 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
        yield return playTestHandler.BeginTest(_container);
        yield return new WaitForSeconds(2f);//Allow battle sequence to start
        yield return _container.Resolve<BattleHandler>().AwaitBattleCompletion();
+       playTestHandler.ClearState();
        
        //End to End Tests
        testControlsView.SetActive(true);
