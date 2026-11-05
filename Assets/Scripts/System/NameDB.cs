@@ -182,11 +182,54 @@ public static class NameDB
         { ItemName.Potion, "Potion" },
         { ItemName.ChoiceBand, "Choice Band" },
         { ItemName.AmuletCoin, "Amulet Coin" },
-        { ItemName.WailmerPail,"Wailmer Pail" },
+        { ItemName.WailmerPail, "Wailmer Pail" },
         { ItemName.Pokeball, "Pokeball" },
         { ItemName.RareCandy, "Rare Candy" },
         { ItemName.SootheBell, "Soothe Bell" },
-        { ItemName.LuxuryBall, "Luxury Ball" }
+        { ItemName.LuxuryBall, "Luxury Ball" },
+        { ItemName.Antidote, "Antidote" },
+        { ItemName.Awakening, "Awakening" },
+        { ItemName.ParalyzeHeal, "Paralyze Heal" },
+        { ItemName.BurnHeal, "Burn Heal" },
+        { ItemName.IceHeal, "Ice Heal" },
+        { ItemName.SuperPotion, "Super Potion" },
+        { ItemName.HyperPotion, "Hyper Potion" },
+        { ItemName.Ether, "Ether" },
+        { ItemName.Revive, "Revive" },
+        { ItemName.PpUp, "PP Up" },
+        { ItemName.Tm06, "TM06" },
+        { ItemName.Tm08, "TM08" },
+        { ItemName.Tm09, "TM09" },
+        { ItemName.Tm13, "TM13" },
+        { ItemName.Tm15, "TM15" },
+        { ItemName.Tm18, "TM18" },
+        { ItemName.Tm19, "TM19" },
+        { ItemName.Tm24, "TM24" },
+        { ItemName.Tm25, "TM25" },
+        { ItemName.Tm26, "TM26" },
+        { ItemName.Tm28, "TM28" },
+        { ItemName.Tm31, "TM31" },
+        { ItemName.Tm35, "TM35" },
+        { ItemName.Tm37, "TM37" },
+        { ItemName.Tm40, "TM40" },
+        { ItemName.HpUp, "HP Up" },
+        { ItemName.Protein, "Protein" },
+        { ItemName.Iron, "Iron" },
+        { ItemName.Carbos, "Carbos" },
+        { ItemName.Calcium, "Calcium" },
+        { ItemName.Zinc, "Zinc" },
+        { ItemName.PpMax, "PP Max" },
+        { ItemName.GoodRod, "Good Rod" },
+        { ItemName.SuperRod, "Super Rod" },
+        { ItemName.ExpShare, "Exp Share" },
+        { ItemName.LuckyEgg, "Lucky Egg" },
+        { ItemName.XAttack, "X Attack" },
+        { ItemName.XDefense, "X Defense" },
+        { ItemName.XSpAttack, "X Special Attack" },
+        { ItemName.DireHit, "Dire Hit" },
+        { ItemName.XSpeed, "X Speed" },
+        { ItemName.XAccuracy, "X Accuracy" },
+        { ItemName.MaxRevive, "Max Revive" },
     };
     public static ItemName ParseItemName(string itemName)
     {
@@ -253,63 +296,6 @@ public static class NameDB
         
     public static readonly List<NatureName> PokemonNatures =
         Enum.GetValues(typeof(NatureName)).Cast<NatureName>().ToList();
-    
-    private static Dictionary<PokemonName, string> _pokemonNames = new()
-    {
-        { PokemonName.Mudkip, "Mudkip" },
-        { PokemonName.Marshtomp, "Marshtomp" },
-        { PokemonName.Swampert, "Swampert" },
-
-        { PokemonName.Trapinch, "Trapinch" },
-        { PokemonName.Vibrava, "Vibrava" },
-        { PokemonName.Flygon, "Flygon" },
-
-        { PokemonName.Treecko, "Treecko" },
-        { PokemonName.Grovyle, "Grovyle" },
-        { PokemonName.Sceptile, "Sceptile" },
-
-        { PokemonName.Torchic, "Torchic" },
-        { PokemonName.Combusken, "Combusken" },
-        { PokemonName.Blaziken, "Blaziken" },
-
-        { PokemonName.Pikachu, "Pikachu" },
-        { PokemonName.Raichu, "Raichu" },
-
-        { PokemonName.Zigzagoon, "Zigzagoon" },
-        { PokemonName.Linoone, "Linoone" },
-
-        { PokemonName.Zubat, "Zubat" },
-        { PokemonName.Golbat, "Golbat" },
-        { PokemonName.Crobat, "Crobat" }
-    };
-
-    public static string GetPokemon(PokemonName pokemon)
-    {
-        return _pokemonNames[pokemon];
-    }
-}
-
-public enum PokemonName
-{
-    Mudkip,
-    Marshtomp,
-    Swampert,
-    Trapinch,
-    Vibrava,
-    Flygon,
-    Treecko,
-    Grovyle,
-    Sceptile,
-    Torchic,
-    Combusken,
-    Blaziken,
-    Pikachu,
-    Raichu,
-    Zigzagoon,
-    Linoone,
-    Zubat,
-    Golbat,
-    Crobat
 }
 
 public enum NatureName
@@ -322,8 +308,60 @@ public enum NatureName
 }
 public enum ItemName
 {
-    FullRestore,MaxPotion,FullHeal,LeppaBerry,OranBerry,CherriBerry,PersimBerry,GuardSpec
-    ,Potion,ChoiceBand,AmuletCoin,WailmerPail,Pokeball,RareCandy,SootheBell,LuxuryBall
+    FullRestore,
+    MaxPotion,
+    FullHeal,
+    LeppaBerry,
+    OranBerry,
+    CherriBerry,
+    PersimBerry,
+    GuardSpec,
+    Potion,
+    ChoiceBand,
+    AmuletCoin,
+    WailmerPail,
+    Pokeball,
+    RareCandy,
+    SootheBell,
+    LuxuryBall,
+    Antidote,
+    Awakening,
+    ParalyzeHeal,
+    BurnHeal,
+    IceHeal,
+    SuperPotion,
+    HyperPotion,
+    Ether,
+    Revive,
+    PpUp,
+    Tm06,Tm08,Tm09,Tm13,Tm15,
+    Tm18,
+    Tm19,
+    Tm24,
+    Tm25,
+    Tm26,
+    Tm28,
+    Tm31,
+    Tm35,
+    Tm37,
+    Tm40,
+    HpUp,
+    Protein,
+    Iron,
+    Carbos,
+    Calcium,
+    Zinc,
+    PpMax,
+    GoodRod,
+    SuperRod,
+    ExpShare,
+    LuckyEgg,
+    XAttack,
+    XDefense,
+    XSpAttack,
+    DireHit,
+    XSpeed,
+    XAccuracy,MaxRevive
 }
 
 public enum AbilityName

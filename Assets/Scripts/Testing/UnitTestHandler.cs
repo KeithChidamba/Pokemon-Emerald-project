@@ -76,7 +76,13 @@ public class UnitTestHandler
     {
         bool testComplete = false;
         var pokemonAsset = Resources.Load<Pokemon>(DirectoryHandler.GetDirectory(AssetDirectory.Pokemon) + "Zigzagoon/Zigzagoon");
-        yield return _pokemonOperationsHandler.HandlePokemonCreation(CreateMember,pokemonAsset,5,1);
+        yield return _pokemonOperationsHandler.HandlePokemonCreation(CreateMember,
+            new NaturalPokemonCreationData
+            {
+                pokemon = pokemonAsset,
+                evolutionStageNumber = 1,
+                pokemonLevel = 5,
+            });
         yield return new WaitUntil(()=>testComplete);
         yield break;
         void CreateMember(Pokemon createdPokemon)
@@ -149,8 +155,13 @@ public class UnitTestHandler
         var pokemonAsset = Resources.Load<Pokemon>(DirectoryHandler.GetDirectory(AssetDirectory.Pokemon) + "Zigzagoon/Zigzagoon");
         var amuletCoin = Resources.Load<Item>(DirectoryHandler.GetDirectory(AssetDirectory.Items)
         + NameDB.GetItem(ItemName.AmuletCoin));
-        yield return _pokemonOperationsHandler.HandlePokemonCreation(CreateMember,pokemonAsset,5,1);
-        
+        yield return _pokemonOperationsHandler.HandlePokemonCreation(CreateMember,
+            new NaturalPokemonCreationData
+            {
+                pokemon = pokemonAsset,
+                evolutionStageNumber = 1,
+                pokemonLevel = 5,
+            });
         yield return new WaitUntil(()=>testComplete);
         yield break;
         void CreateMember(Pokemon createdPokemon)
@@ -175,7 +186,13 @@ public class UnitTestHandler
         var rareCandy = Resources.Load<Item>(DirectoryHandler.GetDirectory(AssetDirectory.Items)
                                               + NameDB.GetItem(ItemName.RareCandy));
        
-        yield return _pokemonOperationsHandler.HandlePokemonCreation(CreateMember,pokemonAsset,21,0);
+        yield return _pokemonOperationsHandler.HandlePokemonCreation(CreateMember,
+            new NaturalPokemonCreationData
+            {
+                pokemon = pokemonAsset,
+                evolutionStageNumber = 0,
+                pokemonLevel = 21,
+            });
         yield return new WaitUntil(()=>testComplete);
         yield break;
         void CreateMember(Pokemon createdPokemon)
@@ -206,7 +223,13 @@ public class UnitTestHandler
         var sootheBell = Resources.Load<Item>(DirectoryHandler.GetDirectory(AssetDirectory.Items)
                                               + NameDB.GetItem(ItemName.SootheBell));
         
-        yield return _pokemonOperationsHandler.HandlePokemonCreation(CreateMember,pokemonAsset,21,0);
+        yield return _pokemonOperationsHandler.HandlePokemonCreation(CreateMember,
+            new NaturalPokemonCreationData
+            {
+                pokemon = pokemonAsset,
+                evolutionStageNumber = 0,
+                pokemonLevel = 21,
+            });
         yield return new WaitUntil(()=>testComplete);
         yield break;
         void CreateMember(Pokemon createdPokemon)

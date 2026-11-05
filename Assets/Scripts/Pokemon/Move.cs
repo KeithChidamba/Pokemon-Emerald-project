@@ -27,6 +27,7 @@ public class Move : InfoModuleHolder
     public bool isMultiTarget;
     public bool isSelfTargeted;
     public bool isSureHit;
+    public bool dealSpecificDamage;
     public bool displayTargetMessage;
     
     [FormerlySerializedAs("Move_damage")] public float moveDamage;
@@ -45,6 +46,6 @@ public class Move : InfoModuleHolder
 
 public enum EffectType
 {
-    PipeLine,UniqueLogic,MultiTargetDamage,Consecutive,HealthDrain,WeatherHealthGain,WeatherChange
-    ,IdentifyTarget, BarrierCreation,DamageProtection,OnFieldDamageModifier,SemiInvulnerable,SpecificDamage
+    PipeLine,UniqueLogic,SemiInvulnerable,Consecutive,HealthDrain,WeatherHealthGain,WeatherChange
+    ,IdentifyTarget, BarrierCreation,DamageProtection,OnFieldDamageModifier
 };

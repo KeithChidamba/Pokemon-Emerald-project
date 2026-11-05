@@ -48,10 +48,7 @@ public static class BattleTestableExtensions
         
                 test.testOperationsComplete = battleHandler.AwaitBattleCompletion;
                 battleHandler.StartWildBattle(wildPokemon,testData.wildPokemonData.biome);
-            }
-            ,wildPokemonData.pokemon
-            ,wildPokemonData.pokemonLevel,
-            wildPokemonData.evolutionStageNumber);
+            },wildPokemonData);
     }
     public static void EndBattle(this IBattleTestable target)
     {

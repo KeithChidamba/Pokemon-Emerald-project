@@ -291,8 +291,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
         {
             //check if item will cause evolution
             bool awaitEvolution = false;
-            int evoIndex = 0;
-            if (selectedPartyPokemon.currentEvolutionLineIndex < selectedPartyPokemon.evolutions.Count - 1)
+            if (selectedPartyPokemon.currentEvolutionLineIndex < selectedPartyPokemon.EvolutionCount - 1)
             {//can still evolve
                 var levelForNextEvolution =
                     selectedPartyPokemon.evolutionLineLevels[selectedPartyPokemon.currentEvolutionLineIndex];
@@ -300,11 +299,10 @@ public class ItemHandler : MonoBehaviour,IInjectable
                 {
                     //this item will trigger evolution
                     pokemonState.OnEvolutionSuccessful += AwaitEvolution;
-                    void AwaitEvolution(int evolutionIndex)
+                    void AwaitEvolution()
                     {
                         pokemonState.OnEvolutionSuccessful -= AwaitEvolution;
                         awaitEvolution = true;
-                        evoIndex = evolutionIndex;
                     }
                 }
             }
@@ -315,7 +313,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
             yield return pokemonState.ReceiveExperienceOutsideBattle(expDifferenceForLevelUp,true);
             if(awaitEvolution)
             {
-                yield return _pokemonOperationsHandler.HandlePokemonEvolution(selectedPartyPokemon, evoIndex);
+                yield return _pokemonOperationsHandler.HandlePokemonEvolution(selectedPartyPokemon);
             }
             pokemonState.handleEvolutionExternally = false;
             OnItemUsed?.Invoke(itemInUse,true);
@@ -338,7 +336,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
        }
        else
        {
-           yield return _pokemonOperationsHandler.HandlePokemonEvolution(selectedPartyPokemon,0);
+           yield return _pokemonOperationsHandler.HandlePokemonEvolution(selectedPartyPokemon);
            OnItemUsed?.Invoke(itemInUse,true);
        }
     }

@@ -122,6 +122,8 @@ public static class InstanceFactory
         }
         newPokemon.ability = pkm.ability;
         newPokemon.evolutions = pkm.evolutions;
+        newPokemon.splitEvolutions = pkm.splitEvolutions;
+        newPokemon.splitEvolutionValue = pkm.splitEvolutionValue;
         newPokemon.heldItem = pkm.heldItem;
         newPokemon.hasItem = pkm.hasItem;
         newPokemon.frontPicture = pkm.frontPicture;

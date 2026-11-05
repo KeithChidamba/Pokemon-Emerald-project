@@ -41,9 +41,7 @@ public class PokemonStorageObjective : StoryObjective
                 newPokemon.captureInformation.areaName = AreaManager.GetAreaName(_gameLoadingHandler.playerData.location);
                 _pokemonStorageHandler.AddPokemonToStorage(newPokemon);
             }
-            ,pokemonForObjective.giftPokemon
-            ,pokemonForObjective.pokemonLevel
-            ,pokemonForObjective.evolutionStageNumber);
+            ,pokemonForObjective.pokemonData);
         }
         
         switch(storageObjectiveType)
@@ -63,7 +61,7 @@ public class PokemonStorageObjective : StoryObjective
     }
     private void CheckForStorageObjectiveClear(Pokemon pokemon)
     {
-        if (pokemon.pokemonName == pokemonForObjective.giftPokemon.pokemonName)
+        if (pokemon.pokemonName == pokemonForObjective.pokemonData.pokemon.pokemonName)
         {
             if(storageObjectiveType == StorageObjectiveType.WithdrawPokemonFromPC)
                 _pokemonStorageHandler.OnPokemonWithdraw -= CheckForStorageObjectiveClear;

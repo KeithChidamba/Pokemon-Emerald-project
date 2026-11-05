@@ -29,6 +29,11 @@ MonoBehaviour:
     - rid: 1021519129163071490
       type: {class: PokemonGiftInteractoinInfo, ns: , asm: Assembly-CSharp}
       data:
-        giftPokemon: {fileID: 11400000, guid: 22e35517851a9644f97a479913d30735, type: 2}
-        pokemonLevel: 5
-        evolutionStageNumber: 0
+        pokemonData:
+          pokemon: {fileID: 11400000, guid: 573c699f83d230d47a5656a346b28e16, type: 2}
+          evolutionStageNumber: 0
+          moveSet: []
+          pokemonLevel: 5
+          hasItem: 0
+          heldItem: {fileID: 0}
+          splitEvolutionIndex: 0

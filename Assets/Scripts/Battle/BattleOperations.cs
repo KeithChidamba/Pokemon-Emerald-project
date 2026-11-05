@@ -31,19 +31,12 @@ public class BattleOperations : MonoBehaviour,IInjectable
         gameObject.SetActive(true);
     }
     public void OnInject() { }
-
-    public bool HasImmunity(Pokemon victim,PokemonTypeData enemyType)
-    {
-        foreach(var type in victim.types)
-            if (PokemonOperations.ContainsType(type.immunities,enemyType))
-                return true;
-        return false;
-    } 
     
     public bool IsStab(Pokemon pokemon,PokemonTypeData moveType)
     {
-        return pokemon.types.Contains(moveType);
+        return pokemon.types.Any(t=>t.typeEnum == moveType.typeEnum);
     }
+    
     public float CheckTypeEffectiveness(BattleParticipant victim, PokemonTypeData moveType)
     {
         // Extra immunity granted by ability/move (Levitate, etc.)
@@ -52,7 +45,7 @@ public class BattleOperations : MonoBehaviour,IInjectable
             return 0;
 
         // Natural immunities, unless negated (Foresight, Odor Sleuth, etc.)
-        if (HasImmunity(victim.Pokemon, moveType))
+        if (HasImmunity())
         {
             bool negated = victim.immunityNegations
                 .Any(n => n.ImmunityNegationTypes.Any(t => t == moveType.typeEnum));
@@ -62,8 +55,16 @@ public class BattleOperations : MonoBehaviour,IInjectable
         }
 
         return GetTypeEffectiveness(victim.Pokemon, moveType);
+        bool HasImmunity()
+        {
+            foreach(var type in victim.Pokemon.types)
+                if (PokemonOperations.ContainsType(type.immunities,moveType))
+                    return true;
+            return false;
+        } 
     }
-    public float GetTypeEffectiveness(Pokemon victim,PokemonTypeData enemyType)
+    
+    private float GetTypeEffectiveness(Pokemon victim,PokemonTypeData enemyType)
     {
         float effectiveness = 1;
         //Weakness
@@ -77,14 +78,29 @@ public class BattleOperations : MonoBehaviour,IInjectable
         
         return effectiveness;
     }
-    public bool HardCountered(Pokemon victim,Pokemon enemy)
+    // All the victim's types must be blocked, and negations are respected
+    public bool HardCountered(BattleParticipant victim, BattleParticipant enemy)
     {
-        foreach (var type in victim.types)
-        {
-            return HasImmunity(enemy, type);
-        }
-        return false;
+        var types = victim.Pokemon.types;
+        return types.Any() && types.All(t => CheckTypeEffectiveness(enemy, t) == 0);
     }
+
+    /// <summary>
+    /// True if the enemy is immune to every one of the victim's types (victim has no STAB that can hit it)
+    /// </summary>
+    public bool HardCountered(Pokemon victim, Pokemon enemy)
+    {
+        return victim.types.Any() && victim.types.All(victimType =>
+            enemy.types.Any(enemyType => PokemonOperations.ContainsType(enemyType.immunities, victimType)));
+    }
+
+    // For scoring party members as switch-ins
+    public float GetPartyTypeEffectiveness(Pokemon victim, PokemonTypeData enemyType)
+    {
+        if (victim.types.Any(t => PokemonOperations.ContainsType(t.immunities, enemyType))) return 0;
+        return GetTypeEffectiveness(victim, enemyType);
+    }
+    
     //Pokeballs
     public float GetCatchRateBonusFromStatus(StatusEffect statusName)
     {

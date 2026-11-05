@@ -23,5 +23,6 @@ public class ContestantPokemonData
     public Pokemon pokemon;
     [Range(0,2)]
     public int evolutionStageNumber;
+    [Range(0, 1)] public int splitEvolutionIndex;
     public List<Move> moveSet;
 }

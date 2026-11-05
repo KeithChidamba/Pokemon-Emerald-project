@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 725247cf13cf23248b7b0f1b93c618c0, type: 3}
   m_Name: Contestant Battle
   m_EditorClassIdentifier: 
-  trainerName: 
+  trainerName: Rival Oluwa Chikamu
   baseMoneyPayout: 0
   trainerLocationData: {fileID: 11400000, guid: 7313abad95799272cbf6b7ccdd21a708, type: 2}
   PokemonParty: []
   battleType: 1
   trainerAiFlags: 000000000100000002000000030000000400000005000000
-  battleIntroSprite: {fileID: -1639878714, guid: e38499f365b8f475a87d7cfe7c294970, type: 3}
+  battleIntroSprite: {fileID: -1281135253, guid: e38499f365b8f475a87d7cfe7c294970, type: 3}
   battleLossMessage: 
   battleIntroMessage: 

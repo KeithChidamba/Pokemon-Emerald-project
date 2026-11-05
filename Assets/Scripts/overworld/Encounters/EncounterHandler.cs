@@ -59,16 +59,22 @@ public class EncounterHandler : MonoBehaviour,IInjectable
             roll -= encounter.encounterChance;
         }
     }
+    
     private void CreateWildPokemon(EncounterPokemonData pokemonData,EncounterTableData tableData,Biome biome,BattleEncounterSource source)
     {
         var randomLevel = Utility.RandomRange(tableData.minimumLevelOfPokemon, tableData.maximumLevelOfPokemon);
         
-        _pokemonOperationsHandler.CreateSpecificPokemon(StartBattle,pokemonData.pokemon,randomLevel,pokemonData.evolutionFormNumber);
-        return;
-        void StartBattle(Pokemon wildPokemon)
+        _pokemonOperationsHandler.CreateSpecificPokemon(wildPokemon =>
         {
             OnEncounterTriggered?.Invoke(wildPokemon,source);
             _battleHandler.StartWildBattle(wildPokemon,biome);
-        }
+        }, 
+        new NaturalPokemonCreationData
+        {
+            pokemon = pokemonData.pokemon,
+            evolutionStageNumber = pokemonData.evolutionFormNumber,
+            pokemonLevel = randomLevel,
+            splitEvolutionIndex = pokemonData.splitEvolutionIndex
+        });
     }
 }

@@ -411,10 +411,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
     }
     public void AddGiftMember(PokemonGiftInteractoinInfo giftData)
     {
-        _pokemonOperationsHandler.CreateSpecificPokemon(GetNewMember,giftData.giftPokemon,giftData.pokemonLevel
-            ,giftData.evolutionStageNumber);
-        return;
-        void GetNewMember(Pokemon newPokemon)
+        _pokemonOperationsHandler.CreateSpecificPokemon(newPokemon =>
         {
             newPokemon.hasTrainer = true;
             newPokemon.pokeballName = NameDB.GetItem(ItemName.Pokeball);
@@ -422,7 +419,7 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
             newPokemon.captureInformation.levelCaptured = newPokemon.currentLevel;
             newPokemon.captureInformation.areaName = AreaManager.GetAreaName(_gameLoadingHandler.playerData.location);
             _pokemonOperationsHandler.SetupPokemonNaming(newPokemon, (result)=>CompletePokemonAddition(newPokemon));
-        }
+        },giftData.pokemonData);
     }
     private void CompletePokemonAddition(Pokemon newPokemon)
     {

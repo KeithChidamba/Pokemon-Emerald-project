@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 [Serializable]
 public class TournamentBracket
@@ -17,6 +19,18 @@ public enum BattleCompetitionDifficulty
 }
 public class BattleZoneHandler : MonoBehaviour,IInjectable
 {
+    public TMP_Text playerName;
+    public List<TMP_Text> playerPartyNames = new();
+    public List<Image> playerPartyImages = new ();
+    public GameObject partyScreenUi;
+    
+    public TMP_Text playerNameVs;
+    public List<Image> playerPartyImagesVs = new ();
+    public TMP_Text enemyNameVs;
+    public Image enemyImageVs;
+    public List<Image> enemyPartyImagesVs = new ();
+    public GameObject vsScreenUi;
+    
     public BattleCompetitionDifficulty currentDifficulty;
     private AiFlags[] easyModeFlags =
     {
@@ -41,6 +55,9 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
     private const int PlayerPartyCount = 3;
     private int opponentLevelGap;
     private const int RequiredPokemonLevel = 65;
+    private const float PartyScreenDuration = 4f;
+    private const float VsScreenDuration = 3f;
+    private const float VsFadeDuration = 0.5f;
 
     public List<TournamentBracket> leftBracket = new();
     public List<TournamentContestant> leftContestants = new();
@@ -48,10 +65,13 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
     public List<TournamentContestant> rightContestants = new();
     private TournamentContestant playerContestant;
     private List<Pokemon> playerSavedPokemon = new();
+    private List<Item> playerSavedItems = new();
     private readonly List<GameObject> spawnedNpcInstances = new();
     private GameObject currentOpponentInstance;
     
     private Coroutine roundTransition;
+    private Coroutine tournamentIntro;
+    private int currentRound;
     
     private AreaManager _areaManager;
     private PokemonPartyHandler _partyHandler;
@@ -61,6 +81,8 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
     private PokemonOperations _pokemonOperations;
     private BattleHandler _battleHandler;
     private GameUiHandler _gameUi;
+    private PlayerBagHandler _bag;
+    private SaveDataHandler _saveDataHandler;
     private ServiceContainer serviceContainer;
     
    public void Inject(ServiceContainer container) 
@@ -74,6 +96,8 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
        _gameLoader = container.Resolve<GameLoadingHandler>();
        _playerMovement = container.Resolve<PlayerMovementHandler>();
        _gameUi = container.Resolve<GameUiHandler>();
+       _bag = container.Resolve<PlayerBagHandler>();
+       _saveDataHandler = container.Resolve<SaveDataHandler>();
    }
    
    public void OnInject()
@@ -112,11 +136,16 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
                npcTrainer.trainerAiFlags = crazyModeFlags.ToList();
                break;
        }
-       BeginTournament();
+       StartCoroutine(BeginTournament());
    }
-   private void BeginTournament()
+   private IEnumerator BeginTournament()
    {
        _gameUi.SetMenuAccessibility(false);
+       _playerMovement.RestrictPlayerMovement(MovementRestrictor.OverworldAction);
+
+       //save the real party and bag before anything is cleared for the tournament
+       yield return _saveDataHandler.SaveAllData();
+
        _battleHandler.OnTrainerBattleResult += DetermineNextBracket;
        
        leftBracket.Clear();
@@ -126,10 +155,8 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
 
        playerSavedPokemon.AddRange(_partyHandler.Party);
        _partyHandler.ClearPartyMembers();
-       
-       _playerMovement.SetPlayerPosition(playerBattlePosition);
-       _playerMovement.FaceOppositeDirection(MovementDirection.Left);
-       _playerMovement.RestrictPlayerMovement(MovementRestrictor.OverworldAction);
+       SavePlayerBag();
+       currentRound = 1;
 
        var numBracketsPerColumn = ContestantCount / 4;
        var npcListCopy = new List<TournamentContestant>(contestantRegistry.contestants);
@@ -193,29 +220,151 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
            return contestant;
        }
        
-       StartCoroutine(SetPokemonData());
-       IEnumerator SetPokemonData()
+       tournamentIntro = StartCoroutine(TournamentIntroSequence());
+   }
+
+   private IEnumerator TournamentIntroSequence()
+   {
+       yield return _gameUi.FadeInBlackScreen();
+
+       //move the player while the screen is black
+       _playerMovement.SetPlayerPosition(playerBattlePosition);
+       _playerMovement.FaceOppositeDirection(MovementDirection.Left);
+
+       //wait for every pokemon to be fully created so the evolved forms are used
+       yield return LoadPlayerPartyRoutine();
+
+       yield return ShowPlayerPartyScreen();
+
+       GiveRoundHelpItems();
+       yield return ShowVsScreen(leftBracket.First());
+       
+       SoundManager.PlayMusic(MusicId.TrainerEyesMeetYoungster);
+       yield return new WaitForSeconds(0.5f);
+       
+       tournamentIntro = null;
+       BeginNewRound(leftBracket.First());
+   }
+
+   private IEnumerator LoadPlayerPartyRoutine()
+   {
+       foreach (var member in playerContestant.pokemonPartyData)
        {
-           foreach (var member in leftBracket.First().firstContestant.pokemonPartyData)
-           {
-               yield return _pokemonOperations.HandlePokemonCreation(GetPokemonCopy
-                   , member.pokemon
-                   , RequiredPokemonLevel,
-                   member.evolutionStageNumber);
-               continue;
-               void GetPokemonCopy(Pokemon pokemonCopy)
+           yield return _pokemonOperations.HandlePokemonCreation(GetPokemonCopy,
+               new NaturalPokemonCreationData
                {
-                   PokemonOperations.ResolvePokemonNickName(pokemonCopy);
-                   pokemonCopy.moveSet.Clear();
-                   foreach (var move in member.moveSet)
-                   {
-                       pokemonCopy.moveSet.Add(InstanceFactory.CreateMove(move));
-                   }
-                   _partyHandler.AddMember(pokemonCopy);
+                   pokemon = member.pokemon,
+                   evolutionStageNumber = member.evolutionStageNumber,
+                   pokemonLevel = RequiredPokemonLevel,
+                   splitEvolutionIndex = member.splitEvolutionIndex
+               });
+           continue;
+           void GetPokemonCopy(Pokemon pokemonCopy)
+           {
+               PokemonOperations.ResolvePokemonNickName(pokemonCopy);
+               pokemonCopy.moveSet.Clear();
+               foreach (var move in member.moveSet)
+               {
+                   pokemonCopy.moveSet.Add(InstanceFactory.CreateMove(move));
                }
+               _partyHandler.AddMember(pokemonCopy);
            }
        }
-       BeginNewRound(leftBracket.First());
+   }
+
+   //screen is still black when this starts, the ui is filled before the black is removed
+   private IEnumerator ShowPlayerPartyScreen()
+   {
+       var party = _partyHandler.Party;
+
+       playerName.text = $"Pokemon trainer {_gameLoader.playerData.playerName}";
+       SetTexts(playerPartyNames, party.Select(p => p.pokemonName));
+       SetSprites(playerPartyImages, party.Select(p => p.partyFrame1));
+       partyScreenUi.SetActive(true);
+
+       _gameUi.RemoveColorScreen();
+       yield return new WaitForSeconds(PartyScreenDuration);
+
+       partyScreenUi.SetActive(false);
+   }
+
+   private IEnumerator ShowVsScreen(TournamentBracket bracket)
+   {
+       var opponent = bracket.secondContestant;
+
+       yield return _gameUi.FadeInBlackScreen();
+
+       //create the opponent's pokemon so their evolved forms are shown
+       var opponentPokemon = new List<Pokemon>();
+       yield return CreateOpponentPreviewPokemon(opponent, opponentPokemon);
+
+       playerNameVs.text = _gameLoader.playerData.playerName;
+       enemyNameVs.text = opponent.trainerName;
+       enemyImageVs.sprite = opponent.battleIntroSprite;
+       SetSprites(playerPartyImagesVs, _partyHandler.Party.Select(p => p.partyFrame1));
+       SetSprites(enemyPartyImagesVs, opponentPokemon.Select(p => p.partyFrame1));
+
+       var group = GetVsCanvasGroup();
+       group.alpha = 1f;
+       vsScreenUi.SetActive(true);
+
+       _gameUi.RemoveColorScreen();
+       yield return new WaitForSeconds(VsScreenDuration);
+
+       for (var elapsed = 0f; elapsed < VsFadeDuration; elapsed += Time.deltaTime)
+       {
+           group.alpha = 1f - elapsed / VsFadeDuration;
+           yield return null;
+       }
+
+       vsScreenUi.SetActive(false);
+       group.alpha = 1f;
+   }
+
+   private IEnumerator CreateOpponentPreviewPokemon(TournamentContestant opponent, List<Pokemon> result)
+   {
+       foreach (var member in opponent.pokemonPartyData)
+       {
+           yield return _pokemonOperations.HandlePokemonCreation(result.Add,
+               new NaturalPokemonCreationData
+               {
+                   pokemon = member.pokemon,
+                   evolutionStageNumber = member.evolutionStageNumber,
+                   pokemonLevel = RequiredPokemonLevel - opponentLevelGap,
+                   splitEvolutionIndex = member.splitEvolutionIndex
+               });
+       }
+   }
+
+   private CanvasGroup GetVsCanvasGroup()
+   {
+       if (!vsScreenUi.TryGetComponent(out CanvasGroup group))
+       {
+           group = vsScreenUi.AddComponent<CanvasGroup>();
+       }
+       return group;
+   }
+
+   private static void SetSprites(List<Image> slots, IEnumerable<Sprite> sprites)
+   {
+       var spriteList = sprites.ToList();
+       for (int i = 0; i < slots.Count; i++)
+       {
+           var hasSprite = i < spriteList.Count;
+           slots[i].gameObject.SetActive(hasSprite);
+           if (hasSprite) slots[i].sprite = spriteList[i];
+       }
+   }
+
+   private static void SetTexts(List<TMP_Text> slots, IEnumerable<string> texts)
+   {
+       var textList = texts.ToList();
+       for (int i = 0; i < slots.Count; i++)
+       {
+           var hasText = i < textList.Count;
+           slots[i].gameObject.SetActive(hasText);
+           if (hasText) slots[i].text = textList[i];
+       }
    }
    
    private void DetermineNextBracket(bool battleWon, List<TrainerData> enemies)
@@ -226,7 +375,9 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
    private IEnumerator ProcessRoundTransition(bool battleWon)
    {
        yield return AwaitBattleTeardown();
-
+        
+       SoundManager.StopMusic();
+       
        DestroyCurrentOpponent();
 
        if (!battleWon)
@@ -248,10 +399,18 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
 
        _partyHandler.HealPartyPokemon();
        SetupNewBrackets();
+       currentRound++;
+       GiveRoundHelpItems();
 
        //between-round dialogue, anything yielded here holds the next round back
 
+       yield return ShowVsScreen(leftBracket.First());
+
        roundTransition = null;
+       
+       SoundManager.PlayMusic(MusicId.TrainerEyesMeetYoungster);
+       yield return new WaitForSeconds(0.5f);
+       
        BeginNewRound(leftBracket.First());
    }
 
@@ -326,16 +485,207 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
         _battleHandler.OnTrainerBattleResult -= DetermineNextBracket;
         
         RestorePlayerParty();
+        RestorePlayerBag();
         ResetTournamentState();
 
         if (playerWonTournament)
         {
-            //reward player
-            _dialogueHandler.DisplayDetails("well done, you won. Rewards are coming soon");
+            //bag is reloaded above, so the reward limit checks see the player's real items
+            var rewards = GetRewards();
+            _dialogueHandler.DisplayDetails($"Well done, you won! You received: {string.Join(", ", rewards)}");
+        }
+        else
+        {
+            _dialogueHandler.DisplayBattleInfo("Try again next time!");
         }
         //spawn player outside battlezone, release movement restriction
         _areaManager.TeleportToArea(AreaName.BattleZone);
         _playerMovement.AllowPlayerMovement(MovementRestrictor.OverworldAction);
+    }
+    
+    #region Rewards
+    private static readonly ItemName[] TournamentTms =
+    {
+        ItemName.Tm06, ItemName.Tm08, ItemName.Tm09, ItemName.Tm13, ItemName.Tm15,
+        ItemName.Tm18, ItemName.Tm19, ItemName.Tm24, ItemName.Tm25, ItemName.Tm26,
+        ItemName.Tm28, ItemName.Tm31, ItemName.Tm35, ItemName.Tm37, ItemName.Tm40
+    };
+    private static readonly ItemName[] TournamentVitamins =
+    {
+        ItemName.HpUp, ItemName.Protein, ItemName.Iron,
+        ItemName.Carbos, ItemName.Calcium, ItemName.Zinc,
+        ItemName.PpUp,ItemName.PpMax
+    };
+
+    //reward pool per difficulty
+    private static readonly Dictionary<BattleCompetitionDifficulty, (ItemName[] Major, ItemName[] Minor)> RewardPools = new()
+    {
+        {
+            BattleCompetitionDifficulty.Easy,
+            (new[] { ItemName.GoodRod, ItemName.ExpShare },
+             TournamentTms.Take(7).ToArray())
+        },
+        {
+            BattleCompetitionDifficulty.Hard,
+            (new[] { ItemName.GoodRod, ItemName.SuperRod, ItemName.ExpShare, ItemName.LuckyEgg },
+             TournamentTms)
+        },
+        {
+            BattleCompetitionDifficulty.Crazy,
+            (new[] { ItemName.GoodRod, ItemName.SuperRod, ItemName.ExpShare, ItemName.LuckyEgg },
+             TournamentTms.Concat(TournamentVitamins).ToArray())
+        }
+    };
+
+    //how many of each major prize the player is allowed to own
+    private static readonly Dictionary<ItemName, int> MajorRewardLimits = new()
+    {
+        { ItemName.ExpShare, 2 },
+        { ItemName.LuckyEgg, 2 },
+        { ItemName.GoodRod, 1 },
+        { ItemName.SuperRod, 1 }
+    };
+
+    /// <summary>
+    /// Gives the player their tournament rewards (one major + one minor, or two minors if no major can be given)
+    /// and returns the names of the items received
+    /// </summary>
+    private List<string> GetRewards()
+    {
+        var pool = RewardPools[currentDifficulty];
+        var rewards = new List<ItemName>();
+
+        var major = RollMajorReward(pool.Major);
+        var minorCount = 1;
+        if (major.HasValue)
+        {
+            rewards.Add(major.Value);
+        }
+        else
+        {
+            //both major rolls were already owned to the max, so double the minor prizes
+            minorCount = 2;
+        }
+        rewards.AddRange(RollMinorRewards(pool.Minor, minorCount));
+
+        foreach (var reward in rewards)
+        {
+            _bag.AddItem(LoadRewardItem(reward));
+        }
+        return rewards.Select(NameDB.GetItem).ToList();
+    }
+
+    //roll once, if the player owns the max of it reroll once for a different major, otherwise no major is given
+    private ItemName? RollMajorReward(ItemName[] majorPool)
+    {
+        var firstPick = majorPool[Utility.RandomRange(0, majorPool.Length)];
+        if (!IsAtOwnedLimit(firstPick)) return firstPick;
+
+        var rerollPool = majorPool.Where(item => item != firstPick).ToArray();
+        if (rerollPool.Length == 0) return null;
+
+        var secondPick = rerollPool[Utility.RandomRange(0, rerollPool.Length)];
+        return IsAtOwnedLimit(secondPick) ? null : secondPick;
+    }
+
+    //picks without replacement so a double reward never gives the same item twice
+    private static List<ItemName> RollMinorRewards(ItemName[] minorPool, int count)
+    {
+        var remaining = new List<ItemName>(minorPool);
+        var picks = new List<ItemName>();
+        for (int i = 0; i < count && remaining.Count > 0; i++)
+        {
+            var index = Utility.RandomRange(0, remaining.Count);
+            picks.Add(remaining[index]);
+            remaining.RemoveAt(index);
+        }
+        return picks;
+    }
+
+    private bool IsAtOwnedLimit(ItemName item)
+    {
+        if (!MajorRewardLimits.TryGetValue(item, out var limit)) return false;
+        return GetOwnedQuantity(item) >= limit;
+    }
+
+    private int GetOwnedQuantity(ItemName itemName)
+    {
+        var itemNameString = NameDB.GetItem(itemName);
+
+        // items in the bag
+        var owned = _bag.allItems
+            .Where(item => item.itemName == itemNameString)
+            .Sum(item => item.quantity);
+
+        // items held by party members, each Pokemon can only hold one
+        foreach(var pokemon in _partyHandler.Party)
+        {
+            if (!pokemon.hasItem)continue;
+            if(pokemon.heldItem.itemName == itemNameString)
+            {
+                owned++;
+            }
+        }
+        return owned;
+    }
+    
+    private static Item LoadRewardItem(ItemName itemName)
+    {
+        var assetDirectory = DirectoryHandler.GetDirectory(AssetDirectory.Items) + NameDB.GetItem(itemName);
+        var item = Resources.Load<Item>(assetDirectory);
+        if (item is null)
+        {
+            throw new Exception($"[Tournament Rewards],{assetDirectory} doesnt exist, check item name in pool");
+        }
+        return InstanceFactory.CreateItem(item);
+    }
+    #endregion
+
+    #region Round Help Items
+    private const int RoundOneXItemCount = 2;
+    private static readonly ItemName[] XItems =
+    {
+        ItemName.XAttack, ItemName.XDefense, ItemName.XSpAttack,
+        ItemName.DireHit, ItemName.XSpeed, ItemName.XAccuracy
+    };
+    private static readonly ItemName[] RoundTwoHelpItems = { ItemName.FullRestore, ItemName.MaxPotion };
+    private static readonly ItemName[] RoundThreeHelpItems = { ItemName.Revive, ItemName.FullRestore };
+    private static readonly ItemName[] FinalRoundHelpItems = { ItemName.MaxRevive, ItemName.GuardSpec, ItemName.MaxPotion };
+
+    //temporary items go into the tournament bag, which is wiped when the saved bag is restored at the end
+    private void GiveRoundHelpItems()
+    {
+        foreach (var item in GetRoundHelpItems())
+        {
+            _bag.AddItem(LoadRewardItem(item));
+        }
+    }
+
+    private List<ItemName> GetRoundHelpItems()
+    {
+        //the final round is the only one with no right bracket
+        if (rightBracket.Count == 0) return new List<ItemName>(FinalRoundHelpItems);
+
+        switch (currentRound)
+        {
+            case 1: return RollMinorRewards(XItems, RoundOneXItemCount);
+            case 2: return new List<ItemName>(RoundTwoHelpItems);
+            case 3: return new List<ItemName>(RoundThreeHelpItems);
+            default: return new List<ItemName>();
+        }
+    }
+    #endregion
+
+    private void SavePlayerBag()
+    {
+        playerSavedItems.AddRange(_bag.allItems);
+        _bag.allItems.Clear();
+    }
+    private void RestorePlayerBag()
+    {
+        _bag.allItems.Clear();
+        _bag.allItems.AddRange(playerSavedItems);
+        playerSavedItems.Clear();
     }
     private void RestorePlayerParty()
     {
@@ -348,6 +698,14 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
     }
     private void ResetTournamentState()
     {
+        if (tournamentIntro != null)
+        {
+            StopCoroutine(tournamentIntro);
+            tournamentIntro = null;
+        }
+        partyScreenUi.SetActive(false);
+        vsScreenUi.SetActive(false);
+
         DestroyAllNpcInstances();
 
         leftBracket.Clear();
@@ -355,6 +713,7 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
         leftContestants.Clear();
         rightContestants.Clear();
         playerContestant = null;
+        currentRound = 0;
 
         foreach (var contestant in contestantRegistry.contestants)
         {
@@ -362,8 +721,8 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
             contestant.logic = null;
         }
     }
-
-    private void BeginNewRound(TournamentBracket bracket)
+   
+   private void BeginNewRound(TournamentBracket bracket)
    {
        var npcContestant = bracket.secondContestant;
        int movementIndex = 1;

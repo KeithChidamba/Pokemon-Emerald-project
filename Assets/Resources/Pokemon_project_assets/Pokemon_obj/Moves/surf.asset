@@ -17,7 +17,7 @@ MonoBehaviour:
   moveName: Surf
   description: Launches a large wave at the foe
   type: {fileID: 11400000, guid: ba5ca0bd34c9e7b4582e5a97734abf95, type: 2}
-  effectType: 2
+  effectType: 0
   hasTypelessEffect: 0
   isSpecial: 1
   isContact: 0
@@ -30,6 +30,7 @@ MonoBehaviour:
   isMultiTarget: 1
   isSelfTargeted: 0
   isSureHit: 0
+  dealSpecificDamage: 0
   displayTargetMessage: 0
   moveDamage: 90
   moveAccuracy: 90
@@ -42,7 +43,6 @@ MonoBehaviour:
   buffOrDebuffData: []
   statusChance: 0
   buffOrDebuffChance: 0
-  effectInfoModule: {fileID: 0}
   references:
     version: 2
     RefIds:

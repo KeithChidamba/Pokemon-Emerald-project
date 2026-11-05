@@ -73,8 +73,7 @@ public class EnemyAiHandler
         trainerParty.Clear();
         foreach (var member in trainerData.PokemonParty)
         {
-            yield return _pokemonOperations.HandlePokemonCreation(GetPokemonCopy,member.data.pokemon
-                ,member.data.pokemonLevel,member.data.evolutionStageNumber);
+            yield return _pokemonOperations.HandlePokemonCreation(GetPokemonCopy,member.data);
             continue;
             void GetPokemonCopy(Pokemon pokemonCopy)
             {
@@ -169,9 +168,10 @@ public class EnemyAiHandler
             }
         }
     }
+    
     private int AiCheckValidSwitch(BattleParticipant enemy)
     {
-        if (participant.canEscape && _battleOperations.HardCountered(participant.Pokemon,enemy.Pokemon))
+        if (participant.canEscape && _battleOperations.HardCountered(participant,enemy))
         {
             List<(int pokemonIndex,float effectivenessScore)> pokemonScores = new();  
             var participatingIndex = _battleHandler.isDoubleBattle? 2:1;
@@ -185,7 +185,7 @@ public class EnemyAiHandler
                 float typeEffectiveness = 0;
                 foreach (var type in enemy.Pokemon.types)
                 {
-                    typeEffectiveness += _battleOperations.GetTypeEffectiveness(trainerParty[i], type);
+                    typeEffectiveness += _battleOperations.GetPartyTypeEffectiveness(trainerParty[i], type);
                 }
                 pokemonScores.Add(new(i,typeEffectiveness));
             }
@@ -375,9 +375,10 @@ public class EnemyAiHandler
     private int AiCheckBadMove(BattleParticipant enemy,Move currentMoveCheck)
     {
         int scoreDifference = 0;
-        if (_battleOperations.HasImmunity(enemy.Pokemon, currentMoveCheck.type))
+        if (currentMoveCheck.moveDamage > 0 &&
+            _battleOperations.CheckTypeEffectiveness(enemy, currentMoveCheck.type) == 0)
         {
-            scoreDifference-=120;
+            scoreDifference -= 120;
         }
         if ( currentMoveCheck.effectType==EffectType.WeatherHealthGain && participant.Pokemon.hp>=participant.Pokemon.maxHp)
         {
@@ -393,7 +394,7 @@ public class EnemyAiHandler
             scoreDifference+=12;
         }
         var typeEffectiveness = _battleOperations.CheckTypeEffectiveness(enemy, currentMoveCheck.type);
-        scoreDifference += (int)typeEffectiveness * 15;
+        scoreDifference += (int)(typeEffectiveness * 15);
         
         return scoreDifference;
     }

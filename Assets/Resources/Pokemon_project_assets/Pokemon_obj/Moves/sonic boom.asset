@@ -17,7 +17,7 @@ MonoBehaviour:
   moveName: Sonic Boom
   description: An air attack that always deals 20 damage
   type: {fileID: 11400000, guid: 824a966e4745d744f886865811f0949e, type: 2}
-  effectType: 12
+  effectType: 0
   hasTypelessEffect: 0
   isSpecial: 0
   isContact: 0
@@ -30,6 +30,7 @@ MonoBehaviour:
   isMultiTarget: 0
   isSelfTargeted: 0
   isSureHit: 0
+  dealSpecificDamage: 1
   displayTargetMessage: 1
   moveDamage: 20
   moveAccuracy: 90
@@ -42,7 +43,6 @@ MonoBehaviour:
   buffOrDebuffData: []
   statusChance: 0
   buffOrDebuffChance: 0
-  additionalInfoModules: []
   references:
     version: 2
     RefIds:

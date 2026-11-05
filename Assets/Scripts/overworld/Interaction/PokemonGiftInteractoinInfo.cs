@@ -3,9 +3,7 @@ using System;
 [Serializable]
 public class PokemonGiftInteractoinInfo : DynamicAdditionalInfo
 {
-    public Pokemon giftPokemon;
-    public int pokemonLevel;
-    public int evolutionStageNumber;
+    public NaturalPokemonCreationData pokemonData;
     
     public override void HandleInternalLogic(ServiceContainer container)
     {

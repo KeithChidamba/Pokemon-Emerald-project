@@ -12,27 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f2d518160ad9424281de035ce286c36, type: 3}
   m_Name: muddy water
   m_EditorClassIdentifier: 
+  dynamicInfoModules:
+  - rid: 2671717721002213376
   moveName: Muddy Water
-  moveDamage: 95
-  moveAccuracy: 85
-  critModifierIndex: 0
+  description: Attacks with muddy water. May lower accuracy.
   type: {fileID: 11400000, guid: ba5ca0bd34c9e7b4582e5a97734abf95, type: 2}
+  effectType: 0
   hasTypelessEffect: 0
   isSpecial: 1
-  isContact: 1
-  isBuffOrDebuff: 1
+  isContact: 0
+  canChangeStats: 1
   hasStatus: 0
-  effectType: 0
-  effectInfoModule: {fileID: 0}
   canCauseFlinch: 0
   canTrap: 0
   canCauseConfusion: 0
   canInfatuate: 0
-  isConsecutive: 0
   isMultiTarget: 1
   isSelfTargeted: 0
   isSureHit: 0
+  dealSpecificDamage: 0
   displayTargetMessage: 0
+  moveDamage: 95
+  moveAccuracy: 85
+  critModifierIndex: 0
   priority: 0
   powerpoints: 10
   basePowerpoints: 10
@@ -44,4 +46,10 @@ MonoBehaviour:
     amount: 1
   statusChance: 0
   buffOrDebuffChance: 20
-  description: Attacks with muddy water. May lower accuracy.
+  references:
+    version: 2
+    RefIds:
+    - rid: 2671717721002213376
+      type: {class: MultiTargetDamageInfo, ns: , asm: Assembly-CSharp}
+      data:
+        target: 1

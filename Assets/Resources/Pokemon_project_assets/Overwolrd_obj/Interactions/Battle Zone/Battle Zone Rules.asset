@@ -34,10 +34,8 @@ MonoBehaviour:
           ends.
         - You will face a 4 opponents depending on who beats who.
         - The format is a classic tournament bracket.
-        - You have the choice of using your own pokemon if they meet the level requiremnt,
-        - or you can use the randomized set of pokemon.
-        - Every enemy you face will be randomized and as challening as possible.
-        - 'If you manage to win all 3 rounds, you will get various prizes. '
+        - You will receive a randomized set of pokemon.
+        - 'If you manage to win all 4 rounds, you will get various prizes. '
         - During the tournament battles, check your bag as you will receive some
           battle items to aid you each round.
         - Go speak to that man to enter the tournament.

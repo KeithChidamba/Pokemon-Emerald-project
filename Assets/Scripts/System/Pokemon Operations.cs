@@ -408,6 +408,11 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         int shinyValue = tid ^ sid ^ pvLow ^ pvHigh;
         newPokemon.isShiny =  shinyValue < 8;
        
+        //Assign split evolution
+        if (newPokemon.splitEvolution)
+        {
+            newPokemon.splitEvolutionValue = newPokemon.personalityValue % 10;
+        }
         //Assign Pokemon Gender
         if (newPokemon.hasGender)
         {
@@ -567,29 +572,44 @@ public class PokemonOperations : MonoBehaviour,IInjectable
     /// <summary>
     /// for single pokemon creation only
     /// </summary>
-    public void CreateSpecificPokemon(Action<Pokemon> creationCallBack,Pokemon template,int desiredLevel,int evolutionStage)
+    public void CreateSpecificPokemon(Action<Pokemon> creationCallBack,NaturalPokemonCreationData pokemonData)
     {
-        StartCoroutine(HandlePokemonCreation(creationCallBack,template,desiredLevel,evolutionStage));
+        StartCoroutine(HandlePokemonCreation(creationCallBack,pokemonData));
     }
-/// <summary>
-/// for bulk async creation in a coroutine
-/// </summary>
-    public IEnumerator HandlePokemonCreation(Action<Pokemon> creationCallBack,Pokemon template,int desiredLevel,int evolutionStage)
+
+    /// <summary>
+    /// for bulk async creation in a coroutine
+    /// </summary>
+    public IEnumerator HandlePokemonCreation(Action<Pokemon> creationCallBack, NaturalPokemonCreationData pokemonData)
     {
-        var newPokemon = InstanceFactory.CreatePokemon(template); 
+        var newPokemon = InstanceFactory.CreatePokemon(pokemonData.pokemon); 
         SetPokemonTraits(newPokemon);
-        if (evolutionStage > 0)
+        if (pokemonData.evolutionStageNumber > 0)
         {
-            if (evolutionStage > newPokemon.evolutions.Count)
-                Debug.LogError("Evolution number in encounter data is out of range of available evolutions");
+            if (newPokemon.splitEvolution)
+            {
+                if (pokemonData.splitEvolutionIndex > 0)
+                {
+                    //use split evolutions 
+                    newPokemon.splitEvolutionValue = Pokemon.SplitEvolutionThreshold;
+                }
+                else
+                {
+                    //use regular evolutions
+                    newPokemon.splitEvolutionValue = Pokemon.SplitEvolutionThreshold - 1;
+                }
+            }
+            if (pokemonData.evolutionStageNumber > newPokemon.EvolutionCount)
+                Debug.LogError($"[{newPokemon.pokemonName} Creation] Evolution number in data is out of range of available evolutions");
             else
-            {//quiet evolution
-                newPokemon.Evolve(newPokemon.evolutions[evolutionStage - 1]);
+            {
+                //quiet evolution
+                newPokemon.Evolve(newPokemon.GetSpecificEvolution(pokemonData.evolutionStageNumber - 1));
             }
         }
         newPokemon.pokemonDisplayName = newPokemon.pokemonName;
         
-        var expForRequiredLevel = CalculateExpForLevel(desiredLevel, newPokemon.expGroup);
+        var expForRequiredLevel = CalculateExpForLevel(pokemonData.pokemonLevel, newPokemon.expGroup);
         var newState = new PokemonStateHandler(_container,newPokemon,false)
         {
             canEvolve = false//prevent evolution from artificial exp
@@ -604,7 +624,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         float remaining = (musicStart + target) - Time.time;
         if (remaining > 0f) yield return new WaitForSeconds(remaining);
     }
-    public IEnumerator HandlePokemonEvolution(Pokemon pokemon, int evolutionIndex)
+    public IEnumerator HandlePokemonEvolution(Pokemon pokemon)
     {
         // Seconds from the moment the music starts
         const float IntroEnd = 5.0f;
@@ -646,7 +666,7 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         yield return Utility.FadeImage(evolutionImageMask, Color.white, MaskFadeEnd - BgFadeEnd);
 
         // ---- Flicker (9 -> 30s) ----
-        var evoSprite = pokemon.evolutions[evolutionIndex].frontPicture;
+        var evoSprite = pokemon.GetCurrentEvolution().frontPicture;
         yield return Utility.PokemonEvolutionAnimation(
             evolutionImage,
             pokemon.frontPicture,
@@ -656,7 +676,8 @@ public class PokemonOperations : MonoBehaviour,IInjectable
 
         // ---- Evolve + reveal (30 -> 32.5s) ----
         var previousName = pokemon.pokemonDisplayName;
-        pokemon.Evolve(pokemon.evolutions[evolutionIndex]);
+        
+        pokemon.Evolve(pokemon.GetCurrentEvolution());
 
         StartCoroutine(Utility.FadeImage(evolutionImageMask, Color.white, new Color(1f, 1f, 1f, 0f),
             RevealEnd - FlickerEnd));

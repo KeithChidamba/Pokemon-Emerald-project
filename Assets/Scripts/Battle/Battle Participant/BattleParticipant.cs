@@ -444,19 +444,15 @@ public class BattleParticipant : MonoBehaviour,IInjectable
         foreach (var obj in arr)
             obj.SetActive(on);
     }
-    private void AddToEvolutionQueue(int evolutionIndex)
+    private void AddToEvolutionQueue()
     {
-        if (_battleHandler.evolutionQueue.Any(evo=> evo.participantToEvolve==this))
+        if (_battleHandler.evolutionQueue.Any(p=> p == this))
         {
             Debug.LogWarning($"multi level up on {participantKey}, check logic");
             //in-case of instant multi-level up
             return;
         }
-       
-        var evoData = new EvolutionInBattleData();
-        evoData.participantToEvolve = this;
-        evoData.evolutionIndex = evolutionIndex;
-        _battleHandler.evolutionQueue.Add(evoData);
+        _battleHandler.evolutionQueue.Add(this);
     }
     public void ActivateParticipant(bool initialCall)
     {

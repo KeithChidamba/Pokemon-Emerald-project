@@ -119,10 +119,7 @@ public class TestingUtilities
         
        foreach (var member in pokemonPartyData)
        {
-           yield return pokemonOperationsHandler.HandlePokemonCreation(CreateMember
-               ,member.naturalPokemonData.pokemon
-               ,member.naturalPokemonData.pokemonLevel
-               ,member.naturalPokemonData.evolutionStageNumber);
+           yield return pokemonOperationsHandler.HandlePokemonCreation(CreateMember,member.naturalPokemonData);
            continue;
            void CreateMember(Pokemon createdPokemon)
            {

@@ -23,6 +23,8 @@ public class PlayTestHandler : MonoBehaviour
         testEnemy.battleType = currentPlayTest.battleType;
         testEnemy.trainerAiFlags.Clear();
         testEnemy.trainerAiFlags.AddRange(currentPlayTest.trainerAiFlags);
+        
+        yield return new WaitForSeconds(2f);
         container.Resolve<BattleHandler>().StartBattle(testEnemy);
     }
     public void ClearState()

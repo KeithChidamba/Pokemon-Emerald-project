@@ -82,8 +82,13 @@ public class Pokemon : ScriptableObject
     public bool requiresFriendshipEvolution;
     [FormerlySerializedAs("RequiresEvolutionStone")] public bool requiresEvolutionStone;
     [FormerlySerializedAs("EvolutionStoneName")] public EvolutionStone evolutionStone;
+    
     [FormerlySerializedAs("split_evolution")] public bool splitEvolution;
     public List<Evolution> evolutions = new();
+    public int EvolutionCount => evolutions.Count;
+    public List<Evolution> splitEvolutions = new();
+    [HideInInspector] public uint splitEvolutionValue;
+    public const uint SplitEvolutionThreshold = 5;
     
     public LearnSetMove[] learnSet;
     public List<MoveName> learnableTms = new();
@@ -120,7 +125,34 @@ public class Pokemon : ScriptableObject
     {
         return types.Any(type=>type.typeEnum == typeName);
     }
-    
+
+    public void GetEvolutions(Pokemon copy)
+    {
+        
+    }
+    public Evolution GetCurrentEvolution()
+    {
+        if(splitEvolution)
+        {
+            if (splitEvolutionValue >= SplitEvolutionThreshold)
+            {
+                return splitEvolutions[currentEvolutionLineIndex];
+            }
+        }
+        return evolutions[currentEvolutionLineIndex];
+    }
+    public Evolution GetSpecificEvolution(int index)
+    {
+        if(splitEvolution)
+        {
+            if (splitEvolutionValue < 5)
+            {
+                return evolutions[index];
+            }
+            return splitEvolutions[index];
+        }
+        return evolutions[index];
+    }
     private int ApplyFriendshipModifier(int currentIncrease)
     {
         float modifier = 1;

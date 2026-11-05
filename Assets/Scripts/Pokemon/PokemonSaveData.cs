@@ -55,7 +55,7 @@ public class PokemonSaveData
    {
        abilityName = NameDB.GetAbility(saveSource.ability.abilityName);
        natureName = saveSource.nature.natureName;
-       evolutionName = saveSource.evolutions[currentEvolutionLineIndex].evolutionName;
+       evolutionName = saveSource.GetCurrentEvolution().evolutionName;
        hasItem = saveSource.heldItem is not null;
        moveData.Clear();
        foreach (var move in saveSource.moveSet)

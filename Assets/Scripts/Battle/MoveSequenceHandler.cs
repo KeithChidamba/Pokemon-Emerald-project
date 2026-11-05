@@ -547,8 +547,27 @@ public class MoveSequenceHandler:MonoBehaviour,IInjectable
     
     private void DealDamage(Move move,BattleParticipant attacker, BattleParticipant victim)
     {
-        DisplayMoveDamage(move,attacker,victim);
-        _processingOrder = false;
+        if (move.isMultiTarget)
+        {
+            StartCoroutine(AwaitMultiTargetDamage());
+        }
+        else if (move.dealSpecificDamage)
+        {
+            var specificDamage = move.GetDynamicModule<EffectValueInfo>().effectValue;
+            DisplaySpecificMoveDamage(move,victim,specificDamage:specificDamage);
+            _processingOrder = false;
+        }
+        else
+        {
+            DisplayMoveDamage(move,attacker,victim);
+            _processingOrder = false;
+        }
+        return;
+        IEnumerator AwaitMultiTargetDamage()
+        {
+            yield return _moveLogicHandler.HandleMultiTargetDamage(move, attacker);
+            _processingOrder = false;
+        }
     } 
     
     private List<BattleParticipant> GetReachableMultiTargets(Move move, BattleParticipant attacker)

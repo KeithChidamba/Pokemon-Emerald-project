@@ -17,7 +17,7 @@ MonoBehaviour:
   moveName: Fly
   description: 
   type: {fileID: 11400000, guid: 957dcf5ca0ca94e449027a003abfc8ca, type: 2}
-  effectType: 11
+  effectType: 2
   hasTypelessEffect: 0
   isSpecial: 0
   isContact: 1
@@ -30,6 +30,7 @@ MonoBehaviour:
   isMultiTarget: 0
   isSelfTargeted: 0
   isSureHit: 0
+  dealSpecificDamage: 0
   displayTargetMessage: 0
   moveDamage: 75
   moveAccuracy: 65

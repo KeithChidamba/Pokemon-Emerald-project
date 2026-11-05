@@ -48,10 +48,7 @@ public class WildBattleBasedTest : BattleBasedTest
                 if (wildPokemonData.hasItem) wildPokemon.GiveItem(InstanceFactory.CreateItem(wildPokemonData.heldItem));
                 createdPokemon = wildPokemon;
                 pokemonCreated = true;
-            }
-            ,wildPokemonData.pokemon
-            ,wildPokemonData.pokemonLevel,
-            wildPokemonData.evolutionStageNumber);
+            },wildPokemonData);
 
         yield return new WaitUntil(() => pokemonCreated);
         

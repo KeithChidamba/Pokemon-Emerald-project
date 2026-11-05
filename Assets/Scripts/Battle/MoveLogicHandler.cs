@@ -33,9 +33,6 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         var move = currentTurn.move;
         switch (currentTurn.move.effectType)
         {
-            case EffectType.MultiTargetDamage:
-               yield return HandleMultiTargetDamage(move,attacker); 
-               break;
             case EffectType.Consecutive:
                 yield return ExecuteConsecutiveMove(move,attacker,victim); 
                 break;
@@ -63,22 +60,13 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
             case EffectType.WeatherChange:
                 yield return ChangeWeather(move); 
                 break;
-            case EffectType.SpecificDamage:
-                yield return DealSpecificDamage(move,victim); 
-                break;
             case EffectType.UniqueLogic:
                 yield return _moveLogicDatabase.InvokeMoveLogic(attacker,victim,currentTurn); 
                 break;
         }
     }
 
-    public List<BattleParticipant> TargetAllExceptSelf(BattleParticipant attacker)
-    {
-        var allParticipants = _battleHandler.GetParticipants.ToList();
-        allParticipants.RemoveAll(p => !p.isActive);
-        allParticipants.RemoveAll(p => p.participantKey == attacker.participantKey);
-        return allParticipants;
-    }
+
     IEnumerator ExecuteConsecutiveMove(Move move,BattleParticipant attacker, BattleParticipant victim)
     {
         var consecutiveMoveInfo = move.GetDynamicModule<ConsecutiveMoveInfo>();
@@ -111,7 +99,7 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         }
         yield return _dialogueHandler.AwaitAllDialogue();
     } 
-    public IEnumerator ApplyMultiTargetDamage(List<BattleParticipant> targets, Move move, BattleParticipant attacker)
+    private IEnumerator ApplyMultiTargetDamage(List<BattleParticipant> targets, Move move, BattleParticipant attacker)
     {
         yield return _dialogueHandler.AwaitAllDialogue();
         foreach (var enemy in targets)
@@ -133,7 +121,13 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         }
         yield return _dialogueHandler.AwaitAllDialogue();
     }
-    
+    private List<BattleParticipant> TargetAllExceptSelf(BattleParticipant attacker)
+    {
+        var allParticipants = _battleHandler.GetParticipants.ToList();
+        allParticipants.RemoveAll(p => !p.isActive);
+        allParticipants.RemoveAll(p => p.participantKey == attacker.participantKey);
+        return allParticipants;
+    }
     public IEnumerator HandleMultiTargetDamage(Move move, BattleParticipant attacker)
     {
         var multiTargetInfo = move.GetDynamicModule<MultiTargetDamageInfo>();
@@ -350,10 +344,4 @@ public class MoveLogicHandler : MonoBehaviour,IInjectable
         _moveUsageHandler.HealthGainDisplay(healthGain,attacker.pokemonState);
         yield return _moveUsageHandler.AwaitHealthGainDisplay();
     }
-    private IEnumerator DealSpecificDamage(Move move, BattleParticipant victim)
-    {
-        var specificDamage = move.GetDynamicModule<EffectValueInfo>().effectValue;
-        _moveUsageHandler.DisplaySpecificMoveDamage(move,victim,specificDamage:specificDamage);
-        yield return null;
-    }  
 }

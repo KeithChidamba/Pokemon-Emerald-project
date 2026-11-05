@@ -351,6 +351,46 @@ public class AssetEditScript : EditorWindow
  
         Debug.Log($"npcInteractionMessage migration complete. Migrated: {migrated}, no match: {noMatch}, skipped: {skipped}");
     }
+    [MenuItem("Tools/Items/Check Item names")]    
+    public static void CheckItemName()
+    {
+        var ITEM_FOLDER = "Assets/Resources/" + DirectoryHandler.GetDirectory(AssetDirectory.Items);
 
+        string[] guids = AssetDatabase.FindAssets(
+            "t:Item",
+            new[] { ITEM_FOLDER });
+
+        // Get all existing item assets and their names
+        HashSet<string> existingItems = new();
+
+        foreach (string guid in guids)
+        {
+            string path = AssetDatabase.GUIDToAssetPath(guid);
+            Item item = AssetDatabase.LoadAssetAtPath<Item>(path);
+
+            if (item == null)
+                continue;
+
+            existingItems.Add(item.itemName);
+        }
+
+        int missing = 0;
+
+        // Check every enum value against the existing assets
+        foreach (ItemName itemName in Enum.GetValues(typeof(ItemName)))
+        {
+            string expectedName = NameDB.GetItem(itemName);
+
+            if (!existingItems.Contains(expectedName))
+            {
+                Debug.LogWarning(
+                    $"[Item Check] Missing item: {itemName} -> \"{expectedName}\"");
+                missing++;
+            }
+        }
+
+        Debug.Log(
+            $"[Item Check] Completed. Checked {Enum.GetValues(typeof(ItemName)).Length} enum values. Missing: {missing}.");
+    }
 }
 

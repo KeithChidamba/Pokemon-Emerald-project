@@ -29,7 +29,7 @@ public class PokemonStateHandler
     public event Action<int> OnExpGained;
     public event Action OnNewLevel;
     public event Action<Pokemon> OnLevelUp;
-    public event Action<int> OnEvolutionSuccessful;
+    public event Action OnEvolutionSuccessful;
     public event Action OnHealthChanged;
     
     private BattleHandler _battleHandler;
@@ -121,22 +121,13 @@ public class PokemonStateHandler
         {
             if (canEvolve)
             {
-                if(pokemon.splitEvolution)
-                {
-                    // Determine Split Evolution
-                    var evolutionValue = pokemon.personalityValue % 10;
-                    if (evolutionValue < 5)
-                        CheckEvolutionRequirements(0);
-                    else if (evolutionValue < 10)
-                        CheckEvolutionRequirements(2);
-                }
-                else
-                    CheckEvolutionRequirements(0);
+                CheckEvolutionRequirements();
             }
         }
         OnNewLevel?.Invoke();
     }
-    private void CheckEvolutionRequirements(int evoIndex)
+
+    private void CheckEvolutionRequirements()
     {
         if (pokemon.requiresFriendshipEvolution)
         {
@@ -161,11 +152,11 @@ public class PokemonStateHandler
         {
             if (handleEvolutionExternally)
             {
-                OnEvolutionSuccessful?.Invoke(pokemon.currentEvolutionLineIndex+evoIndex);
+                OnEvolutionSuccessful?.Invoke();
             }
             else
             {
-                pokemon.Evolve(pokemon.evolutions[pokemon.currentEvolutionLineIndex + evoIndex]);
+                pokemon.Evolve(pokemon.GetCurrentEvolution());
             }
         }
     }

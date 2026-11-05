@@ -67,7 +67,7 @@ public class BattleHandler : MonoBehaviour, IInjectable
     public BattleType currentBattleType;
     public enum BattlesStyle {Switch=0,Set=1 };
     public BattlesStyle currentBattleStyle;
-    public List<EvolutionInBattleData> evolutionQueue;
+    public List<BattleParticipant> evolutionQueue;
     private PlayerTurnUsage _previousTurnUsage;
     
     public event Action OnBattleStarted;
@@ -927,12 +927,11 @@ public class BattleHandler : MonoBehaviour, IInjectable
             yield break;
             IEnumerator HandleEvolutions()
             {
-                foreach (var evolution in evolutionQueue)
+                foreach (var participant in evolutionQueue)
                 {
-                    if (evolution.participantToEvolve.isActive)
+                    if (participant.isActive)
                     {
-                        var pokemon = evolution.participantToEvolve.Pokemon;
-                        yield return _pokemonOperations.HandlePokemonEvolution(pokemon,evolution.evolutionIndex);
+                        yield return _pokemonOperations.HandlePokemonEvolution(participant.pokemonState.pokemon);
                     }
                 }
                 evolutionQueue.Clear();

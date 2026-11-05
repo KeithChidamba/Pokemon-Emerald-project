@@ -17,7 +17,7 @@ MonoBehaviour:
   moveName: Earthquake
   description: cause a violent earthquake
   type: {fileID: 11400000, guid: 1e160a6fcf49fc54b8f15c25d45abac3, type: 2}
-  effectType: 2
+  effectType: 0
   hasTypelessEffect: 0
   isSpecial: 0
   isContact: 0
@@ -30,6 +30,7 @@ MonoBehaviour:
   isMultiTarget: 1
   isSelfTargeted: 0
   isSureHit: 0
+  dealSpecificDamage: 0
   displayTargetMessage: 0
   moveDamage: 100
   moveAccuracy: 100
@@ -42,7 +43,6 @@ MonoBehaviour:
   buffOrDebuffData: []
   statusChance: 0
   buffOrDebuffChance: 0
-  effectInfoModule: {fileID: 0}
   references:
     version: 2
     RefIds:

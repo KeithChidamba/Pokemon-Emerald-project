@@ -65,6 +65,11 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     }
     private IEnumerator BrickBreak(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
+        if (!victim.canBeDamaged)
+        { 
+            _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName+" protected itself");
+            yield break;
+        }
         var enemyTeam = _battleHandler.GetTeam(attacker.currentEnemies[0].participantKey);
         foreach (var barrier in enemyTeam.barriers)
         {
@@ -90,6 +95,11 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
 
     private IEnumerator Hyperbeam(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
+        if (!victim.canBeDamaged)
+        { 
+            _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName+" protected itself");
+            yield break;
+        }
         _moveUsageHandler.DisplayMoveDamage(currentTurn.move,attacker,victim);
         var cancelledTurn = new Turn(currentTurn);
         cancelledTurn.isCancelled = true;
@@ -101,19 +111,26 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     {
         if (attacker.currentCoolDown.isExecutionTurn)
         {
-            _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName+" unleashed the power");
-            var storedDamage = attacker.currentCoolDown.turnData.move.moveDamage;
-            if (storedDamage > 0)
-            {
-                currentTurn.move.moveDamage = storedDamage;
-                var typelessDamage = _moveUsageHandler.CalculateMoveDamage(currentTurn.move,attacker, victim, true);
-                _moveUsageHandler.DisplaySpecialDamage(victim, predefinedDamage: typelessDamage);
+            if (!victim.canBeDamaged)
+            { 
+                _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName+" protected itself");
             }
             else
             {
-                _dialogueHandler.DisplayBattleInfo("But it failed!");
+                _dialogueHandler.DisplayBattleInfo(attacker.Pokemon.pokemonDisplayName+" unleashed the power");
+                var storedDamage = attacker.currentCoolDown.turnData.move.moveDamage;
+                if (storedDamage > 0)
+                {
+                    currentTurn.move.moveDamage = storedDamage;
+                    var typelessDamage = _moveUsageHandler.CalculateMoveDamage(currentTurn.move,attacker, victim, true);
+                    _moveUsageHandler.DisplaySpecialDamage(victim, predefinedDamage: typelessDamage);
+                }
+                else
+                {
+                    _dialogueHandler.DisplayBattleInfo("But it failed!");
+                } 
             }
-           
+            
             _moveUsageHandler.OnMoveHit -= attacker.currentCoolDown.StoreDamage;
             attacker.currentCoolDown.ResetState();
             yield return null;
@@ -127,6 +144,11 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     
     private IEnumerator TakeDown(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
+        if (!victim.canBeDamaged)
+        { 
+            _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName+" protected itself");
+            yield break;
+        }
         var damage = _moveUsageHandler.CalculateMoveDamage(currentTurn.move,attacker, victim);
         var recoilDamage = math.floor(damage / 4f);
         
@@ -156,9 +178,15 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
         }
         return baseDamage;
     }
+
     private IEnumerator Magnitude(Turn currentTurn, BattleParticipant attacker, BattleParticipant victim)
     {
-        int magnitudeStrength = Utility.RandomRange(4, 11);
+
+        if (!victim.canBeDamaged)
+        { 
+            _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName+" protected itself");
+            yield break;
+        }int magnitudeStrength = Utility.RandomRange(4, 11);
 
         var baseDamage = MagnitudeDamageEffect(magnitudeStrength);
 
@@ -170,6 +198,11 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
 
     private IEnumerator Endeavor(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
+        if (!victim.canBeDamaged)
+        { 
+            _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName+" protected itself");
+            yield break;
+        }
         if (victim.Pokemon.hp < attacker.Pokemon.hp)
         {
             _dialogueHandler.DisplayBattleInfo("but it failed!");
@@ -181,6 +214,11 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
 
     private IEnumerator FuryCutter(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
+        if (!victim.canBeDamaged)
+        { 
+            _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName+" protected itself");
+            yield break;
+        }
         var damageLevel = new[] { 10f, 20f, 40f, 80f, 160f };
         if(NameDB.NameMatch(attacker.previousMoveData.move,MoveName.FuryCutter))
         {
@@ -195,6 +233,11 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
     }
     private IEnumerator SilverWind(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
+        if (!victim.canBeDamaged)
+        { 
+            _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName+" protected itself");
+            yield break;
+        }
         bool battleEnded = false;
         bool awaitingFaint = true;
         
@@ -245,6 +288,11 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
 
     private IEnumerator Flail(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
+        if (!victim.canBeDamaged)
+        { 
+            _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName+" protected itself");
+            yield break;
+        }
         List<(int hpLevel, float damage)> damagePerLevel = new()
         {
             (32, 200f), (16, 150f), (8, 100f), (4, 80f), (2, 40f)
@@ -266,6 +314,11 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
 
     private IEnumerator FalseSwipe(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
+        if (!victim.canBeDamaged)
+        { 
+            _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName+" protected itself");
+            yield break;
+        }
         var damage = _moveUsageHandler.CalculateMoveDamage(currentTurn.move,attacker, victim);
         damage = Mathf.Min(damage, victim.Pokemon.hp - 1);
         damage = Mathf.Max(damage, 0);
@@ -290,6 +343,11 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
 
     private IEnumerator Covet(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
+        if (!victim.canBeDamaged)
+        { 
+            _dialogueHandler.DisplayBattleInfo(victim.Pokemon.pokemonDisplayName+" protected itself");
+            yield break;
+        }
         _moveUsageHandler.DisplayMoveDamage(currentTurn.move,attacker,victim);
         if (victim.Pokemon.hasItem && !attacker.Pokemon.hasItem)
         {

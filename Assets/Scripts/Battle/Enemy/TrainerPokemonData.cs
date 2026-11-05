@@ -16,4 +16,5 @@ public struct NaturalPokemonCreationData
     public int pokemonLevel;
     public bool hasItem;
     public Item heldItem;
+    [Range(0, 1)] public int splitEvolutionIndex;
 }

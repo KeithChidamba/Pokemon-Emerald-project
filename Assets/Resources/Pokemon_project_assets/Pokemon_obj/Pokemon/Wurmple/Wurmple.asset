@@ -24,16 +24,15 @@ MonoBehaviour:
   isShiny: 0
   gender: 0
   ratioFemale: 50
-  nature: {fileID: 0}
   hasGender: 1
-  hp: 0
-  maxHp: 0
   baseHp: 45
   baseAttack: 45
   baseDefense: 35
   baseSpecialAttack: 20
   baseSpecialDefense: 30
   baseSpeed: 20
+  hp: 0
+  maxHp: 0
   attack: 0
   defense: 0
   specialAttack: 0
@@ -64,7 +63,6 @@ MonoBehaviour:
   nextLevelExpAmount: 0
   expGroup: 1
   expYield: 54
-  canEvolve: 1
   friendshipLevel: 0
   hasTrainer: 0
   types:
@@ -76,11 +74,17 @@ MonoBehaviour:
   friendshipEvolutionRequirement:
     friendshipRequirement: 0
     evolutionIndex: 0
+  requiresFriendshipEvolution: 0
   requiresEvolutionStone: 0
   evolutionStone: 0
-  abilities: 06000000
   splitEvolution: 1
-  requiresFriendshipEvolution: 0
+  evolutions:
+  - {fileID: 11400000, guid: 91a90426a0e18aa4890f91c50bc70adf, type: 2}
+  - {fileID: 11400000, guid: ddb36ec2bb47ec9468768b6e5931e0ce, type: 2}
+  splitEvolutions:
+  - {fileID: 11400000, guid: 11b7028df9f89b14eaab8d7baee180ad, type: 2}
+  - {fileID: 11400000, guid: 9f9a4db669e72184bbdb3e010f6edd75, type: 2}
+  splitEvolutionValue: 0
   learnSet:
   - learnSetMove: 3
     requiredLevel: 1
@@ -91,12 +95,9 @@ MonoBehaviour:
   learnableTms: 480000001c000000
   learnableHms: 
   moveSet: []
+  abilities: 06000000
   ability: {fileID: 11400000, guid: 2753225943009a84284482e1ea9aae6b, type: 2}
-  evolutions:
-  - {fileID: 11400000, guid: 91a90426a0e18aa4890f91c50bc70adf, type: 2}
-  - {fileID: 11400000, guid: ddb36ec2bb47ec9468768b6e5931e0ce, type: 2}
-  - {fileID: 11400000, guid: 11b7028df9f89b14eaab8d7baee180ad, type: 2}
-  - {fileID: 11400000, guid: 9f9a4db669e72184bbdb3e010f6edd75, type: 2}
+  nature: {fileID: 0}
   heldItem: {fileID: 0}
   hasItem: 0
   frontPicture: {fileID: 21300000, guid: ace8ff692708557b686b5f40b0c5bfc1, type: 2}
@@ -105,9 +106,3 @@ MonoBehaviour:
   partyFrame2: {fileID: 21300000, guid: 569376c5c60f451a78ccadbda5aae7f0, type: 2}
   battleIntroFrame: {fileID: 21300000, guid: 090cab533f86f725cbbfdf6091edd43f, type: 2}
   pokeballName: 
-  healthPhase: 0
-  abilityName: 
-  natureName: 
-  evolutionNames: []
-  typeNames: []
-  moveData: []

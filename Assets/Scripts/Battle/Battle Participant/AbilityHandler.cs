@@ -162,24 +162,30 @@ public class AbilityHandler
         if (!pokemon.hasTrainer) return;
         if (pokemon.currentLevel < 5) return;
         
-        List<(int MinLevel, int MaxLevel, string[] Items)> itemPools = new()
+        List<(int MinLevel, int MaxLevel, ItemName[] Items)> itemPools = new()
         {
-            (5, 9, new[] { "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
-            (10, 19, new[] { "Super Potion", "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
-            (20, 29, new[] { "Hyper Potion", "Super Potion", "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
-            (30, 39, new[] { "Ether", "Full Heal", "Hyper Potion", "Super Potion", "Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
-            (40, 49, new[] { "Rare Candy", "Full Heal", "Ether", "Hyper Potion", "Super Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
-            (50, 59, new[] { "Rare Candy", "Full Heal", "Ether", "Revive", "Hyper Potion", "Antidote", "Awakening", "Paralyze Heal", "Burn Heal", "Ice Heal" }),
-            (60, 69, new[] { "Rare Candy", "Full Heal", "Ether", "Revive", "Hyper Potion",  "Escape Rope" }),
-            (70, 100, new[] { "Rare Candy", "Full Heal", "Ether", "Revive", "Hyper Potion",  "PP Up" })
+            (5, 9, new[] { ItemName.Potion, ItemName.Antidote, ItemName.Awakening, ItemName.ParalyzeHeal, ItemName.BurnHeal, ItemName.IceHeal }),
+            (10, 19, new[] { ItemName.SuperPotion, ItemName.Potion, ItemName.Antidote, ItemName.Awakening, ItemName.ParalyzeHeal, ItemName.BurnHeal, ItemName.IceHeal }),
+            (20, 29, new[] { ItemName.HyperPotion, ItemName.SuperPotion, ItemName.Potion, ItemName.Antidote, ItemName.Awakening, ItemName.ParalyzeHeal, ItemName.BurnHeal, ItemName.IceHeal }),
+            (30, 39, new[] { ItemName.Ether, ItemName.FullHeal, ItemName.HyperPotion, ItemName.SuperPotion, ItemName.Potion, ItemName.Antidote, ItemName.Awakening, ItemName.ParalyzeHeal, ItemName.BurnHeal, ItemName.IceHeal }),
+            (40, 49, new[] { ItemName.RareCandy, ItemName.FullHeal, ItemName.Ether, ItemName.HyperPotion, ItemName.SuperPotion, ItemName.Antidote, ItemName.Awakening, ItemName.ParalyzeHeal, ItemName.BurnHeal, ItemName.IceHeal }),
+            (50, 59, new[] { ItemName.RareCandy, ItemName.FullHeal, ItemName.Ether, ItemName.Revive, ItemName.HyperPotion, ItemName.Antidote, ItemName.Awakening, ItemName.ParalyzeHeal, ItemName.BurnHeal, ItemName.IceHeal }),
+            (60, 69, new[] { ItemName.RareCandy, ItemName.FullHeal, ItemName.Ether, ItemName.Revive, ItemName.HyperPotion,}),
+            (70, 100, new[] { ItemName.RareCandy, ItemName.FullHeal, ItemName.Ether, ItemName.Revive, ItemName.HyperPotion, ItemName.PpUp })
         };
         
-        string[] possibleItems = null;
+        List<string> possibleItems = null;
         foreach (var pool in itemPools)
         {
             if (pokemon.currentLevel >= pool.MinLevel && pokemon.currentLevel <= pool.MaxLevel)
             {
-                possibleItems = pool.Items;
+                possibleItems = new List<string>();
+
+                foreach (var item in pool.Items)
+                {
+                    possibleItems.Add(NameDB.GetItem(item));
+                }
+
                 break;
             }
         }
@@ -188,7 +194,7 @@ public class AbilityHandler
             throw new Exception($"Item pool logic has an edge case, pokemon level: {pokemon.currentLevel}");
         }
        
-        var itemWonIndex = Utility.RandomRange(0, possibleItems.Length);
+        var itemWonIndex = Utility.RandomRange(0, possibleItems.Count);
 
         var assetDirectory = DirectoryHandler.GetDirectory(AssetDirectory.Items) + possibleItems[itemWonIndex];
         
