@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 [Serializable]
 public abstract class StoryObjective : ScriptableObject
@@ -10,6 +11,9 @@ public abstract class StoryObjective : ScriptableObject
         {
             serviceContainer.Resolve<PlayerMovementHandler>().SetPositionBoundary(playerBoundary);
         }
+        
+        serviceContainer.Resolve<InteractionHandler>().SetInteractionRestrictions(restrictedInteractions);
+        
         OnLoad?.Invoke();
         OnObjectiveLoaded();
     }
@@ -19,6 +23,9 @@ public abstract class StoryObjective : ScriptableObject
         {
             serviceContainer.Resolve<PlayerMovementHandler>().RemovePositionBoundary();
         }
+        
+        serviceContainer.Resolve<InteractionHandler>().ClearRestrictions();
+        
         OnClear?.Invoke();
         OnObjectiveCleared();
     }
@@ -32,6 +39,7 @@ public abstract class StoryObjective : ScriptableObject
     public string objectiveHeading;
     public StoryObjectiveType objectiveType;
     public PlayerBoundary playerBoundary;
+    public List<OverworldInteractionType> restrictedInteractions = new();
     protected ServiceContainer serviceContainer;
 }
 public enum StoryObjectiveType

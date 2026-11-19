@@ -12,16 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b7f36d76f0f5d3669252db41fff9a89, type: 3}
   m_Name: Withdraw pikachu
   m_EditorClassIdentifier: 
-  objectiveHeading: withdraw pikachu from pc
+  objectiveHeading: withdraw pikachu from the pc on the far right
   objectiveType: 7
   playerBoundary:
     isRestricting: 1
     boundaries:
     - direction: 1
       limit: -16
+  restrictedInteractions: 
   storageObjectiveType: 0
   spawnPokemonInPc: 1
   pokemonForObjective:
-    giftPokemon: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}
-    pokemonLevel: 12
-    evolutionStageNumber: 0
+    pokemonData:
+      pokemon: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}
+      evolutionStageNumber: 0
+      moveSet:
+      - {fileID: 11400000, guid: 53fed834b2f80124ba1a685c0ffcbe2b, type: 2}
+      - {fileID: 11400000, guid: 267ab4e1ebd598540951809a1e2b4823, type: 2}
+      - {fileID: 11400000, guid: c7d43dcc896f14a279fc8f692215abfc, type: 2}
+      - {fileID: 11400000, guid: b777dec5f205a61448873e7760324510, type: 2}
+      pokemonLevel: 11
+      hasItem: 0
+      heldItem: {fileID: 0}
+      splitEvolutionIndex: 0

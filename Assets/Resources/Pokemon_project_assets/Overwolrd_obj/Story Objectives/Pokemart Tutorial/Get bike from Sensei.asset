@@ -19,6 +19,7 @@ MonoBehaviour:
     boundaries:
     - direction: 1
       limit: -16
+  restrictedInteractions: 
   npcName: Sensei
   npcData:
     npcPosition: {x: 67, y: -14, z: 0}

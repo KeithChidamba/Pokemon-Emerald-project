@@ -10,6 +10,7 @@ public class BerryTreeSaveData
     public int numStagesWatered;
     public string itemAssetName;
     public int soilIndex;
+    public int slotIndex;
     public string lastLogin;
 
     public void SaveData(BerryTreeData data)
@@ -44,6 +45,7 @@ public class BerryTreeSaveData
         treeData.numStagesWatered = numStagesWatered;
         treeData.itemAssetName = itemAssetName;
         treeData.soilIndex = soilIndex;
+        treeData.slotIndex = slotIndex;
         treeData.lastLogin = lastLogin;
         
         return treeData;

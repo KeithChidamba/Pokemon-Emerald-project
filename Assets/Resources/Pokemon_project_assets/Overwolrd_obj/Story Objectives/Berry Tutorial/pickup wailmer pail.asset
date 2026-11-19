@@ -12,10 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 888591249c9dce0c8aa814792a20212e, type: 3}
   m_Name: pickup wailmer pail
   m_EditorClassIdentifier: 
-  mainAssetName: pickup wailmer pail
   objectiveHeading: Pickup the item next to the soil
-  hasProgression: 0
-  indexInList: 0
   objectiveType: 10
   playerBoundary:
     isRestricting: 1
@@ -28,4 +25,5 @@ MonoBehaviour:
       limit: -17
     - direction: 4
       limit: 7
+  restrictedInteractions: 020000000300000004000000
   itemToPickup: {fileID: 11400000, guid: a5ad488316e62bf7dbfb38fddc47ed74, type: 2}

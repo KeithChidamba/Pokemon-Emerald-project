@@ -22,9 +22,10 @@ MonoBehaviour:
     - direction: 1
       limit: -40
     - direction: 3
-      limit: 20
+      limit: 22
     - direction: 4
-      limit: 32
+      limit: 26
+  restrictedInteractions: 
   npcName: keith
   npcData:
     npcPosition: {x: 24, y: -21, z: 0}

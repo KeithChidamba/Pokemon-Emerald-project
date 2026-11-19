@@ -16,7 +16,7 @@ MonoBehaviour:
   interactionMessage: How would you like to use the PC?
   dialogueType: 1
   isEventTrigger: 0
-  interactionOptions: 050000000500000000000000
+  interactionOptions: 040000000500000000000000
   optionsUiText:
   - Pokemon Storage
   - Item Storage

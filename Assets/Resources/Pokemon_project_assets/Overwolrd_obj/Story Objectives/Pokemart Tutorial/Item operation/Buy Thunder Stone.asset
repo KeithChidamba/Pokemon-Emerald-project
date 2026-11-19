@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c94b6633adc97ef929f385a1db57e01d, type: 3}
   m_Name: Buy Thunder Stone
   m_EditorClassIdentifier: 
-  objectiveHeading: 
+  objectiveHeading: Purchase a Thunder stone from the market
   objectiveType: 5
   playerBoundary:
     isRestricting: 0
     boundaries:
     - direction: 1
       limit: -87
+  restrictedInteractions: 
   itemForObjective: {fileID: 11400000, guid: f119188b4200e601a85c9ce3fa256f00, type: 2}
   marketObjectiveType: 1

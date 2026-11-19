@@ -184,12 +184,17 @@ public class DialogueHandler : MonoBehaviour,IInjectable
         newInteraction.dialogueType = type;
         return newInteraction;
     }
-    public void DisplayCustomOptions(string info, string[]optionsText, Action[] optionEvents)
+    
+    public void DisplayCustomOptions(string info, string[]optionsText, Action[] optionEvents
+        ,OverworldInteractionType type = OverworldInteractionType.None)
     {
         interactionOptionsHandler.OnInteractionOptionChosen += InvokeSelectedOption;
         
         canExitDialogue = false;
         var newInteraction = NewInteraction(info,DialogType.CustomOptions);
+        
+        newInteraction.overworldInteraction = type;
+        
         foreach (string text in optionsText) 
         {
             newInteraction.interactionOptions.Add(InteractionOptions.Custom);

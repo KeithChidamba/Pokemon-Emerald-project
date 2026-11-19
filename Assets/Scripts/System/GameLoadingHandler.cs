@@ -35,6 +35,7 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
     private InputStateHandler _inputStateHandler;
     private GameUiHandler _gameUIHandler;
     private GameSettingsHandler _gameSettingsHandler;
+    private OverworldState _overworldState;
     
     public void Inject(ServiceContainer container)
     {
@@ -47,6 +48,8 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
         _inputStateHandler = container.Resolve<InputStateHandler>();
         _gameUIHandler = container.Resolve<GameUiHandler>();
         _gameSettingsHandler = container.Resolve<GameSettingsHandler>();
+        _overworldState = container.Resolve<OverworldState>();
+            
         gameObject.SetActive(true);
     }
     public void OnInject() { }
@@ -175,6 +178,8 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
             }
             _gameSettingsHandler.ConfigureSavedSettings();
         }
+        _overworldState.StartDataLoad();
+        
         StartCoroutine(GameStartLoading(gameStartDelay));
     }
 }

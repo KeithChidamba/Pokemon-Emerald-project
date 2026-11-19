@@ -18,7 +18,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 128412336089757397, guid: 059958c1d3c492d48b861aeec9c3ab34, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 128412336089757397, guid: 059958c1d3c492d48b861aeec9c3ab34, type: 3}
       propertyPath: m_StaticEditorFlags
@@ -149,7 +149,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 128412336089757397, guid: 059958c1d3c492d48b861aeec9c3ab34, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1510495507358654107, guid: 059958c1d3c492d48b861aeec9c3ab34, type: 3}
       propertyPath: treeData
@@ -251,7 +251,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 128412336089757397, guid: 059958c1d3c492d48b861aeec9c3ab34, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1510495507358654107, guid: 059958c1d3c492d48b861aeec9c3ab34, type: 3}
       propertyPath: treeData
@@ -353,7 +353,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 128412336089757397, guid: 059958c1d3c492d48b861aeec9c3ab34, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1510495507358654107, guid: 059958c1d3c492d48b861aeec9c3ab34, type: 3}
       propertyPath: treeData
@@ -503,7 +503,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8311802281219589920, guid: bf1c441c28b34bbec93fb6b810de0dd5, type: 3}
       propertyPath: m_Name
-      value: Oran And Sitrus Berries Variant
+      value: Berry Soil Bed
       objectReference: {fileID: 0}
     - target: {fileID: 8311802281219589920, guid: bf1c441c28b34bbec93fb6b810de0dd5, type: 3}
       propertyPath: m_Layer

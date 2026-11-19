@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 [CreateAssetMenu(fileName = "berryTree Registry", menuName = "Overworld/Berry tree registry")]
 public class BerryTreeRegistry : ScriptableObject
 {
-    [FormerlySerializedAs("berryTrees")] public List<OverworldTree> soilGroups;
+    [FormerlySerializedAs("berryTrees")] public List<OverworldTree> soilGroups = new();
 }
 
 [Serializable]

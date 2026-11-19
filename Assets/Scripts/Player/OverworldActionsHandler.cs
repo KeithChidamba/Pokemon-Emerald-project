@@ -86,7 +86,7 @@ public class OverworldActionsHandler : MonoBehaviour,IInjectable
     {
         return equippedSpecialItem is not null;
     }
-    void Update()
+    private void Update()
     {
         if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem))
         {

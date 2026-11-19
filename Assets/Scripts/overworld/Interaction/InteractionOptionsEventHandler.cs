@@ -11,6 +11,7 @@ public enum InteractionOptions
     OpenPokemonStorage,
     OpenItemStorage,HandleInDynamicClass
 }
+
 public class InteractionOptionsEventHandler : MonoBehaviour,IInjectable
 {
     [SerializeField]private GameObject pokeballPrefab;

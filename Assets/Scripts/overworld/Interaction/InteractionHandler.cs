@@ -14,7 +14,8 @@ public class InteractionHandler : MonoBehaviour,IInjectable
     private bool _interactionCooldown;
     public Tilemap waterTilemap;
     public Tilemap interactionTilemap;
-
+    [SerializeField]private List<OverworldInteractionType> restrictedInteractions = new();
+    
     private OverworldActionsHandler _overworldActions;
     private InputStateHandler _inputStateHandler;
     private DialogueHandler _dialogueHandler;
@@ -37,7 +38,16 @@ public class InteractionHandler : MonoBehaviour,IInjectable
         _canCheckForInteraction = true;
         gameObject.SetActive(true);
     }
-    void Update()
+    
+    public void SetInteractionRestrictions(List<OverworldInteractionType> restrictions)
+    {
+        restrictedInteractions.AddRange(restrictions);
+    }
+    public void ClearRestrictions()
+    {
+        restrictedInteractions.Clear();
+    }
+    private void Update()
     {
         if(_inputStateHandler.IsEmptyState && !_stopInteractions)
         {
@@ -109,8 +119,11 @@ public class InteractionHandler : MonoBehaviour,IInjectable
                         var interactableObject = hit.transform.GetComponent<OverworldInteractable>();
                         if (interactableObject is not null)
                         {
-                            SoundManager.Play(UiId.Select);
-                            _dialogueHandler.StartInteraction(interactableObject);
+                            if(!restrictedInteractions.Contains(interactableObject.interaction.overworldInteraction))
+                            {
+                                SoundManager.Play(UiId.Select);
+                                _dialogueHandler.StartInteraction(interactableObject);
+                            }
                         }
                         else
                         {
@@ -118,6 +131,10 @@ public class InteractionHandler : MonoBehaviour,IInjectable
                         }
                     }
                 }
+            }
+            if (restrictedInteractions.Contains(OverworldInteractionType.Fish))
+            {
+                return;
             }
             if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem)
                 && _overworldActions.IsEquipped(Equipable.FishingRod))
@@ -150,7 +167,9 @@ public class InteractionHandler : MonoBehaviour,IInjectable
                         return;
                     }
                     _dialogueHandler.DisplayCustomOptions("Would you like to fish for pokemon"
-                       , new[]{"Yes", "No"},new Action[] { _overworldActions.PlayFishingAnimation, _dialogueHandler.EndDialogue });
+                       , new[]{"Yes", "No"},
+                       new Action[] { _overworldActions.PlayFishingAnimation, _dialogueHandler.EndDialogue }
+                       ,OverworldInteractionType.Fish);
                 }
                 else
                 {
@@ -160,6 +179,7 @@ public class InteractionHandler : MonoBehaviour,IInjectable
         }
         else
         {
+            if (restrictedInteractions.Contains(OverworldInteractionType.Fish)) return;
             if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem)
                 && _overworldActions.IsEquipped(Equipable.FishingRod))
             {

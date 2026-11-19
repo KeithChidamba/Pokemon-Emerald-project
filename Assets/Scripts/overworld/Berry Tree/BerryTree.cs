@@ -9,7 +9,10 @@ public class BerryTree : MonoBehaviour
     public Interaction waterInteraction;
     public Interaction idleInteraction;
     public BerryTreeData treeData;
-
+    
+    public Item currentBerryForObjective;
+    public bool handlingObjective;
+    
     public SpriteRenderer treeSpriteRenderer;
     private int _currentSpriteIndex;
     [SerializeField] private float secondsCounter;
@@ -143,7 +146,7 @@ public class BerryTree : MonoBehaviour
     {
         if (interactable != primaryInteractable) return;
         if (interactable.interaction.overworldInteraction != OverworldInteractionType.WaterBerryTree) return;
-        
+
         if (optionChosen > 0)
         {
             _dialogueHandler.EndDialogue(); 
@@ -214,6 +217,15 @@ public class BerryTree : MonoBehaviour
             return;
         }
 
+        if (handlingObjective)
+        {
+            if (currentBerryForObjective.itemName != berryToPlant.itemName)
+            {
+                _dialogueHandler.DisplayDetails("Can't plant that one, pick the correct berry");
+                return;
+            }
+        }
+        
         _playerBag.DepleteItem(berryToPlant,false);
         
         _playerBag.OnItemSelected -= PlantBerry;
@@ -248,13 +260,24 @@ public class BerryTree : MonoBehaviour
     {
         if (interactable != primaryInteractable) return;
         if (interactable.interaction.overworldInteraction != OverworldInteractionType.PickBerry) return;
-
+        
         if (optionChosen > 0)
         {
             OnInteractionComplete?.Invoke(false);
             _dialogueHandler.EndDialogue(); 
             return;
         }
+        
+        if (handlingObjective)
+        {
+            if (currentBerryForObjective.itemName != treeData.berryItem.itemName)
+            {
+                _dialogueHandler.DisplayDetails("Can't pick this berry, pick the correct one");
+                OnInteractionComplete?.Invoke(false);
+                return;
+            }
+        }
+        
         _dialogueHandler.DeletePreviousOptions();
         
         var berries = InstanceFactory.CreateItem(treeData.berryItem);

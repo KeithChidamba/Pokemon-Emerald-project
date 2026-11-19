@@ -40,5 +40,6 @@ public enum OverworldInteractionType
     PokemartClerk,
     PlantBerry,
     PickBerry,
-    WaterBerryTree
+    WaterBerryTree,
+    Fish
 }

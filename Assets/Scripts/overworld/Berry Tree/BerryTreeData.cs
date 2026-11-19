@@ -19,6 +19,7 @@ public class BerryTreeData : ScriptableObject
      public bool isPlanted;
      [HideInInspector]public string itemAssetName;
      [HideInInspector]public int soilIndex;
+     [HideInInspector]public int slotIndex;
      [HideInInspector]public string lastLogin;
     
      public DateTime GetLastLogin()

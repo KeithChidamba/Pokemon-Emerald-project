@@ -12,12 +12,16 @@ public class NpcMovementObjective : NpcStoryObjective
    private DialogueHandler _dialogueHandler;
    private PlayerMovementHandler _playerMovementHandler;
    private AreaManager _areaManager;
+   private GameUiHandler _gameUiHandler;
    
    protected override void OnObjectiveLoaded()
    {
       _dialogueHandler = serviceContainer.Resolve<DialogueHandler>(); 
       _playerMovementHandler = serviceContainer.Resolve<PlayerMovementHandler>();
       _areaManager = serviceContainer.Resolve<AreaManager>(); 
+      _gameUiHandler = serviceContainer.Resolve<GameUiHandler>();
+      
+      _gameUiHandler.SetMenuAccessibility(false); 
       
       _dialogueHandler.DisplayObjectiveText(objectiveHeading);
       SetupNpc(_areaManager);
@@ -72,5 +76,11 @@ public class NpcMovementObjective : NpcStoryObjective
 
       return (Mathf.Approximately(dx, 1f) && Mathf.Approximately(dy, 0f)) ||
              (Mathf.Approximately(dx, 0f) && Mathf.Approximately(dy, 1f));
+   }
+   protected override void OnObjectiveCleared()
+   {
+      _gameUiHandler.SetMenuAccessibility(true);
+      var overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
+      overworldStateHandler.ClearAndLoadNextObjective();
    }
 }

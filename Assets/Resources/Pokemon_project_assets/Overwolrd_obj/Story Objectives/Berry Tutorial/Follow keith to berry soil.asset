@@ -25,6 +25,7 @@ MonoBehaviour:
       limit: 19
     - direction: 1
       limit: -25
+  restrictedInteractions: 02000000030000000400000005000000
   npcName: keith
   npcData:
     npcPosition: {x: 17, y: -20, z: 0}

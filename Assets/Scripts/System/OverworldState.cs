@@ -56,14 +56,21 @@ public class OverworldState : MonoBehaviour,IInjectable
                 _cachedObjectives.Add(objective.name,objective);
             }
         }
-        _gameLoadingHandler.OnGameStarted += StartDataLoad;
     }
 
-    private void StartDataLoad()
+    public void StartDataLoad()
     {
         StartCoroutine(LoadOverworldState());
     }
-
+    public void NotifyTreesOfObjective(Item berryForObjective,bool active)
+    {
+        foreach (var tree in overworldBerryTrees)
+        {
+            tree.handlingObjective = active;
+            tree.currentBerryForObjective = berryForObjective;
+        }
+    }
+    
     private void LoadDefaultTrees()
     {
         for(var i = 0;i<treeRegistry.soilGroups.Count;i++ )
@@ -72,55 +79,88 @@ public class OverworldState : MonoBehaviour,IInjectable
             if (!overworldTreeData.loadedFromJson)
             {
                 var leftOverTree = overworldTreeData;
-                var newSoilObject = Instantiate(berrySoilPrefab,leftOverTree.treePosition,berryTreesParent.rotation, berryTreesParent);
+                var newSoilObject = Instantiate(berrySoilPrefab, leftOverTree.treePosition, berryTreesParent.rotation, berryTreesParent);
                 newSoilObject.SetActive(true);
-                var berryTrees = newSoilObject
-                    .GetComponentsInChildren<BerryTree>(true)
-                    .OrderBy(t => t.transform.GetSiblingIndex())
-                    .ToArray();
-                overworldBerryTrees.AddRange(berryTrees);
-                for(var j = 0;j<berryTrees.Length;j++ )
+
+                var soilTransform = newSoilObject.transform;
+                var treeIndex = 0;
+
+                for (var c = 0; c < soilTransform.childCount; c++)
                 {
-                    berryTrees[j].Inject(_container);
-                    berryTrees[j].LoadDefaultAsset(overworldTreeData.treeData[j],i);
+                    var berryTree = soilTransform.GetChild(c).GetComponent<BerryTree>();
+                    if (berryTree == null) continue;   // not a tree, don't consume a data slot
+
+                    if (treeIndex >= leftOverTree.treeData.Count)
+                    {
+                        Debug.LogWarning($"Soil has more BerryTrees than treeData entries ({leftOverTree.treeData.Count}).");
+                        break;
+                    }
+
+                    overworldBerryTrees.Add(berryTree);
+                    berryTree.Inject(_container);
+                    berryTree.LoadDefaultAsset(leftOverTree.treeData[treeIndex], i);
+                    treeIndex++;
                 }
+
+                if (treeIndex < leftOverTree.treeData.Count)
+                    Debug.LogWarning($"Only {treeIndex} BerryTrees found for {leftOverTree.treeData.Count} treeData entries.");
             }
         }
     }
 
     private void LoadSavedTrees()
     {
-        var soilCreated = 0;
+        var soilTrees = new Dictionary<int, BerryTree[]>();
+        var slotLoaded = new Dictionary<int, bool[]>();
+
         foreach (var treeData in jsonLoadedTreeData)
         {
             var overworldSoilData = treeRegistry.soilGroups[treeData.soilIndex];
-                    
-            if(!overworldSoilData.loadedFromJson)
+
+            if (!soilTrees.TryGetValue(treeData.soilIndex, out var berryTrees))
             {
                 overworldSoilData.numTreesLoaded = 0;
                 overworldSoilData.loadedFromJson = true;
-                soilCreated++;
+
                 var newSoilObject = Instantiate(berrySoilPrefab, overworldSoilData.treePosition,
                     berryTreesParent.rotation, berryTreesParent);
                 newSoilObject.SetActive(true);
-                var berryTrees = newSoilObject
-                    .GetComponentsInChildren<BerryTree>(true)
-                    .OrderBy(t => t.transform.GetSiblingIndex())
-                    .ToArray();
+
+                var soilTransform = newSoilObject.transform;
+                var treeList = new List<BerryTree>();
+                for (var j = 0; j < soilTransform.childCount; j++)
+                {
+                    var t = soilTransform.GetChild(j).GetComponent<BerryTree>();
+                    if (t != null) treeList.Add(t);
+                }
+
+                berryTrees = treeList.ToArray();
+
                 overworldBerryTrees.AddRange(berryTrees);
-                berryTrees[0].Inject(_container);
-                berryTrees[0].LoadTreeData(treeData); 
+                soilTrees[treeData.soilIndex] = berryTrees;
+                slotLoaded[treeData.soilIndex] = new bool[berryTrees.Length];
             }
-            else
+
+            var slot = treeData.slotIndex;
+            if (slot < 0 || slot >= berryTrees.Length || slotLoaded[treeData.soilIndex][slot]) continue;
+
+            var tree = berryTrees[slot];
+
+            if (tree == null)
             {
-                var treesPerSoil = 4;//always 4
-                var currentTree = overworldBerryTrees[((soilCreated - 1) * treesPerSoil) + overworldSoilData.numTreesLoaded];
-                currentTree.Inject(_container);
-                currentTree.LoadTreeData(treeData); 
+                Debug.LogError($"Null tree: soil {treeData.soilIndex}, slot {slot}, soil children {berryTrees.Length}");
+                continue;
             }
+
+            tree.Inject(_container);
+            tree.LoadTreeData(treeData);
+
+            slotLoaded[treeData.soilIndex][slot] = true;
             overworldSoilData.numTreesLoaded++;
+            
         }
     }
+   
     private IEnumerator LoadOverworldState()
     {
         storyProgress = null;
@@ -159,7 +199,7 @@ public class OverworldState : MonoBehaviour,IInjectable
                 .OrderBy(x => x.soilIndex)
                 .ToList();
             if(jsonLoadedTreeData.Count > 0)
-            {
+            { 
                 LoadSavedTrees();
             }
             else LoadDefaultTrees();
@@ -271,12 +311,7 @@ public class OverworldState : MonoBehaviour,IInjectable
         var newPickupData = new PickupData(pickup, false);
         _objectivePickupRegistry.AddToLookUp(newPickupData);
     }
-    
-    public bool HasObjective(StoryObjective objectiveData)
-    {
-        return _cachedObjectives.ContainsKey(objectiveData.name);
-    }
-    
+
     public void ClearAndLoadNextObjective()
     {
         _storyObjectiveGroups[currentObjectiveGroup].RemoveAt(0);
@@ -302,18 +337,28 @@ public class OverworldState : MonoBehaviour,IInjectable
     {
         jsonLoadedTreeData.Add(treeData);
     }
+    private static int GetTreeSlot(BerryTree tree)
+    {
+        var parent = tree.transform.parent;
+        var slot = 0;
+        for (var i = 0; i < tree.transform.GetSiblingIndex(); i++)
+        {
+            if (parent.GetChild(i).GetComponent<BerryTree>() != null) slot++;
+        }
+        return slot;
+    }
     public void SaveOverworldData()
     {
+        var newBerrySave = new BerryTreeSaveRegistry();
         foreach (var tree in overworldBerryTrees)
         {
             var treeSave = new BerryTreeSaveData();
             treeSave.SaveData(tree.treeData);
-           
-            //prevent duplicate json file names
-            var randomID = Utility.Random16Bit();
-            _saveHandler.SaveDataAsJson(treeSave,$"{tree.treeData.berryItem.itemName} {randomID}",SaveDataDirectory.BerryTrees);
+            treeSave.slotIndex = GetTreeSlot(tree);
+            newBerrySave.savedTrees.Add(treeSave);
         }
-       
+        _saveHandler.SaveDataAsJson(newBerrySave, "Tree Registry", SaveDataDirectory.BerryTrees);
+        
         _saveHandler.SaveDataAsJson(_loadedPickupRegistry,"Item pickup registry",SaveDataDirectory.OverworldItemPickupRegistry);
        
         int objectiveCount = 0;
@@ -332,11 +377,8 @@ public class OverworldState : MonoBehaviour,IInjectable
         }
         else
         {
-            var fullSize =
-                storyObjectiveRegistry.storyObjectiveGroups
-                    .First(group => group.section == currentObjectiveGroup).storyObjectives.Count;
             var currentGroupCount = _storyObjectiveGroups[currentObjectiveGroup].Count;
-            storyProgress.numRemainingInGroup = fullSize - currentGroupCount;
+            storyProgress.numRemainingInGroup = currentGroupCount;
         }
         storyProgress.lastActiveGroup = currentObjectiveGroup;
         _saveHandler.SaveDataAsJson(storyProgress,"Story Progress",SaveDataDirectory.StoryObjectiveProgress);

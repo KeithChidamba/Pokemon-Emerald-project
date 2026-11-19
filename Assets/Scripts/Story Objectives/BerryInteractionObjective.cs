@@ -17,6 +17,9 @@ public class BerryInteractionObjective : StoryObjective
     {
         _dialogueHandler = serviceContainer.Resolve<DialogueHandler>();
         _overworldState = serviceContainer.Resolve<OverworldState>();
+
+        _overworldState.NotifyTreesOfObjective(berryForObjective,true);
+        
         _watchedTree = null;
         _dialogueHandler.DisplayObjectiveText(objectiveHeading);
         _dialogueHandler.OnOptionsDisplayed += CheckInteractionTriggered;
@@ -54,6 +57,7 @@ public class BerryInteractionObjective : StoryObjective
 
     protected override void OnObjectiveCleared()
     {
+        _overworldState.NotifyTreesOfObjective(null,false);
         _dialogueHandler.OnOptionsDisplayed -= CheckInteractionTriggered;
         StopWatchingTree();
         _overworldState.ClearAndLoadNextObjective();

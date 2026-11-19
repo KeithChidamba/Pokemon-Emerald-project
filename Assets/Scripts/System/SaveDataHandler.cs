@@ -370,12 +370,16 @@ public class SaveDataHandler : MonoBehaviour, IInjectable
         var overworldTrees =
             GetJsonFilesFromPath(_saveDataPath + DirectoryHandler.GetSaveDirectory(SaveDataDirectory.BerryTrees));
         
-        foreach (var jsonFilePath in overworldTrees)
+        if (overworldTrees.Count > 0)
         {
-            var treeJson = File.ReadAllText(jsonFilePath);
-            var treeSave = new BerryTreeSaveData();
-            JsonUtility.FromJsonOverwrite(treeJson,treeSave);            
-            _overworldStateHandler.StoreBerryTreeData(treeSave.LoadTree());
+            var treeJson = File.ReadAllText(overworldTrees[0]);
+            var treeSave = new BerryTreeSaveRegistry();
+            JsonUtility.FromJsonOverwrite(treeJson,treeSave);
+            foreach (var tree in treeSave.savedTrees)
+            {
+                _overworldStateHandler.StoreBerryTreeData(tree.LoadTree());
+            }
+            yield return new WaitForSeconds(1f);
         }
 
         var storyProgressJson = GetJsonFilesFromPath(_saveDataPath +

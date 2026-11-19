@@ -44,7 +44,7 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
     [SerializeField]private Vector3 previousValidPosition;
     [SerializeField]private LayerMask movementBlockers;
     [SerializeField]private bool standingOnTile;
-    
+    [SerializeField] private GameObject boundaryView;
     [SerializeField]private List<MovementRestrictionState> movementRestrictors = new()
     { 
         new (MovementRestrictor.Battle, false), 
@@ -327,10 +327,13 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
             {
                 yAxisInput = 0;
             }
-            
 //movement
             if (Math.Abs(yAxisInput) == 1)
             {
+                var boundaryOffset = yAxisInput > 0
+                    ? new Vector3(0.5f, 0f, 0f)   // upward
+                    : new Vector3(0.5f, 1f, 0f);   // downward
+              
                 var positionModifierY = new Vector3(0, yAxisInput, 0);
                 var hit = Physics2D.Raycast(
                     interactionPoint.transform.position,
@@ -339,17 +342,28 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
                 );
                 if (!hit)//check blockers
                 {
-                    if (AtBoundary(positionModifierY)) HandleBump();
+                    if (AtBoundary(positionModifierY))
+                    {
+                        boundaryView.transform.position = movePoint.position + positionModifierY + boundaryOffset;
+                        boundaryView.transform.localScale = new Vector3(1f,0.5f,0);
+                        boundaryView.SetActive(true);
+                        HandleBump();
+                    }
                     else
                     {
                         movePoint.position += positionModifierY;
                         standingOnTile = false;
+                        boundaryView.SetActive(false);
                     }
                 }else HandleBump();
             }
             
             if (Math.Abs(xAxisInput) == 1)
             {
+                var boundaryOffset = xAxisInput > 0
+                    ? new Vector3(0f, 0.5f, 0f)   // right
+                    : new Vector3(1f, 0.5f, 0f);   // left
+
                 var positionModifierX = new Vector3(xAxisInput, 0, 0);
                 var hit = Physics2D.Raycast(
                     interactionPoint.transform.position,
@@ -358,11 +372,18 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
                 );
                 if (!hit)//check blockers
                 {
-                    if (AtBoundary(positionModifierX)) HandleBump();
+                    if (AtBoundary(positionModifierX))
+                    {
+                        boundaryView.transform.position = movePoint.position + positionModifierX + boundaryOffset;
+                        boundaryView.transform.localScale = new Vector3(0.5f,1f,0);
+                        boundaryView.SetActive(true);
+                        HandleBump();
+                    }
                     else
                     {
                         movePoint.position += positionModifierX;
                         standingOnTile = false;
+                        boundaryView.SetActive(false);
                     }
                 } else HandleBump();
             }
