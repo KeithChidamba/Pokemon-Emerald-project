@@ -1,0 +1,14 @@
+{
+    "playerName": "AHN",
+    "trainerID": 54404,
+    "secretID": 47716,
+    "playerMoney": 300,
+    "numBadges": 0,
+    "playerPosition": {
+        "x": 64.0,
+        "y": -107.0,
+        "z": 0.0
+    },
+    "location": 1,
+    "equippedItemName": ""
+}

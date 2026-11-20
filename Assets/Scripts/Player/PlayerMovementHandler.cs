@@ -127,6 +127,10 @@ public class PlayerMovementHandler : MonoBehaviour,IInjectable
         return directionConversions[currentDirectionIndex==0? 0 : currentDirectionIndex-1]; 
     }
 
+    public bool HasRestriction(MovementRestrictor restrictor)
+    {
+        return movementRestrictors.Any(r => r.restrictor == restrictor);
+    }
     public void AllowPlayerMovement(MovementRestrictor restrictor,float delay=0.65f)
     {
         var currentRestriction = movementRestrictors.First(r => r.restrictor == restrictor);

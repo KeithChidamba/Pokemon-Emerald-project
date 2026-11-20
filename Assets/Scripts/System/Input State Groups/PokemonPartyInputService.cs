@@ -18,9 +18,7 @@ public class PokemonPartyInputService: IInputGroup
     {
         Action stateMethod = _inputStateHandler.currentState.stateName switch
         {
-            InputStateName.PokemonPartyItemUsage => _pokemonPartyHandler.UpdateHealthBarColors,
             InputStateName.PokemonPartyNavigation => _pokemonPartyHandler.UpdateHealthBarColors,
-
             _ => null
         };
         stateMethod?.Invoke();

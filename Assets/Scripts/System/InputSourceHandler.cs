@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public enum ControlEvent
 {
-    Up,Down,Left,Right,UseSpecialItem,OpenMenu,ViewControls,Confirm,Exit
+    Up,Down,Left,Right,UseSpecialItem,OpenMenu,Confirm,Exit
 }
 [DefaultExecutionOrder(-1000)]
 public class InputSourceHandler : MonoBehaviour, IInjectable
@@ -59,9 +59,7 @@ public class InputSourceHandler : MonoBehaviour, IInjectable
         
         if (Input.GetKeyDown(KeyCode.Space)) TriggerPress(ControlEvent.OpenMenu);
         if (Input.GetKeyUp(KeyCode.Space)) TriggerRelease(ControlEvent.OpenMenu);
-        
-        if (Input.GetKeyDown(KeyCode.Escape)) TriggerPress(ControlEvent.ViewControls);
-        if (Input.GetKeyUp(KeyCode.Escape)) TriggerRelease(ControlEvent.ViewControls);
+
     }
     private static void TriggerPress(ControlEvent e)
     {

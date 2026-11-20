@@ -5,6 +5,10 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum MenuRestrictionEvent
+{
+    None,StoryObjective,OverworldAction
+}
 public class GameUiHandler : MonoBehaviour,IInjectable
 {
     public GameObject menuOptions;
@@ -12,9 +16,10 @@ public class GameUiHandler : MonoBehaviour,IInjectable
     [SerializeField]private GameObject exitButton;
     [SerializeField]private List<GameObject> menuUiOptions = new ();
     public GameObject menuSelector;
-    public GameObject keyBindsUI;
-     public Image blackFadingScreen;
-     
+    public Image blackFadingScreen;
+    
+    public MenuRestrictionEvent currentMenuRestriction;
+    
     public bool usingWebGl;
     [SerializeField]private bool canOpenMenu;
     [SerializeField]private bool viewingMenu;
@@ -75,9 +80,15 @@ public class GameUiHandler : MonoBehaviour,IInjectable
     {
         blackFadingScreen.gameObject.SetActive(false);
     }
-    public void SetMenuAccessibility(bool isAccessible)
+    public void RestrictMenuAccessibility(MenuRestrictionEvent restrictionEvent)
     {
-        canOpenMenu = isAccessible;
+        currentMenuRestriction = restrictionEvent;
+        canOpenMenu = false;
+    }
+    public void AllowMenuAccessibility()
+    {
+        currentMenuRestriction = MenuRestrictionEvent.None;
+        canOpenMenu = true;
     }
     private void Update()
     {
@@ -91,11 +102,13 @@ public class GameUiHandler : MonoBehaviour,IInjectable
                     viewingMenu = true;
                     ActivateMenuSelection();
                 }
-            }else _dialogueHandler.DisplayDetails("Can't open Menu during this event");
-        }
-        if (InputSourceHandler.InputPressed(ControlEvent.ViewControls) && _inputStateHandler.IsEmptyState)
-        {
-            ViewKeyBinds();
+            }else
+            {
+                if(currentMenuRestriction == MenuRestrictionEvent.StoryObjective)
+                {
+                    _dialogueHandler.DisplayDetails("Can't open Menu during this event");
+                }
+            }
         }
     }
     private void AddScreen()
@@ -227,13 +240,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
             ,InputStateGroup.None,isParent:true
             ,profile.parentObject,onExit:RemoveScreen,onClose:RemoveScreen,displayOpenTransition:true));
     }
-    private void ViewKeyBinds()
-    {
-        AddScreen();
-        _inputStateHandler.ChangeInputState(new (InputStateName.KeyBinds,InputStateGroup.None,isParent:true
-            ,keyBindsUI,onExit:RemoveScreen,onClose:RemoveScreen));
-    }
-
+    
     public void ViewPokemonParty(PartyUsage partyUsage)
     {
         if (_pokemonPartyHandler.Party.Count < 1)
@@ -247,15 +254,12 @@ public class GameUiHandler : MonoBehaviour,IInjectable
 
         _pokemonPartyHandler.currentUsage = partyUsage;
         
-        InputStateName partyUsageState;
         if (partyUsage==PartyUsage.ItemUsage)
         {
-             partyUsageState = InputStateName.PokemonPartyItemUsage;
             _pokemonPartyHandler.UpdatePartyUsageMessage("Use on who?");
         }
         else
         {
-            partyUsageState = InputStateName.PokemonPartyNavigation;
             _pokemonPartyHandler.UpdatePartyUsageMessage(
                 partyUsage is PartyUsage.SwapOut
                     or PartyUsage.SwitchOutFromBattleStyle?
@@ -282,7 +286,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
         _inputStateHandler.OnStateChanged += _pokemonPartyHandler.CheckStateUpdate;
         _pokemonPartyHandler.memberCards[0].ChangeVisibility(true);//initial visual set
         
-        _inputStateHandler.ChangeInputState(new (partyUsageState,
+        _inputStateHandler.ChangeInputState(new (InputStateName.PokemonPartyNavigation,
             InputStateGroup.PokemonParty, true,_pokemonPartyHandler.partyUI,
             InputDirection.Vertical, partySelectables, null
             , true, false,CloseParty,CloseParty,canManualExit:false,canExit:true

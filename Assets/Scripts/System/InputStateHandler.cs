@@ -31,9 +31,9 @@ public enum InputStateName
     PokemonStorageUsage,ItemStorageUsage,PokemonStoragePartyOptions,PokemonStorageDepositSelection,
     PokemonDetails, PokemonDetailsMoveSelection ,PokemonDetailsMoveData,
     PlayerBagItemSell,PlayerBagNavigation,
-    PokemonPartyOptions,PokemonPartyItemUsage,PokemonPartyNavigation,
+    PokemonPartyOptions,PokemonPartyNavigation,
     MartItemPurchase,MartItemNavigation,
-    PlayerMenu,PlayerProfile,KeyBinds,StartMenu,
+    PlayerMenu,PlayerProfile,StartMenu,
     GameSettingsNavigation,GameSettingOptionsNavigation,
     TypingInterfaceNavigation,TypingInterfaceOptions
 }

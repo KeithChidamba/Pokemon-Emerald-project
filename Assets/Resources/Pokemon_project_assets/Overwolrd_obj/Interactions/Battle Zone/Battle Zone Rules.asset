@@ -32,9 +32,9 @@ MonoBehaviour:
         dialogue:
         - First things first, you wont be able to save the game until the tournament
           ends.
-        - You will face a 4 opponents depending on who beats who.
+        - You will face 4 opponents depending on who beats who.
         - The format is a classic tournament bracket.
-        - You will receive a randomized set of pokemon.
+        - 'You will receive a randomized set of pokemon. '
         - 'If you manage to win all 4 rounds, you will get various prizes. '
         - During the tournament battles, check your bag as you will receive some
           battle items to aid you each round.

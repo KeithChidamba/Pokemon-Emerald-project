@@ -24,6 +24,7 @@ public static class InstanceFactory
         newMove.isSelfTargeted = m.isSelfTargeted;
         newMove.isMultiTarget = m.isMultiTarget;
         newMove.isSureHit = m.isSureHit;
+        newMove.dealSpecificDamage = m.dealSpecificDamage;
         newMove.displayTargetMessage = m.displayTargetMessage;
         newMove.priority = m.priority;
         newMove.powerpoints = m.powerpoints;
@@ -161,6 +162,7 @@ public static class InstanceFactory
         memberCopy.data.pokemonLevel = member.data.pokemonLevel;
         memberCopy.data.hasItem = member.data.hasItem;
         memberCopy.data.heldItem = member.data.heldItem;
+        memberCopy.data.splitEvolutionIndex = member.data.splitEvolutionIndex;
         memberCopy.data.evolutionStageNumber = member.data.evolutionStageNumber;
         return memberCopy;
     }
@@ -178,6 +180,9 @@ public static class InstanceFactory
         treeData.minutesPerStage = data.minutesPerStage;
         treeData.berryItem = data.berryItem;
         treeData.spriteData = data.spriteData;
+        treeData.numStagesWatered = data.numStagesWatered;
+        treeData.soilIndex = data.soilIndex;
+        treeData.slotIndex = data.slotIndex;
         return treeData;
     }
     public static Item CreateItem(Item item)
@@ -196,7 +201,6 @@ public static class InstanceFactory
         newItem.canBeUsedInOverworld = item.canBeUsedInOverworld;
         newItem.canBeUsedInBattle = item.canBeUsedInBattle;
         newItem.isHeldItem = item.isHeldItem;
-        newItem.canBeSold = item.canBeSold;
         newItem.canBeHeld = item.canBeHeld;
         newItem.dynamicInfoModules = item.dynamicInfoModules;
         return newItem;

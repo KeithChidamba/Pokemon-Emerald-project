@@ -41,11 +41,13 @@ public class PokemonSaveData
     public int nextLevelExpAmount;
     public int friendshipLevel;
     public bool hasTrainer;
+    public uint splitEvolutionValue;
     public StatusEffect statusEffect;
     public string pokeballName;
     public int currentEvolutionLineIndex;
     public bool hasItem;
    
+    
    public string abilityName;
    public string natureName;
    public List<MoveSaveData> moveData=new();
@@ -103,7 +105,7 @@ public class PokemonSaveData
        friendshipLevel = saveSource.friendshipLevel;
        hasTrainer = saveSource.hasTrainer;
        statusEffect = saveSource.statusEffect;
-
+       splitEvolutionValue = saveSource.splitEvolutionValue;
        pokeballName = saveSource.pokeballName;
        currentEvolutionLineIndex = saveSource.currentEvolutionLineIndex;
    }
@@ -175,6 +177,7 @@ public class PokemonSaveData
        newPokemon.nextLevelExpAmount = nextLevelExpAmount;
        newPokemon.friendshipLevel = friendshipLevel;
        newPokemon.hasTrainer = hasTrainer;
+       newPokemon.splitEvolutionValue = splitEvolutionValue;
        newPokemon.statusEffect = statusEffect;
        
        newPokemon.nature = Resources.Load<Nature>(DirectoryHandler.GetDirectory

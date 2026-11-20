@@ -450,7 +450,7 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
             
             var switchData = new SwitchOutData(partyPositionOfVictim,pokemonIndex,victim);
 
-            yield return _turnBasedCombatHandler.HandleSwap(switchData,true);
+            yield return _turnBasedCombatHandler.HandleInvoluntarySwap(switchData,true);
         }
     }
     private IEnumerator Rest(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)

@@ -130,11 +130,10 @@ public class PokemonPartyHandler : MonoBehaviour,IInjectable
 
     public void CheckStateUpdate(InputState currentState)
     {
-        if (currentState.stateName != InputStateName.PokemonPartyNavigation 
-            && currentState.stateName != InputStateName.PokemonPartyItemUsage)
-            return;
+        if (currentState.stateName != InputStateName.PokemonPartyNavigation) return;
         _inputStateHandler.OnSelectionIndexChanged += UpdateCancelButton;
     }
+    
     private void UpdateCancelButton(int currentIndex)
     {
         if ( currentIndex < party.Count)

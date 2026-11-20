@@ -21,7 +21,7 @@ public class NpcMovementObjective : NpcStoryObjective
       _areaManager = serviceContainer.Resolve<AreaManager>(); 
       _gameUiHandler = serviceContainer.Resolve<GameUiHandler>();
       
-      _gameUiHandler.SetMenuAccessibility(false); 
+      _gameUiHandler.RestrictMenuAccessibility(MenuRestrictionEvent.StoryObjective); 
       
       _dialogueHandler.DisplayObjectiveText(objectiveHeading);
       SetupNpc(_areaManager);
@@ -79,7 +79,7 @@ public class NpcMovementObjective : NpcStoryObjective
    }
    protected override void OnObjectiveCleared()
    {
-      _gameUiHandler.SetMenuAccessibility(true);
+      _gameUiHandler.AllowMenuAccessibility();
       var overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
       overworldStateHandler.ClearAndLoadNextObjective();
    }

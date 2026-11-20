@@ -80,7 +80,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
             }
             if (itemUsed.forPartyUse) 
             { 
-                _inputStateHandler.ResetSpecificUi(InputStateName.PokemonPartyItemUsage,true);
+                _inputStateHandler.ResetSpecificUi(InputStateName.PokemonPartyNavigation,true);
             }
             if (!successful)
             {

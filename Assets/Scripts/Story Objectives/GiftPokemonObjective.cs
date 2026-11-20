@@ -18,7 +18,7 @@ public class GiftPokemonObjective : PropBasedObjective
         _dialogueHandler.DisplayObjectiveText(objectiveHeading);
         _overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
         _interactionOptionsHandler.OnInteractionOptionChosen += CheckInteractionOption;
-        gameUiHandler.SetMenuAccessibility(false);
+        gameUiHandler.RestrictMenuAccessibility(MenuRestrictionEvent.StoryObjective);
         LoadObjects(_overworldStateHandler);
     }
     
@@ -55,7 +55,7 @@ public class GiftPokemonObjective : PropBasedObjective
                 propState.InActive : propState.InAccessible;
         }
         
-        gameUiHandler.SetMenuAccessibility(true);
+        gameUiHandler.AllowMenuAccessibility();
         ClearObjective();
     }
     

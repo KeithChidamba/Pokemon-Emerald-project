@@ -168,9 +168,10 @@ public class BattleIntro : MonoBehaviour,IInjectable
             participantIntroImages[i].sprite = participants[i].isPlayer?
                playerSprite: participants[i].Pokemon.frontPicture;
         }
-
+        
         yield return MainIntroSequence();
         
+        var player = participants[0];
         var wildParticipant = _wildPokemonHandler.participant;
         _dialogueHandler.DisplayBattleInfo(
             $"A wild {wildParticipant.rawName} has appeared");
@@ -185,19 +186,15 @@ public class BattleIntro : MonoBehaviour,IInjectable
         participantIntroImages[2].gameObject.SetActive(false); 
         
         StartCoroutine(PokemonIntroAnimation(wildParticipant));
-        StartCoroutine(PokemonIntroAnimationMovement(wildParticipant));
+        StartCoroutine(PokemonIntroAnimationMovement(wildParticipant,false));
         yield return new WaitForSeconds(3f);
         
-        _dialogueHandler.DisplayBattleInfo( $"Go! {participants[0].Pokemon.pokemonDisplayName}");
+        _dialogueHandler.DisplayBattleInfo( $"Go! {player.Pokemon.pokemonDisplayName}");
         StartCoroutine(_battleVisualsHandler.DisplayPokemonRelease());
         yield return new WaitForSeconds(1.5f);
         
-        for (var i=0;i<2;i++)
-        {
-            if (!participants[i].isActive) continue;
-            StartCoroutine(PokemonIntroAnimationMovement(participants[i]));
-            participants[i].participantUI.SetActive(true);//change to slide
-        }
+        StartCoroutine(PokemonIntroAnimationMovement(player));
+        player.participantUI.SetActive(true);
         ResetParticipantIntroImages();
     }
 
@@ -371,9 +368,9 @@ public class BattleIntro : MonoBehaviour,IInjectable
         }
     }
     
-    private IEnumerator PokemonIntroAnimationMovement(BattleParticipant participant)
+    private IEnumerator PokemonIntroAnimationMovement(BattleParticipant participant,bool playSound=true)
     {
-        SoundManager.Play(JingleId.SendOutPokemon);
+        if(playSound)SoundManager.Play(JingleId.SendOutPokemon);
         if (participant.Pokemon.statusEffect == StatusEffect.Sleep)
         {
             yield break;

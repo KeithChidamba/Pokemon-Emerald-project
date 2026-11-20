@@ -147,10 +147,8 @@ public class PokemonPartyMemberUi : MonoBehaviour,IInjectable
         {
             ChangeVisibility(false);
         }
-        
-        _isViewingCard = currentState.stateName == InputStateName.PokemonPartyNavigation
-                         || currentState.stateName == InputStateName.PokemonPartyItemUsage;
-        
+
+        _isViewingCard = currentState.stateName == InputStateName.PokemonPartyNavigation;
         if (_isViewingCard)
         {
             _inputStateHandler.OnSelectionIndexChanged += UpdateUi;

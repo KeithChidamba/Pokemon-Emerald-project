@@ -225,12 +225,9 @@ public class BerryTree : MonoBehaviour
                 return;
             }
         }
-        
         _playerBag.DepleteItem(berryToPlant,false);
         
         _playerBag.OnItemSelected -= PlantBerry;
-        
-        treeData.numStagesWatered = 0;
         
         SetInteraction(OverworldInteractionType.WaterBerryTree);
         var treeDataAsset = Resources.Load<BerryTreeData>(
@@ -240,7 +237,7 @@ public class BerryTree : MonoBehaviour
         var previousSoilIndex = treeData.soilIndex;
         
         treeData = InstanceFactory.CreateTreeData(treeDataAsset);
-        
+        treeData.numStagesWatered = 0;
         treeData.soilIndex = previousSoilIndex;
         treeData.isPlanted = true;
         treeData.itemAssetName = berryToPlant.itemName;

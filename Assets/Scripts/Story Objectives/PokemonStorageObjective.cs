@@ -29,7 +29,7 @@ public class PokemonStorageObjective : StoryObjective
         
         if (spawnPokemonInPc)
         {
-            _gameUiHandler.SetMenuAccessibility(false); 
+            _gameUiHandler.RestrictMenuAccessibility(MenuRestrictionEvent.StoryObjective); 
             _pokemonOperationsHandler.CreateSpecificPokemon(
             newPokemon =>
             {
@@ -74,7 +74,7 @@ public class PokemonStorageObjective : StoryObjective
     {
         if (spawnPokemonInPc)
         {
-            _gameUiHandler.SetMenuAccessibility(true);
+            _gameUiHandler.AllowMenuAccessibility();
         }
         
         var overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 

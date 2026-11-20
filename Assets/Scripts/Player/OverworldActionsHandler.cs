@@ -90,6 +90,7 @@ public class OverworldActionsHandler : MonoBehaviour,IInjectable
     {
         if (InputSourceHandler.InputPressed(ControlEvent.UseSpecialItem))
         {
+            if (_playerMovementHandler.HasRestriction(MovementRestrictor.OverworldAction)) return;
             if (!_inputStateHandler.IsEmptyState) return;
             if (!ItemEquipped())
             {

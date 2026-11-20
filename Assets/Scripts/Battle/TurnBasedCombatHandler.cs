@@ -206,7 +206,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         _moveExecutionHandlers.Clear();
         StopAllCoroutines();
     }
-    public bool CanMoveReachTarget(Move move, BattleParticipant target, out bool isSureHit)
+    private bool CanMoveReachTarget(Move move, BattleParticipant target, out bool isSureHit)
     {
         return target.IsReachableBy(move, out isSureHit);
     }
@@ -368,14 +368,21 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
         _turnHistory.AddRange(priorityList);
 
         //handle all swaps turns
-        var switchTurns = new List<int>();
-
+        var switchTurns = new Stack<int>();
+        
         for (var i = 0; i < _turnHistory.Count; i++)
         {
             if (_turnHistory[i].turnUsage == TurnUsage.SwitchOut)
             {
-                switchTurns.Add(i);
-                yield return HandleSwap(_turnHistory[i].switchData);
+                var currentIndex = i;
+                switchTurns.Push(currentIndex);
+                yield return HandleSwap(_turnHistory[i].switchData,false, 
+                () =>
+                {
+                    //if pokemon fainted during switchout
+                    switchTurns.Pop();
+                    RemoveTurn(currentIndex);
+                });
                 yield return _battleHandler.AwaitFaintQueue();
                 yield return _dialogueHandler.AwaitAllDialogue();
             }
@@ -634,7 +641,11 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             processing = false;
         }
     }
-    public IEnumerator HandleSwap(SwitchOutData swap, bool forcedSwap=false)
+    public IEnumerator HandleInvoluntarySwap(SwitchOutData swap, bool forcedSwap)
+    {
+        yield return HandleSwap(swap,forcedSwap,null);
+    }
+    private IEnumerator HandleSwap(SwitchOutData swap, bool forcedSwap,Action faintCallBack)
     {
         if (forcedSwap)
         {
@@ -677,6 +688,7 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             yield return _moveUsageHandler.AwaitDamageDisplay();
             if (victim.Pokemon.hp <= 0)
             {
+                faintCallBack?.Invoke();
                 yield break;
             }
         }

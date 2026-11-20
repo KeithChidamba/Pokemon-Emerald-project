@@ -1,0 +1,25 @@
+{
+    "overworldPickups": [
+        {
+            "pickup": {
+                "instanceID": 25764
+            },
+            "pickupId": "Ether Pickup",
+            "hasBeenPicked": false
+        },
+        {
+            "pickup": {
+                "instanceID": 27882
+            },
+            "pickupId": "Max Ether Pickup",
+            "hasBeenPicked": false
+        },
+        {
+            "pickup": {
+                "instanceID": 26784
+            },
+            "pickupId": "Rare Candy Pickup",
+            "hasBeenPicked": false
+        }
+    ]
+}

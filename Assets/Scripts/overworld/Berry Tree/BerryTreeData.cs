@@ -12,11 +12,11 @@ public class BerryTreeData : ScriptableObject
      public int maxYield; 
      public int minutesPerStage;
      
-     public bool currentStageNeedsWater;
-     public int currentStageProgress;
-     public float minutesSinceLastStage;
-     public int numStagesWatered;
-     public bool isPlanted;
+     [HideInInspector]public bool currentStageNeedsWater;
+     [HideInInspector]public int currentStageProgress;
+     [HideInInspector]public float minutesSinceLastStage;
+     [HideInInspector]public int numStagesWatered;
+     [HideInInspector]public bool isPlanted;
      [HideInInspector]public string itemAssetName;
      [HideInInspector]public int soilIndex;
      [HideInInspector]public int slotIndex;

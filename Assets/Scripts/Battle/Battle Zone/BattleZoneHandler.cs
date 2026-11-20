@@ -140,7 +140,7 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
    }
    private IEnumerator BeginTournament()
    {
-       _gameUi.SetMenuAccessibility(false);
+       _gameUi.RestrictMenuAccessibility(MenuRestrictionEvent.OverworldAction);
        _playerMovement.RestrictPlayerMovement(MovementRestrictor.OverworldAction);
 
        //save the real party and bag before anything is cleared for the tournament
@@ -295,14 +295,25 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
        yield return _gameUi.FadeInBlackScreen();
 
        //create the opponent's pokemon so their evolved forms are shown
-       var opponentPokemon = new List<Pokemon>();
-       yield return CreateOpponentPreviewPokemon(opponent, opponentPokemon);
-
+       var opponentPokemon = new List<Sprite>();
+       foreach (var member in opponent.pokemonPartyData)
+       {
+           if(member.evolutionStageNumber>0)
+           {
+               var evo = member.pokemon.GetSpecificEvolution(member.evolutionStageNumber - 1);
+               opponentPokemon.Add(evo.partyFrame1);
+           }
+           else
+           {
+               opponentPokemon.Add(member.pokemon.partyFrame1);
+           }
+       }
+ 
        playerNameVs.text = _gameLoader.playerData.playerName;
        enemyNameVs.text = opponent.trainerName;
        enemyImageVs.sprite = opponent.battleIntroSprite;
        SetSprites(playerPartyImagesVs, _partyHandler.Party.Select(p => p.partyFrame1));
-       SetSprites(enemyPartyImagesVs, opponentPokemon.Select(p => p.partyFrame1));
+       SetSprites(enemyPartyImagesVs, opponentPokemon);
 
        var group = GetVsCanvasGroup();
        group.alpha = 1f;
@@ -319,21 +330,6 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
 
        vsScreenUi.SetActive(false);
        group.alpha = 1f;
-   }
-
-   private IEnumerator CreateOpponentPreviewPokemon(TournamentContestant opponent, List<Pokemon> result)
-   {
-       foreach (var member in opponent.pokemonPartyData)
-       {
-           yield return _pokemonOperations.HandlePokemonCreation(result.Add,
-               new NaturalPokemonCreationData
-               {
-                   pokemon = member.pokemon,
-                   evolutionStageNumber = member.evolutionStageNumber,
-                   pokemonLevel = RequiredPokemonLevel - opponentLevelGap,
-                   splitEvolutionIndex = member.splitEvolutionIndex
-               });
-       }
    }
 
    private CanvasGroup GetVsCanvasGroup()
@@ -481,7 +477,7 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
 
     private void EndTournament(bool playerWonTournament)
     {
-        _gameUi.SetMenuAccessibility(true);
+        _gameUi.AllowMenuAccessibility();
         _battleHandler.OnTrainerBattleResult -= DetermineNextBracket;
         
         RestorePlayerParty();
