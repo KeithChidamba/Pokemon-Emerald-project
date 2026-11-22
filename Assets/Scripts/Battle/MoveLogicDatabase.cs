@@ -328,15 +328,14 @@ public class MoveLogicDatabase : MonoBehaviour,IInjectable
 
     private IEnumerator BellyDrum(Turn currentTurn,BattleParticipant attacker, BattleParticipant victim)
     {
-        if (attacker.Pokemon.hp < 2)
+        var selfDamage = Mathf.FloorToInt(attacker.Pokemon.maxHp / 2f);
+        if (attacker.Pokemon.hp <= selfDamage)
         {
             _dialogueHandler.DisplayBattleInfo("But it failed!");
             yield break;
         }
         
-        var selfDamage = Mathf.FloorToInt(attacker.Pokemon.maxHp / 2f);
         _moveUsageHandler.DisplaySpecialDamage(attacker,selfDamage);
-        
         var buffData = new StatChangeTransitData(attacker, Stat.Attack, true, 6);
         _moveUsageHandler.InitiateStatChange(buffData);
     }

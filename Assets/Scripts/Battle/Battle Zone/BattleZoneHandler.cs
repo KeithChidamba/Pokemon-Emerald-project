@@ -52,7 +52,31 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
     public Vector3 npcIntroPosition;
     public Vector3 playerBattlePosition;
     private const int ContestantCount = 16;
-    private const int PlayerPartyCount = 3;
+    //each entry is one party slot and lists the power ratings that slot may be filled from.
+    //easy and hard give one weak, one capable and one strong pokemon. crazy never gives a weak pokemon:
+    //one capable, one strong and a third that is either
+    private static readonly ContestantPowerRating[][] DefaultPlayerPartySlots =
+    {
+        new[] { ContestantPowerRating.Weak },
+        new[] { ContestantPowerRating.Capable },
+        new[] { ContestantPowerRating.Strong }
+    };
+    private static readonly ContestantPowerRating[][] CrazyPlayerPartySlots =
+    {
+        new[] { ContestantPowerRating.Capable },
+        new[] { ContestantPowerRating.Strong },
+        new[] { ContestantPowerRating.Capable, ContestantPowerRating.Strong }
+    };
+    //the old numeric powerRating range each enum value stands for. contestants are scored with the max of the range,
+    //so a party of 3 scores 90 (all weak) up to 300 (all strong)
+    private static readonly Dictionary<ContestantPowerRating, (int min, int max)> PowerRatingRanges = new()
+    {
+        { ContestantPowerRating.Weak, (1, 30) },
+        { ContestantPowerRating.Capable, (31, 65) },
+        { ContestantPowerRating.Strong, (66, 100) }
+    };
+    //a contestant's rating must be below the limit for that round (index 0 = round 1), and at or above the previous limit
+    private static readonly int[] RoundRatingLimits = { 150, 200, 250, 300 };
     private int opponentLevelGap;
     private const int RequiredPokemonLevel = 65;
     private const float PartyScreenDuration = 4f;
@@ -64,6 +88,12 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
     public List<TournamentBracket> rightBracket = new();
     public List<TournamentContestant> rightContestants = new();
     private TournamentContestant playerContestant;
+    //the opponent the player faces in each round (index 0 = round 1), picked when the tournament starts
+    private readonly List<TournamentContestant> playerOpponentsByRound = new();
+    //contestants that must win their simulated matches so they survive to meet the player
+    private readonly HashSet<TournamentContestant> guaranteedWinners = new();
+    //battle parties, only built for the 4 opponents the player will actually face
+    private readonly Dictionary<TournamentContestant, List<TrainerPokemonData>> opponentParties = new();
     private List<Pokemon> playerSavedPokemon = new();
     private List<Item> playerSavedItems = new();
     private readonly List<GameObject> spawnedNpcInstances = new();
@@ -166,37 +196,39 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
            trainerName = _gameLoader.playerData.playerName,
            bracketIndex = 0
        };
-       //give payer some pokemon from a preset pool
-       var membersFromPool = contestantRegistry.playerPokemonPool;
+       //give player pokemon from the preset pool, the allowed power ratings depend on the difficulty
        playerContestant.pokemonPartyData.Clear();
-       for (int i = 0; i < PlayerPartyCount; i++)
-       {
-           var randomPartyIndex = Utility.RandomRange(0, membersFromPool.Count);
-           
-           while (playerContestant.pokemonPartyData.Contains(membersFromPool[randomPartyIndex]))
-           {
-               randomPartyIndex = Utility.RandomRange(0, membersFromPool.Count);
-           }
-           playerContestant.pokemonPartyData.Add(membersFromPool[randomPartyIndex]);
-       }
-       
+       playerContestant.pokemonPartyData.AddRange(RollPlayerParty(contestantRegistry.playerPokemonPool, currentDifficulty));
+
+       //scramble the contestants by rating band and decide who the player meets each round
+       ScrambleOpponents(npcListCopy);
+       BuildOpponentParties();
+
+       //the bracket layout below puts each round's opponent on the player's path:
+       //round 1 = left[0] opponent, round 2 = left[1], round 3 = left[2], round 4 = right[0]
        leftBracket.Add(new TournamentBracket
        {
            firstContestant = playerContestant,
-           secondContestant = GetRandomContestant(0)
+           secondContestant = Place(playerOpponentsByRound[0], 0)
        });
   
        rightBracket.Add(new TournamentBracket
        {
-           firstContestant = GetRandomContestant(0),
+           firstContestant = Place(playerOpponentsByRound[3], 0),
            secondContestant = GetRandomContestant(0)
        });
        
        for (int i = 1; i < numBracketsPerColumn; i++)
        {
+           var leftFirst = i switch
+           {
+               1 => Place(playerOpponentsByRound[1], i),
+               2 => Place(playerOpponentsByRound[2], i),
+               _ => GetRandomContestant(i)
+           };
            leftBracket.Add(new TournamentBracket
            {
-               firstContestant = GetRandomContestant(i),
+               firstContestant = leftFirst,
                secondContestant = GetRandomContestant(i)
            });
            rightBracket.Add(new TournamentBracket
@@ -211,6 +243,11 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
        rightContestants.AddRange(rightBracket.Select(b=>b.firstContestant));
        rightContestants.AddRange(rightBracket.Select(b=>b.secondContestant));
        
+       TournamentContestant Place(TournamentContestant contestant, int bracketIndex)
+       {
+           contestant.bracketIndex = bracketIndex;
+           return contestant;
+       }
        TournamentContestant GetRandomContestant(int bracketIndex)
        {
            var random = Utility.RandomRange(0, npcListCopy.Count);
@@ -222,6 +259,107 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
        
        tournamentIntro = StartCoroutine(TournamentIntroSequence());
    }
+
+   #region Tournament Setup
+   //one random pokemon per party slot, drawn from the power ratings that slot allows for this difficulty
+   private static List<ContestantPokemonData> RollPlayerParty(List<ContestantPokemonData> pool, BattleCompetitionDifficulty difficulty)
+   {
+       var isCrazy = difficulty == BattleCompetitionDifficulty.Crazy;
+       var slots = isCrazy ? CrazyPlayerPartySlots : DefaultPlayerPartySlots;
+       var party = new List<ContestantPokemonData>();
+       foreach (var allowedRatings in slots)
+       {
+           var candidates = pool
+               .Where(p => allowedRatings.Contains(p.rating) && !party.Contains(p))
+               .ToList();
+           if (candidates.Count == 0)
+           {
+               Debug.LogWarning($"[Battle Zone] No unused pokemon in the player pool rated {string.Join("/", allowedRatings)}, using a fallback");
+               //crazy still never gets a weak pokemon unless the pool has nothing else left
+               candidates = pool.Where(p => !party.Contains(p) && (!isCrazy || p.rating != ContestantPowerRating.Weak)).ToList();
+               if (candidates.Count == 0) candidates = pool.Where(p => !party.Contains(p)).ToList();
+           }
+           party.Add(candidates[Utility.RandomRange(0, candidates.Count)]);
+       }
+       return party;
+   }
+
+   private static int CalculateContestantRating(TournamentContestant contestant)
+   {
+       return contestant.pokemonPartyData.Sum(p => PowerRatingRanges[p.rating].max);
+   }
+
+   //scores every contestant from their party, groups them into rating bands and picks one random contestant per round.
+   //picked contestants are removed from the available list so they are not reused in the bracket
+   private void ScrambleOpponents(List<TournamentContestant> available)
+   {
+       playerOpponentsByRound.Clear();
+       guaranteedWinners.Clear();
+
+       foreach (var contestant in available)
+       {
+           contestant.rating = CalculateContestantRating(contestant);
+       }
+
+       for (int round = 0; round < RoundRatingLimits.Length; round++)
+       {
+           var upper = RoundRatingLimits[round];
+           var lower = round == 0 ? int.MinValue : RoundRatingLimits[round - 1];
+
+           var band = available.Where(c => c.rating >= lower && c.rating < upper).ToList();
+           TournamentContestant pick;
+           if (band.Count > 0)
+           {
+               pick = band[Utility.RandomRange(0, band.Count)];
+           }
+           else
+           {
+               //nobody in the band, use the strongest contestant still under the limit, or the weakest overall
+               Debug.LogWarning($"[Battle Zone] No contestant with rating {lower}-{upper - 1} for round {round + 1}, using a fallback");
+               pick = available.Where(c => c.rating < upper).OrderByDescending(c => c.rating).FirstOrDefault()
+                      ?? available.OrderBy(c => c.rating).First();
+           }
+           available.Remove(pick);
+           playerOpponentsByRound.Add(pick);
+           guaranteedWinners.Add(pick);
+       }
+   }
+
+   //only the player's 4 opponents are ever seen or fought, so only they get battle parties
+   private void BuildOpponentParties()
+   {
+       DestroyOpponentParties();
+       foreach (var opponent in playerOpponentsByRound)
+       {
+           var party = new List<TrainerPokemonData>();
+           foreach (var member in opponent.pokemonPartyData)
+           {
+               var newData = ScriptableObject.CreateInstance<TrainerPokemonData>();
+               newData.data = new NaturalPokemonCreationData
+               {
+                   pokemon = member.pokemon,
+                   pokemonLevel = RequiredPokemonLevel - opponentLevelGap,
+                   evolutionStageNumber = member.evolutionStageNumber,
+                   moveSet = member.moveSet
+               };
+               party.Add(newData);
+           }
+           opponentParties[opponent] = party;
+       }
+   }
+
+   private void DestroyOpponentParties()
+   {
+       foreach (var party in opponentParties.Values)
+       {
+           foreach (var data in party)
+           {
+               if (data != null) Destroy(data);
+           }
+       }
+       opponentParties.Clear();
+   }
+   #endregion
 
    private IEnumerator TournamentIntroSequence()
    {
@@ -471,6 +609,10 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
     {
         if (bracket.firstContestant == playerContestant) return playerContestant;
 
+        //the player's future opponents always win so they are still standing when their round comes
+        if (guaranteedWinners.Contains(bracket.firstContestant)) return bracket.firstContestant;
+        if (guaranteedWinners.Contains(bracket.secondContestant)) return bracket.secondContestant;
+
         var firstWins = Utility.RandomRange(0, 2) == 0;
         return firstWins ? bracket.firstContestant : bracket.secondContestant;
     }
@@ -709,6 +851,9 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
         leftContestants.Clear();
         rightContestants.Clear();
         playerContestant = null;
+        playerOpponentsByRound.Clear();
+        guaranteedWinners.Clear();
+        DestroyOpponentParties();
         currentRound = 0;
 
         foreach (var contestant in contestantRegistry.contestants)
@@ -736,18 +881,7 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
                npcTrainer.PokemonParty.Clear();
                npcTrainer.trainerName = npcContestant.trainerName;
                npcTrainer.battleIntroSprite = npcContestant.battleIntroSprite;
-               foreach (var member in npcContestant.pokemonPartyData)
-               {
-                   var newData = ScriptableObject.CreateInstance<TrainerPokemonData>();
-                   newData.data = new NaturalPokemonCreationData
-                   {
-                       pokemon = member.pokemon,
-                       pokemonLevel = RequiredPokemonLevel - opponentLevelGap,
-                       evolutionStageNumber = member.evolutionStageNumber,
-                       moveSet = member.moveSet
-                   };
-                   npcTrainer.PokemonParty.Add(newData);
-               }
+               npcTrainer.PokemonParty.AddRange(opponentParties[npcContestant]);
                _battleHandler.isBattleCompetition = true;
                _dialogueHandler.StartInteraction(battleInteraction);
            } else

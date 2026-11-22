@@ -11,12 +11,19 @@ public class BattleZoneContestantRegistry : ScriptableObject
 public class TournamentContestant
 {
     public string trainerName;
+    [HideInInspector]public int rating;
     public Sprite battleIntroSprite;
     public SpriteDataForNpc spriteData;
     public List<ContestantPokemonData> pokemonPartyData = new();
     [HideInInspector] public NpcLogic logic;
     [HideInInspector]public int bracketIndex;
 }
+
+public enum ContestantPowerRating
+{
+    Weak,Capable,Strong
+}
+
 [Serializable]
 public class ContestantPokemonData
 {
@@ -25,4 +32,5 @@ public class ContestantPokemonData
     public int evolutionStageNumber;
     [Range(0, 1)] public int splitEvolutionIndex;
     public List<Move> moveSet;
+    public ContestantPowerRating rating;
 }

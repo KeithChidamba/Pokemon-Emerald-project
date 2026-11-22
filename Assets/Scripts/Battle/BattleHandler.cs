@@ -257,7 +257,14 @@ public class BattleHandler : MonoBehaviour, IInjectable
         
         var validTargets = expectedTargets.Where(key => battleParticipants[key].isActive).ToArray();
         
-        var currentTargetIndex = Array.IndexOf(validTargets,previousKey);      
+        var currentTargetIndex = Array.IndexOf(validTargets,previousKey);
+        if (currentTargetIndex < 0)
+        {
+            //the previous/default target isn't selectable (e.g. that enemy already fainted), so start on the
+            //first enemy that is still active instead of falling back to the partner at index 0
+            currentTargetIndex = Array.FindIndex(validTargets,
+                key => key is BattleParticipantKey.Enemy or BattleParticipantKey.EnemyPartner);
+        }
         
         var choiceIndex = Mathf.Clamp(currentTargetIndex + indexChange,0,validTargets.Length-1);
         

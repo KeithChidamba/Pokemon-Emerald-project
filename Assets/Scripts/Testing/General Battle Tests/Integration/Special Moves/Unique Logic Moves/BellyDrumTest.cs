@@ -29,7 +29,7 @@ public class BellyDrumTest : BattleBasedTest
     private void AttackWithLowHp()
     {
         var player = _battleHandler.GetParticipant(BattleParticipantKey.Player);
-        player.Pokemon.hp = 1;
+        player.Pokemon.hp = Mathf.FloorToInt(player.Pokemon.maxHp / 2f) - 1;
         player.Pokemon.moveSet[0].priority = 100;
         _sequencer.UseMove();
     }

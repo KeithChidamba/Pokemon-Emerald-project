@@ -410,6 +410,7 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
     /// <param name="item"></param>
     public void AddItem(Item item)
     {
+        if (item.quantity == 0) item.quantity++;
         if (allItems.Any(i=> i.itemName == item.itemName))
         {
             var itemFound = SearchForItem(item.itemName);
@@ -426,16 +427,13 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
                     allItems.Add(overflow);
                     NumItems++;
                 }
-            }
-            else
-            {
-                allItems.Add(InstanceFactory.CreateItem(item));
-                NumItems++;
-            }
-        }
-        else
+            }else CompleteItemAddition();
+        }else CompleteItemAddition();
+        return;
+        void CompleteItemAddition()
         {
-            allItems.Add(InstanceFactory.CreateItem(item));
+            var newItem = InstanceFactory.CreateItem(item);
+            allItems.Add(newItem);
             NumItems++;
         }
     }
