@@ -20,6 +20,7 @@
 
 - [Overview](#overview)
 - [Features](#features)
+- [Battle Zone](#battle-zone)
 - [Architecture](#architecture)
 - [Testing Framework](#testing-framework)
 - [WebGL Build & Browser Persistence](#webgl-build--browser-persistence)
@@ -31,47 +32,71 @@
 
 ## Overview
 
-This project is a personal challenge: rebuild the core systems of **Pokémon Emerald** from the ground up inside the Unity Engine. The aim is to reproduce the underlying architecture, not just the look of the game. Battle mechanics, move logic, abilities, status effects, items, the overworld, NPCs, story progression, sound, and persistent save data are all implemented independently in C#, then validated by a custom in-engine test suite.
+This project is a personal challenge: rebuild the core systems of **Pokémon Emerald** from the ground up inside the Unity Engine. The aim is to reproduce the underlying architecture, not just the look of the game. Battle mechanics, move logic, abilities, status effects, items, the overworld, NPCs, story progression, sound, and persistent save data are all implemented independently in C#, then validated by a custom in-engine test suite. The latest addition is the **Battle Zone**, a playable 16-trainer tournament built on top of the battle engine, enemy AI, and story systems.
 
-Development began in December 2024 and has reached **600+ commits and roughly 277 C# scripts**. The project doubles as a sandbox for practising proper software architecture (dependency injection, data-driven design, automated testing) in a domain where turn-based battle logic is notoriously fiddly to get right.
+Development began in December 2024 and has reached **600+ commits and roughly 290 C# scripts**. The project doubles as a sandbox for practising proper software architecture (dependency injection, data-driven design, automated testing) in a domain where turn-based battle logic is notoriously fiddly to get right.
 
 ## Features
 
-### ⚔️ Battle System
+### Battle System
 - Full turn-based battle engine covering damage calculation, type effectiveness, stat changes, status effects, weather, and field conditions
 - Single and double battles against wild Pokémon and trainers
 - Individually implemented logic for special-case moves (multi-hit, semi-invulnerable, recoil, drain, protection, barriers, and unique-logic moves such as Bide, Pursuit, Whirlwind, and Silver Wind)
 - Ability interactions (e.g. Static, Levitate, Guts, Shed Skin, Arena Trap, Pickup) modeled as discrete, testable systems
 - Held item effects, including consumables and move-locking items such as Choice Band
 - EXP gain and EXP Share, bonus EXP, and an in-battle evolution flow with a dedicated evolution screen
+- **Enemy AI** (`EnemyAiHandler`) driven by composable per-trainer flags (`CheckBadMove`, `CheckViability`, `CheckStatus`, `CheckSetup`, `CheckSwitching`, `CheckPriority`), so trainer difficulty is configured through data rather than code
+- Fixes and refinements for semi-invulnerable moves, multi-target moves, Pursuit against fainting targets, and damage processing in double battles
 
-### 📖 Story Objective System
+### Story Objective System
 A data-driven progression system that scripts the game's narrative beats:
 - Abstract `StoryObjective` ScriptableObjects with **13 objective types**, including wild and trainer battles, NPC interaction and movement, item pickups, gift Pokémon, market and storage UI usage, and berry interactions
 - Objectives are **grouped into sections**, with their own save handling so progress persists between sessions
 - **Player position boundaries** restrict movement while an objective is active
-- **42 objective assets** drive the content, including a complete tutorial sequence
+- **60 objective assets** drive the content, organised into six tutorial sections (Fishing, Berry, Combat, Storage, PokéMart, and Hunting Wild Pokémon) coordinated by a `StoryObjectiveRegistry`
+- Tutorial restrictions limit which overworld interactions are available while an objective is active, keeping new players on the intended path
 
-### 🗺️ Overworld, Areas & NPCs
+### Overworld, Areas & NPCs
 - Tile-based overworld movement and interaction on Unity's Tilemap system
 - **Area system** (`AreaManager`, `AreaData`) with tile-based area switching, per-area NPC loading, and biome data. Currently defined areas: Open Garden, PokéMart, PokéCenter, Route 101, Route 102, and Battle Zone
 - NPCs with scripted movement, player auto-detection, and a follow mechanic for story sequences
 - Wild encounter tables, fishing encounter areas, berry trees with planting and growth, and overworld item pickups
 - PokéMarts, Pokémon Center healing (with animations), and PC storage
 
-### 🎒 Pokémon & Item Management
-- Pokémon data modeling: stats, natures, abilities, EV yields, learnsets, and evolution (level, item, and friendship-based)
+### Pokémon & Item Management
+- Pokémon data modeling: stats, natures, abilities, EV yields, learnsets, and evolution (level, item, and friendship-based, including split evolutions handled in the Pokémon creation pipeline)
 - A modular **info module** system for item and move data, so each item or move type carries only the behaviour it needs
 - Broad item support: Poké Balls, potions, revives, status healers, X-items, berries, herbs, vitamins, Rare Candy, evolution stones, Ether and PP modifiers, TMs/HMs, held items, and fishing rods
 
-### 🔊 Sound System
+### Sound System
 - Central `SoundManager` handling music, jingles, UI sounds, and sound effects across separate layers
 - Music ducking, fade control, and pitch variance per sound, backed by 60+ audio files
 - Editor tooling to auto-populate sound entries from a folder
 
-### 💾 Persistent Save System
+### Persistent Save System
 - JSON-based serialization for player, party, story progress, and world state
-- Directory-structured save data, separated by category (Player, Items, Overworld, Party Pokémon, PC Storage)
+- Directory-structured save data, separated by category (Player, Items, Overworld, Party Pokémon, PC Storage, Game Settings)
+- Pokémon save data is stored separately from Pokémon state, and items and berry trees have their own JSON structures
+- Temporary save and restore of the player's real party and bag around the Battle Zone tournament, so progress is never lost
+
+## Battle Zone
+
+A fully playable tournament mode, available in the Battle Zone area, that showcases the battle engine, enemy AI, and info module systems working together.
+
+- **16-contestant knockout bracket** with left and right sides that converge for a final round. Opponents are drawn at random from a `BattleZoneContestantRegistry` ScriptableObject
+- **Three difficulty modes** chosen through dialogue options, each of which changes both the opponent level gap and which AI flags the opponent trainer uses:
+
+| Difficulty | Opponent level gap | AI behaviour |
+|---|---|---|
+| Easy | 15 levels below the player's team | Avoids bad moves |
+| Hard | 8 levels below | Adds move viability and priority checks |
+| Crazy | Same level (Lv. 65) | Adds status, setup, and switching logic |
+
+- **Preset team pool:** the player is given a random team of three from a preset Pokémon pool at a fixed level, and opponents use predefined parties, so the competition is balanced regardless of the player's story progress
+- **Safe state handling:** the player's real party and bag are saved and cleared before the tournament starts, then restored when it ends, and EXP gain is disabled during tournament battles
+- **Round-by-round support items** (X-items, Full Restore, Max Potion, Revive, Max Revive, Guard Spec) are handed out between rounds through a temporary tournament bag
+- **Rewards scale with difficulty:** one major prize (such as a Good Rod, Super Rod, Exp. Share, or Lucky Egg) plus a minor prize (TMs, and vitamins on Crazy), with ownership limits so the player cannot farm duplicates
+- **Presentation:** party reveal and VS screens with fades, NPC spawning and dialogue between rounds, and dedicated music
 
 ## Architecture
 
@@ -87,11 +112,11 @@ The codebase uses a lightweight dependency-injection setup rather than relying o
 
 This keeps individual systems (battle, save data, UI, input, areas, story objectives) decoupled and independently testable, which is what makes the test suite below practical to maintain.
 
-Game content (Pokémon, moves, items, areas, story objectives) is largely data-driven through **ScriptableObjects**, separating content definitions from logic. Asynchronous sequencing (animations, battle turn order, UI transitions) is handled through **119 coroutine-driven scripts**.
+Game content (Pokémon, moves, items, areas, story objectives) is largely data-driven through **ScriptableObjects**, separating content definitions from logic. Asynchronous sequencing (animations, battle turn order, UI transitions) is handled through **120+ coroutine-driven scripts**.
 
 ## Testing Framework
 
-Rather than relying on manual playtesting alone, the project includes a hand-built testing framework that runs inside the engine. It has grown to **93 test files** across three tiers:
+Rather than relying on manual playtesting alone, the project includes a hand-built testing framework that runs inside the engine. It has grown to **95 scripts** across three automated tiers, plus a play-test tool:
 
 | Tier | Files | Scope |
 |---|---|---|
@@ -102,6 +127,7 @@ Rather than relying on manual playtesting alone, the project includes a hand-bui
 Supporting infrastructure:
 - `TestRegistry` defines which tests run and in what order (about 72 tests registered)
 - `TestCaseHandler`, `UnitTestHandler`, and `TestActionSequencer` manage test cases, pass/fail conditions, and scripted action sequences
+- `PlayTestHandler` and `BattlePlayTestData` ScriptableObjects let you set up a custom battle (battle type, AI flags, enemy party, and player party) and play it manually, for quickly reproducing bugs
 - `TestingEnvironmentHandler` sets up a controlled game state for each test
 - A custom **editor tool** (`Tools > Test Class Generator`) scaffolds new Integration and End-to-End test classes from reusable templates, cutting boilerplate when adding coverage
 
@@ -122,7 +148,7 @@ The project compiles to a playable WebGL build, with a save system engineered fo
 | Language | C# |
 | Testing | Unity Test Framework + custom in-house test harness |
 | Web Interop | Hand-written JavaScript (`.jslib`), Emscripten FS / IDBFS, JSZip |
-| Editor Tooling | Custom Unity editor windows (test generator, asset lookup, sound auto-populate, build script) |
+| Editor Tooling | Custom Unity editor windows (test generator, asset lookup, asset editing, dynamic info module holder, sound auto-populate, build script) |
 | Deployment | WebGL, hosted via GitHub Pages |
 
 ## Project Structure
@@ -130,18 +156,20 @@ The project compiles to a playable WebGL build, with a save system engineered fo
 ```
 Assets/
 ├── Scripts/
-│   ├── Battle/             # Turn-based battle engine (45 scripts)
-│   ├── Pokemon/            # Pokémon data, stats, evolution, learnsets (10 scripts)
+│   ├── Battle/             # Battle engine, enemy AI, and Battle Zone (49 scripts)
+│   ├── Pokemon/            # Pokémon data, stats, evolution, learnsets (12 scripts)
 │   ├── Items/              # Item handling and info modules (16 scripts)
 │   ├── NPC/                # NPC logic, movement, and creation data (7 scripts)
 │   ├── Story Objectives/   # Narrative and quest progression (17 scripts)
-│   ├── overworld/          # Areas, encounters, interactions, berry trees (24 scripts)
-│   ├── System/             # DI container, input services, saving, sound, info modules (28 scripts)
-│   ├── Ui/                 # UI logic (26 scripts)
-│   ├── Testing/            # Custom test framework and test suites (93 scripts)
-│   └── Player/             # Player movement and data (4 scripts)
+│   ├── overworld/          # Areas, encounters, interactions, berry trees (28 scripts)
+│   ├── System/             # DI container, input services, saving, sound, info modules (27 scripts)
+│   ├── Ui/                 # UI logic (27 scripts)
+│   ├── Testing/            # Custom test framework, test suites, and play tests (95 scripts)
+│   ├── Player/             # Player movement and data (4 scripts)
+│   └── animation/          # Animation helpers (1 script)
 ├── Editor/                 # Custom editor tooling
 ├── Plugins/                # WebGL JavaScript interop (.jslib)
+├── Full_Animations/        # Player, battle, fishing, bike, and watering animations
 ├── Scenes/                 # Main.unity
 ├── Save_data/ & Temp_Save_data/   # Runtime save directory structure
 ├── Resources/, Tiles/, Palettes/  # Game data, art, and world-building assets
@@ -161,10 +189,9 @@ To try it without installing Unity, use the [live WebGL build](https://keithchid
 
 ## Upcoming Content
 
-> ### 🚧 Coming Soon: The Battle Zone
-> A new **Battle Zone** area is currently in development, building on the existing battle engine and story objective system. More story content will follow as the area comes together.
+> ### Recently Released: The Battle Zone
+> The **Battle Zone** tournament is now playable, with three difficulty modes, preset teams, support items, and item rewards. It was built on top of the existing battle engine and story objective system.
 >
-> Development is active, so expect frequent updates and changes while this content is built.
 
 ## Author
 
