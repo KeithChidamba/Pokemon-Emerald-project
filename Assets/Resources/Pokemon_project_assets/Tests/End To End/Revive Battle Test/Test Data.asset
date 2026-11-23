@@ -15,24 +15,39 @@ MonoBehaviour:
   pokemonPartyData:
   - naturalPokemonData:
       pokemon: {fileID: 11400000, guid: 6592117e71bba254fb768825ba3f1542, type: 2}
-      pokemonLevel: 12
       evolutionStageNumber: 0
-      hasItem: 0
-      heldItem: {fileID: 0}
       moveSet:
       - {fileID: 11400000, guid: 2d03686e73c8a174e8f1dd31d6ebdc76, type: 2}
+      pokemonLevel: 12
+      hasItem: 0
+      heldItem: {fileID: 0}
+      splitEvolutionIndex: 0
     specificNature: {fileID: 0}
     specificGender: 0
     specificAbility: {fileID: 0}
     nickName: wiy
   - naturalPokemonData:
       pokemon: {fileID: 11400000, guid: d24b5c094011ff04d8e1324cf65b379e, type: 2}
-      pokemonLevel: 11
       evolutionStageNumber: 0
-      hasItem: 0
-      heldItem: {fileID: 0}
       moveSet:
       - {fileID: 11400000, guid: 88bd6685312db15438e092430c87989c, type: 2}
+      pokemonLevel: 11
+      hasItem: 0
+      heldItem: {fileID: 0}
+      splitEvolutionIndex: 0
+    specificNature: {fileID: 0}
+    specificGender: 0
+    specificAbility: {fileID: 0}
+    nickName: thun
+  - naturalPokemonData:
+      pokemon: {fileID: 11400000, guid: b7f2b56e327076f4da62d619e125dd49, type: 2}
+      evolutionStageNumber: 0
+      moveSet:
+      - {fileID: 11400000, guid: 88bd6685312db15438e092430c87989c, type: 2}
+      pokemonLevel: 11
+      hasItem: 0
+      heldItem: {fileID: 0}
+      splitEvolutionIndex: 0
     specificNature: {fileID: 0}
     specificGender: 0
     specificAbility: {fileID: 0}
@@ -46,3 +61,13 @@ MonoBehaviour:
     pokemonParty:
     - {fileID: 11400000, guid: e4bae69d0debc2e5b8e4130511119076, type: 2}
     - {fileID: 11400000, guid: 7512ba96756866388b6358c8a097fa1d, type: 2}
+  wildPokemonData:
+    naturalPokemonData:
+      pokemon: {fileID: 0}
+      evolutionStageNumber: 0
+      moveSet: []
+      pokemonLevel: 0
+      hasItem: 0
+      heldItem: {fileID: 0}
+      splitEvolutionIndex: 0
+    biome: 0

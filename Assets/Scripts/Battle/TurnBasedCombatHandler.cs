@@ -880,20 +880,44 @@ public class TurnBasedCombatHandler : MonoBehaviour,IInjectable
             currentTurnIndex = 0;
         
         var currentParticipant = _battleHandler.GetCurrentParticipant();
-        if (!currentParticipant.isActive && !currentParticipant.awaitingRevival)
+        
+        if (!currentParticipant.isActive && currentParticipant.awaitingRevival)
         {
-            if (_battleHandler.isDoubleBattle && IsLastParticipant())
-            {
-                BeginTurnExecution();
-            }
-            else
-            {
-                NextTurn();
-            }
+            StartCoroutine(ReviveThenStartTurn(currentParticipant));
+            return;
+        }
+
+        if (!currentParticipant.isActive)
+        {
+            SkipInactiveTurn();
         }
         else
         {
             OnNewTurn?.Invoke();
+        }
+    }
+    private void SkipInactiveTurn()
+    {
+        if (_battleHandler.isDoubleBattle && IsLastParticipant())
+        {
+            BeginTurnExecution();
+        }
+        else
+        {
+            NextTurn();
+        }
+    }
+    private IEnumerator ReviveThenStartTurn(BattleParticipant participant)
+    {
+        yield return _battleHandler.ReviveParticipant(participant);
+
+        if (participant.isActive)
+        {
+            OnNewTurn?.Invoke();
+        }
+        else
+        {
+            SkipInactiveTurn();
         }
     }
     private bool MoveSuccessful(Move move, BattleParticipant attacker, BattleParticipant target)

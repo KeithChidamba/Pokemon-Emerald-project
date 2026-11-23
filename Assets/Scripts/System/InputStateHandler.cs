@@ -480,7 +480,7 @@ public class InputStateHandler : MonoBehaviour,IInjectable
     {
         foreach (var stateToRemove in statesToRemove)
         {
-            var removalExists = stateRemovalJobs.Any(s => s.state.stateName == stateToRemove.stateName);
+            var removalExists = stateRemovalJobs.Any(j => ReferenceEquals(j.state, stateToRemove));
             if (!removalExists)
             {
                 stateRemovalJobs.Add(new(stateToRemove,manualExit));

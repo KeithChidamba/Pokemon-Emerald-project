@@ -8428,6 +8428,7 @@ MonoBehaviour:
   - {fileID: 51419307}
   menuSelector: {fileID: 981086145}
   blackFadingScreen: {fileID: 1298382683}
+  currentMenuRestriction: 0
   usingWebGl: 0
   canOpenMenu: 0
   viewingMenu: 0

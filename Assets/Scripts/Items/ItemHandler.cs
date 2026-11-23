@@ -462,18 +462,22 @@ public class ItemHandler : MonoBehaviour,IInjectable
         };
         state.NotifyHealthChange();
         _pokemonPartyHandler.RefreshMemberCards();
-        foreach (var participant in _battleHandler.GetParticipants)
+        
+        if (_battleHandler.BattleInProgress)
         {
-            if (participant.Pokemon is null) continue;
-            if (participant.Pokemon.pokemonID == selectedPartyPokemon.pokemonID)
+            var slot = _battleHandler.GetParticipants.FirstOrDefault(p =>
+                p.isPlayer &&
+                p.Pokemon is not null &&
+                p.Pokemon.pokemonID == selectedPartyPokemon.pokemonID);
+            
+            if (slot is { isActive: false })
             {
-                participant.awaitingRevival = true;
-                break;
+                slot.awaitingRevival = true;
             }
         }
-        _dialogueHandler.DisplayDetails(selectedPartyPokemon.pokemonDisplayName+" has been revived!");
-        _turnBasedCombatHandler.OnNewTurn += _battleHandler.ReviveParticipant;
-        OnItemUsed?.Invoke(itemInUse,true);
+
+        _dialogueHandler.DisplayDetails(selectedPartyPokemon.pokemonDisplayName + " has been revived!");
+        OnItemUsed?.Invoke(itemInUse, true);
     }
     private void ChangePowerpoints(Item itemInUse,Pokemon selectedPartyPokemon)
     {

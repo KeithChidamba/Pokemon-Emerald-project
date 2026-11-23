@@ -600,35 +600,20 @@ public class BattleHandler : MonoBehaviour, IInjectable
         participant.abilityHandler.SetAbilityMethod();
         participant.heldItemHandler.SetHeldItemEffect();
     }
+    
     public void CountValidParticipants()
     {
         validParticipantCount = currentParticipants.Count(p=>p.isActive);
     }
-
-    public void ReviveParticipant()
+    
+    public IEnumerator ReviveParticipant(BattleParticipant participant)
     {
-        _turnBasedCombatHandler.OnNewTurn -= ReviveParticipant;
         _inputStateHandler.AddPlaceHolderState();
-        StartCoroutine(AwaitSwitch());
-        return;
-        IEnumerator AwaitSwitch()
-        {
-            foreach (var participant in currentParticipants)
-            {
-                if (participant.Pokemon is not null)
-                {
-                    //if revived during double battle for example
-                    if (participant.Pokemon.hp > 0 && !participant.isActive)
-                    {
-                        yield return _battleIntroHandler.DisplayPokemonRevival(participant, participant.Pokemon);
-                        _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
-                        participant.awaitingRevival = false;
-                        break;
-                    }
-                }
-            }
-        }
+        yield return _battleIntroHandler.DisplayPokemonRevival(participant, participant.Pokemon);
+        participant.awaitingRevival = false;
+        _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
     }
+    
     /// <summary>
     /// Return list of active participants with
     /// pokemon (hp > 0)
@@ -987,7 +972,8 @@ public class BattleHandler : MonoBehaviour, IInjectable
                 participant.RemovePokemon();
                 participant.pokemonTrainerAI = null;
             }
-
+            
+            participant.awaitingRevival = false;
             participant.activeForBattle = false;
         }
 

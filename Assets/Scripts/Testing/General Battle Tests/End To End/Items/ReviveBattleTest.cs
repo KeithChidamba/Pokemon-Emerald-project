@@ -16,6 +16,7 @@ public class ReviveBattleTest: EndToEndTest,IItemTestable,IBattleTestable
         {
             //guarantee faint
             _pokemonPartyHandler.Party[1].hp = 1;
+            _pokemonPartyHandler.Party[2].hp = 0;
             _pokemonPartyHandler.Party[1].statusEffect = StatusEffect.Burn;
         });
         
