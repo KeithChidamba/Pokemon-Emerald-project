@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public enum MenuRestrictionEvent
 {
-    None,StoryObjective,OverworldAction
+    StoryObjective,OverworldAction,Battle
 }
 public class GameUiHandler : MonoBehaviour,IInjectable
 {
@@ -18,7 +18,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
     public GameObject menuSelector;
     public Image blackFadingScreen;
     
-    public MenuRestrictionEvent currentMenuRestriction;
+    public List<MenuRestrictionEvent> currentMenuRestrictions = new();
     
     public bool usingWebGl;
     [SerializeField]private bool canOpenMenu;
@@ -82,13 +82,13 @@ public class GameUiHandler : MonoBehaviour,IInjectable
     }
     public void RestrictMenuAccessibility(MenuRestrictionEvent restrictionEvent)
     {
-        currentMenuRestriction = restrictionEvent;
+        currentMenuRestrictions.Add(restrictionEvent);
         canOpenMenu = false;
     }
-    public void AllowMenuAccessibility()
+    public void AllowMenuAccessibility(MenuRestrictionEvent restrictionEvent)
     {
-        currentMenuRestriction = MenuRestrictionEvent.None;
-        canOpenMenu = true;
+        currentMenuRestrictions.Remove(restrictionEvent);
+        canOpenMenu = currentMenuRestrictions.Count == 0;
     }
     private void Update()
     {
@@ -104,7 +104,7 @@ public class GameUiHandler : MonoBehaviour,IInjectable
                 }
             }else
             {
-                if(currentMenuRestriction == MenuRestrictionEvent.StoryObjective)
+                if(currentMenuRestrictions.Contains(MenuRestrictionEvent.StoryObjective))
                 {
                     _dialogueHandler.DisplayDetails("Can't open Menu during this event");
                 }

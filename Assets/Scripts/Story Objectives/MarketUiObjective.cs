@@ -24,24 +24,37 @@ public class MarketUiObjective : StoryObjective
         
         switch(marketObjectiveType)
         {
-            case MarketObjectiveType.SellItem: 
-                _playerBag.OnItemSold += CheckForItemObjectiveClear; 
+            case MarketObjectiveType.SellItem:
+                _playerBag.restrictingSell = true;
+                _playerBag.itemRestriction = itemForObjective;
+                _playerBag.OnItemSold += ClearStateAfterItemObjective; 
                 break;
             case MarketObjectiveType.BuyItem: 
-                _pokeMartHandler.OnItemBought += CheckForItemObjectiveClear;
+                _pokeMartHandler.restrictingBuy = true;
+                _pokeMartHandler.itemRestriction = itemForObjective;
+                _pokeMartHandler.OnItemBought += ClearStateAfterItemObjective;
                 break;
         }
     }
 
-    private void CheckForItemObjectiveClear(Item item)
+    private void ClearStateAfterItemObjective(Item item)
     {
-        if (itemForObjective.itemName == item.itemName)
+        switch(marketObjectiveType)
         {
-            _pokeMartHandler.OnItemBought -= CheckForItemObjectiveClear;
-            _playerBag.OnItemSold -= CheckForItemObjectiveClear; 
-            ClearObjective();
+            case MarketObjectiveType.SellItem:
+                _playerBag.restrictingSell = false;
+                _playerBag.itemRestriction = null;
+                _playerBag.OnItemSold -= ClearStateAfterItemObjective; 
+                break;
+            case MarketObjectiveType.BuyItem: 
+                _pokeMartHandler.restrictingBuy = false;
+                _pokeMartHandler.itemRestriction = null;
+                _pokeMartHandler.OnItemBought -= ClearStateAfterItemObjective;
+                break;
         }
+        ClearObjective();
     }
+    
     protected override void OnObjectiveCleared()
     {
         var overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 

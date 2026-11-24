@@ -15,7 +15,10 @@ MonoBehaviour:
   objectiveHeading: Go to the mart and sell your nugget.
   objectiveType: 5
   playerBoundary:
-    isRestricting: 0
-    boundaries: []
+    isRestricting: 1
+    boundaries:
+    - direction: 1
+      limit: -88
+  restrictedInteractions: 
   itemForObjective: {fileID: 11400000, guid: fe3bc1f86d27d54dca1cddc8b56d7c60, type: 2}
   marketObjectiveType: 0

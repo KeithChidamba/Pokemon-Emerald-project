@@ -1,0 +1,14 @@
+{
+    "playerName": "AH",
+    "trainerID": 14991,
+    "secretID": 52586,
+    "playerMoney": 10350,
+    "numBadges": 0,
+    "playerPosition": {
+        "x": 37.0,
+        "y": -44.0,
+        "z": 0.0
+    },
+    "location": 0,
+    "equippedItemName": "Bike"
+}

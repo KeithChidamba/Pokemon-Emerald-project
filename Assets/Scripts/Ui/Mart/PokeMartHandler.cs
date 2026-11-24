@@ -27,6 +27,10 @@ public class PokeMartHandler : MonoBehaviour,IInjectable
     public GameObject quantitySelector;
     public Text itemDescription;
     public Vector2 itemImageTargetSize = new (90, 90);
+    
+    public Item itemRestriction;
+    public bool restrictingBuy;
+
     public event Action<Item> OnItemBought;
     
     private DialogueHandler _dialogueHandler;
@@ -102,7 +106,14 @@ public class PokeMartHandler : MonoBehaviour,IInjectable
     public void BuyItem()
     {
         var item = InstanceFactory.CreateItem(currentStoreItems[topIndex + selectedItemIndex]);
-        
+        if (restrictingBuy)
+        {
+            if(item.itemName != itemRestriction.itemName)
+            {
+                _dialogueHandler.DisplayDetails("You can't buy that right now!");
+                return;
+            }
+        }
         if(_gameLoadingHandler.playerData.playerMoney >= item.buyPrice)
         {
             item.quantity = selectedItemQuantity;
@@ -113,8 +124,7 @@ public class PokeMartHandler : MonoBehaviour,IInjectable
             selectedItemQuantity = 1;
             OnItemBought?.Invoke(item);
         }
-        else
-            _dialogueHandler.DisplayDetails("You dont have enough money for that!");
+        else _dialogueHandler.DisplayDetails("You dont have enough money for that!");
     }
     public void ChangeItemQuantity(int value)
     {

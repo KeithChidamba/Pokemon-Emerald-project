@@ -19,6 +19,7 @@ public enum BattleCompetitionDifficulty
 }
 public class BattleZoneHandler : MonoBehaviour,IInjectable
 {
+    private bool _processingTournament;
     public TMP_Text playerName;
     public List<TMP_Text> playerPartyNames = new();
     public List<Image> playerPartyImages = new ();
@@ -133,21 +134,26 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
    public void OnInject()
    {
       gameObject.SetActive(true);
-      _battleHandler.OnBattleStarted += () => AlterExpGain(false);
-      _battleHandler.OnBattleEnd += () => AlterExpGain(true);
+      _battleHandler.OnBattleStarted += () => AlterExpGain(true);
+      _battleHandler.OnBattleEnd += () => AlterExpGain(false);
    }
    
-   private void AlterExpGain(bool canGain)
+   private void AlterExpGain(bool preventGain)
    {
+       if (!_processingTournament)
+       {
+           return;
+       }
        var participants = _battleHandler.GetParticipants;
        foreach (var participant in participants)
        {
-           participant.pokemonState.canGainExp = canGain;
+           participant.pokemonState.preventExpGain = preventGain;
        }
    }
 
    public void SetDifficultyAndStart(BattleCompetitionDifficulty difficulty)
    {
+       _processingTournament = true;
        _dialogueHandler.EndDialogue();
        currentDifficulty = difficulty;
        npcTrainer.trainerAiFlags.Clear();
@@ -619,7 +625,7 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
 
     private void EndTournament(bool playerWonTournament)
     {
-        _gameUi.AllowMenuAccessibility();
+        _gameUi.AllowMenuAccessibility(MenuRestrictionEvent.OverworldAction);
         _battleHandler.OnTrainerBattleResult -= DetermineNextBracket;
         
         RestorePlayerParty();
@@ -639,6 +645,7 @@ public class BattleZoneHandler : MonoBehaviour,IInjectable
         //spawn player outside battlezone, release movement restriction
         _areaManager.TeleportToArea(AreaName.BattleZone);
         _playerMovement.AllowPlayerMovement(MovementRestrictor.OverworldAction);
+        _processingTournament = false;
     }
     
     #region Rewards

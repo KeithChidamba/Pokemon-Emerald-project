@@ -10,11 +10,13 @@ public class WildBattleObjective : StoryObjective
     public BattleEncounterSource encounterSourceForObjective;
     public bool blockFighting;
     public bool catchExactPokemon;
+    public bool forcePokemonToFight;
     public Pokemon pokemonForObjective;
     
     private BattleHandler _battleHandler;
     private EncounterHandler  _encounterHandler;
     private PokemonOperations _pokemonOperationsHandler;
+    private WildPokemonAiHandler _wildPokemon;
     
     protected override void OnObjectiveLoaded()
     {
@@ -22,10 +24,17 @@ public class WildBattleObjective : StoryObjective
         _encounterHandler = serviceContainer.Resolve<EncounterHandler>(); 
         _battleHandler = serviceContainer.Resolve<BattleHandler>(); 
         _pokemonOperationsHandler = serviceContainer.Resolve<PokemonOperations>();
+        _wildPokemon = serviceContainer.Resolve<WildPokemonAiHandler>();
         
         if(blockFighting)
         {
             _battleHandler.SetBattleOptionPermission(BattleOption.Fight, false);
+        }
+
+        if (forcePokemonToFight)
+        {
+            _wildPokemon.SetBehavior(BattleAiBehaviorMode.Controlled);
+            _wildPokemon.AssignBehaviorAction(_wildPokemon.UseRandomMove);
         }
         
         if (objectiveOutline == BattleObjectiveOutline.BeatWildPokemon)

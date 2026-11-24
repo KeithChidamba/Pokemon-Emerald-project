@@ -55,7 +55,7 @@ public class GiftPokemonObjective : PropBasedObjective
                 propState.InActive : propState.InAccessible;
         }
         
-        gameUiHandler.AllowMenuAccessibility();
+        gameUiHandler.AllowMenuAccessibility(MenuRestrictionEvent.StoryObjective);
         ClearObjective();
     }
     

@@ -79,7 +79,7 @@ public class NpcMovementObjective : NpcStoryObjective
    }
    protected override void OnObjectiveCleared()
    {
-      _gameUiHandler.AllowMenuAccessibility();
+      _gameUiHandler.AllowMenuAccessibility(MenuRestrictionEvent.StoryObjective);
       var overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 
       overworldStateHandler.ClearAndLoadNextObjective();
    }

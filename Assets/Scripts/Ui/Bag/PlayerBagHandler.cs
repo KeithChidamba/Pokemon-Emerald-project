@@ -35,8 +35,12 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
     [SerializeField]private int maxItemCapacity=99;
     private int _totalSellingAmount;
     public bool storageView;
-    
+
     public BagUsage currentBagUsage;
+
+    public Item itemRestriction;
+    public bool restrictingSell;
+    
     public GameObject sellingItemUI;
     public Text sellQuantityText;
     public Text sellingAmountText;
@@ -118,6 +122,16 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
     public void SellToMarket()
     {
         var itemToSell = currentCategoryOfItems[topIndex + selectedItemIndex];
+        
+        if (restrictingSell)
+        {
+            if(itemToSell.itemName != itemRestriction.itemName)
+            {
+                _dialogueHandler.DisplayDetails("You can't sell that right now!");
+                return;
+            }
+        }
+        
         OnItemSold?.Invoke(itemToSell);
         _gameLoadingHandler.playerData.playerMoney += _totalSellingAmount;
         itemToSell.quantity -= sellQuantity;

@@ -1,0 +1,70 @@
+{
+    "basePokemonName": "Pikachu",
+    "pokemonName": "Pikachu",
+    "nickName": "Pikachu",
+    "pokemonDisplayName": "Pikachu",
+    "captureInformation": {
+        "areaName": "Poke-Center",
+        "levelCaptured": 11
+    },
+    "pokemonID": 4219817232578539204,
+    "personalityValue": 1558867652,
+    "isShiny": false,
+    "hasGender": true,
+    "gender": 2,
+    "hp": 30.0,
+    "maxHp": 30.0,
+    "attack": 19.0,
+    "defense": 14.0,
+    "specialAttack": 16.0,
+    "specialDefense": 18.0,
+    "speed": 23.0,
+    "hpIv": 13.0,
+    "attackIv": 3.0,
+    "defenseIv": 5.0,
+    "specialAttackIv": 7.0,
+    "specialDefenseIv": 25.0,
+    "speedIv": 10.0,
+    "hpEv": 0.0,
+    "attackEv": 0.0,
+    "defenseEv": 0.0,
+    "specialAttackEv": 0.0,
+    "specialDefenseEv": 0.0,
+    "speedEv": 1.0,
+    "currentLevel": 11,
+    "currentExpAmount": 1039,
+    "currentLevelExpAmount": 1001,
+    "nextLevelExpAmount": 1331,
+    "friendshipLevel": 120,
+    "hasTrainer": true,
+    "splitEvolutionValue": 0,
+    "statusEffect": 0,
+    "pokeballName": "Pokeball",
+    "currentEvolutionLineIndex": 0,
+    "hasItem": false,
+    "abilityName": "Static",
+    "natureName": "Brave",
+    "moveData": [
+        {
+            "moveName": "growl",
+            "powerPoints": 40,
+            "maxPowerpoints": 40
+        },
+        {
+            "moveName": "thundershock",
+            "powerPoints": 29,
+            "maxPowerpoints": 30
+        },
+        {
+            "moveName": "quick attack",
+            "powerPoints": 29,
+            "maxPowerpoints": 30
+        },
+        {
+            "moveName": "thunder wave",
+            "powerPoints": 20,
+            "maxPowerpoints": 20
+        }
+    ],
+    "evolutionName": "Raichu"
+}

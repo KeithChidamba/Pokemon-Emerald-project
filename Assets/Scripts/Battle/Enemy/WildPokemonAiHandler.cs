@@ -34,7 +34,13 @@ public class WildPokemonAiHandler : MonoBehaviour,IInjectable
     {
         _currentBehaviorAction = action;
     }
-    
+
+    public void UseRandomMove()
+    {
+        var randMove = Utility.RandomRange(0, participant.Pokemon.moveSet.Count);
+        //attack player, since its single battle
+        _battleHandler.UseMove(participant.Pokemon.moveSet[randMove],participant,BattleParticipantKey.Player);
+    }
     public void MakeBattleDecision()
     {
         if (_behaviorMode == BattleAiBehaviorMode.Controlled)
@@ -48,9 +54,7 @@ public class WildPokemonAiHandler : MonoBehaviour,IInjectable
         }
         else
         {
-            var randMove = Utility.RandomRange(0, participant.Pokemon.moveSet.Count);
-            //attack player, since its single battle
-            _battleHandler.UseMove(participant.Pokemon.moveSet[randMove],participant,BattleParticipantKey.Player);
+            UseRandomMove();
         }
     }
     public IEnumerator EndWildBattle(BattleEndState endState)

@@ -1,3 +1,28 @@
 {
-    "saveItems": []
+    "saveItems": [
+        {
+            "itemAssetName": "Old Rod",
+            "quantity": 1
+        },
+        {
+            "itemAssetName": "Oran berry",
+            "quantity": 1
+        },
+        {
+            "itemAssetName": "Wailmer Pail",
+            "quantity": 1
+        },
+        {
+            "itemAssetName": "Sitrus berry",
+            "quantity": 2
+        },
+        {
+            "itemAssetName": "Bike",
+            "quantity": 1
+        },
+        {
+            "itemAssetName": "Rare Candy",
+            "quantity": 4
+        }
+    ]
 }

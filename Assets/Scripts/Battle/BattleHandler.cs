@@ -985,7 +985,9 @@ public class BattleHandler : MonoBehaviour, IInjectable
         _battleIntroHandler.ResetParticipantIntroImages();
 
         SoundManager.PopMusicWhenFinished();
-
+        
+        _gameUIHandler.AllowMenuAccessibility(MenuRestrictionEvent.Battle);
+        
         overWorld.SetActive(true);
         
         if (!isBattleCompetition)

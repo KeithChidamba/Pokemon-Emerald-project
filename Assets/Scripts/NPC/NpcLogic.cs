@@ -21,13 +21,13 @@ public class NpcLogic : MonoBehaviour
     
     private DialogueHandler _dialogueHandler;
     private PlayerMovementHandler _playerMovement;
-    private BattleHandler _battleHandler;
+    private GameUiHandler _gameUiHandler;
     
     public void Inject(ServiceContainer container,OverwolrdNpcData data)
     {
         _dialogueHandler = container.Resolve<DialogueHandler>();
         _playerMovement = container.Resolve<PlayerMovementHandler>();
-        _battleHandler = container.Resolve<BattleHandler>();
+        _gameUiHandler = container.Resolve<GameUiHandler>();
         
         overworldData = data;
         movementHandler.animationData = data.npcData.npcAnimationData;
@@ -122,6 +122,7 @@ public class NpcLogic : MonoBehaviour
        
         constantScan = false;
         
+        _gameUiHandler.RestrictMenuAccessibility(MenuRestrictionEvent.Battle);
         _playerMovement.FaceOppositeDirection(movementHandler.GetCurrentDirection());
         
         //positions are always locked to whole numbers

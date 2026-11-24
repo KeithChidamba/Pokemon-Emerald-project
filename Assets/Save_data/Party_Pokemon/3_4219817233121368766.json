@@ -1,0 +1,70 @@
+{
+    "basePokemonName": "Mudkip",
+    "pokemonName": "Mudkip",
+    "nickName": "Mudkip",
+    "pokemonDisplayName": "Mudkip",
+    "captureInformation": {
+        "areaName": "Open Garden",
+        "levelCaptured": 10
+    },
+    "pokemonID": 4219817233121368766,
+    "personalityValue": 2101697214,
+    "isShiny": false,
+    "hasGender": true,
+    "gender": 2,
+    "hp": 32.0,
+    "maxHp": 32.0,
+    "attack": 19.0,
+    "defense": 16.0,
+    "specialAttack": 17.0,
+    "specialDefense": 14.0,
+    "speed": 15.0,
+    "hpIv": 24.0,
+    "attackIv": 0.0,
+    "defenseIv": 15.0,
+    "specialAttackIv": 21.0,
+    "specialDefenseIv": 14.0,
+    "speedIv": 11.0,
+    "hpEv": 0.0,
+    "attackEv": 0.0,
+    "defenseEv": 0.0,
+    "specialAttackEv": 0.0,
+    "specialDefenseEv": 0.0,
+    "speedEv": 0.0,
+    "currentLevel": 10,
+    "currentExpAmount": 458,
+    "currentLevelExpAmount": 420,
+    "nextLevelExpAmount": 560,
+    "friendshipLevel": 65,
+    "hasTrainer": true,
+    "splitEvolutionValue": 0,
+    "statusEffect": 0,
+    "pokeballName": "Master Ball",
+    "currentEvolutionLineIndex": 0,
+    "hasItem": false,
+    "abilityName": "Torrent",
+    "natureName": "Naive",
+    "moveData": [
+        {
+            "moveName": "growl",
+            "powerPoints": 40,
+            "maxPowerpoints": 40
+        },
+        {
+            "moveName": "tackle",
+            "powerPoints": 35,
+            "maxPowerpoints": 35
+        },
+        {
+            "moveName": "mud-slap",
+            "powerPoints": 10,
+            "maxPowerpoints": 10
+        },
+        {
+            "moveName": "water gun",
+            "powerPoints": 25,
+            "maxPowerpoints": 25
+        }
+    ],
+    "evolutionName": "Marshtomp"
+}

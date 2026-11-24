@@ -23,8 +23,10 @@ MonoBehaviour:
       limit: -42
     - direction: 3
       limit: 18
+  restrictedInteractions: 
   objectiveOutline: 0
   encounterSourceForObjective: 2
   blockFighting: 0
   catchExactPokemon: 0
+  forcePokemonToFight: 1
   pokemonForObjective: {fileID: 11400000, guid: 5f8c77d7f565f5744b7a63546f937909, type: 2}

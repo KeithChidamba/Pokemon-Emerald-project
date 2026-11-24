@@ -19,7 +19,7 @@
                 "instanceID": 26784
             },
             "pickupId": "Rare Candy Pickup",
-            "hasBeenPicked": false
+            "hasBeenPicked": true
         }
     ]
 }

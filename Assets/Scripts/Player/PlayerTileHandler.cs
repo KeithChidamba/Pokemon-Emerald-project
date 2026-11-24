@@ -17,12 +17,14 @@ public class PlayerTileHandler : MonoBehaviour,IInjectable
     private PlayerMovementHandler _playerMovementHandler;
     private EncounterHandler  _encounterHandler;
     private AreaManager  _areaHandler;
-    
+    private GameUiHandler _gameUiHandler;
     public void Inject(ServiceContainer container)
     {
         _encounterHandler = container.Resolve<EncounterHandler>();
         _playerMovementHandler = container.Resolve<PlayerMovementHandler>();
         _areaHandler = container.Resolve<AreaManager>();
+        _gameUiHandler = container.Resolve<GameUiHandler>();
+        
         gameObject.SetActive(true);
     }
 
@@ -90,6 +92,7 @@ public class PlayerTileHandler : MonoBehaviour,IInjectable
         if (randomNumber < encounterChance)
         {
             _playerMovementHandler.RestrictPlayerMovement(MovementRestrictor.Battle);
+            _gameUiHandler.RestrictMenuAccessibility(MenuRestrictionEvent.Battle);
             _encounterHandler.TriggerEncounter((NormalEncounteArea)tile.table);
         }
     }

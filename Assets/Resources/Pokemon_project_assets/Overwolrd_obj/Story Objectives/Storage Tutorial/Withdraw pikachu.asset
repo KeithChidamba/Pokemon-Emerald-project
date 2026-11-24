@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b7f36d76f0f5d3669252db41fff9a89, type: 3}
   m_Name: Withdraw pikachu
   m_EditorClassIdentifier: 
-  objectiveHeading: withdraw pikachu from the pc on the far right
+  objectiveHeading: withdraw pikachu from the pc on the right
   objectiveType: 7
   playerBoundary:
     isRestricting: 1

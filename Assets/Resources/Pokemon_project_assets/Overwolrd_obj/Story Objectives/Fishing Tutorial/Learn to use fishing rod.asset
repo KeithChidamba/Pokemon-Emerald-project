@@ -34,7 +34,7 @@ MonoBehaviour:
     npcInteraction: {fileID: 0}
     npcInteractionMessage: Press [Use Equipped Item] when infront of fishing area
       to start fishing. You might fail a few times but keep going. Once you get a
-      bite, press Interact and the battle with start. Once inside the battle, open
+      bite, press Interact and the battle will start. Once inside the battle, open
       your bag->Pokeballs->Master ball. Click on that master ball to catch the mudkip.
   removeAfterInteraction: 0
   facePlayer: 1

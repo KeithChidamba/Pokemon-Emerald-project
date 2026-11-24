@@ -9,7 +9,7 @@
             "itemAssetName": "Chesto berry",
             "soilIndex": 0,
             "slotIndex": 0,
-            "lastLogin": "2026-11-23T11:55:52.4513160+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0612110+02:00"
         },
         {
             "isPlanted": true,
@@ -20,7 +20,7 @@
             "itemAssetName": "Cherri berry",
             "soilIndex": 0,
             "slotIndex": 1,
-            "lastLogin": "2026-11-23T11:55:52.4563350+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0646850+02:00"
         },
         {
             "isPlanted": true,
@@ -31,7 +31,7 @@
             "itemAssetName": "Pecha berry",
             "soilIndex": 0,
             "slotIndex": 2,
-            "lastLogin": "2026-11-23T11:55:52.4563560+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0647020+02:00"
         },
         {
             "isPlanted": true,
@@ -42,7 +42,7 @@
             "itemAssetName": "Rawst berry",
             "soilIndex": 0,
             "slotIndex": 3,
-            "lastLogin": "2026-11-23T11:55:52.4563670+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0647130+02:00"
         },
         {
             "isPlanted": true,
@@ -53,18 +53,29 @@
             "itemAssetName": "Oran berry",
             "soilIndex": 1,
             "slotIndex": 0,
-            "lastLogin": "2026-11-23T11:55:52.4563800+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0647240+02:00"
         },
         {
             "isPlanted": true,
-            "currentStageNeedsWater": false,
-            "currentStageProgress": 4,
+            "currentStageNeedsWater": true,
+            "currentStageProgress": 2,
             "minutesSinceLastStage": 0.0,
-            "numStagesWatered": 0,
+            "numStagesWatered": 1,
             "itemAssetName": "Oran berry",
             "soilIndex": 1,
             "slotIndex": 1,
-            "lastLogin": "2026-11-23T11:55:52.4563910+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0647350+02:00"
+        },
+        {
+            "isPlanted": false,
+            "currentStageNeedsWater": false,
+            "currentStageProgress": 0,
+            "minutesSinceLastStage": 117.0,
+            "numStagesWatered": 0,
+            "itemAssetName": "Sitrus berry",
+            "soilIndex": 1,
+            "slotIndex": 2,
+            "lastLogin": "2026-11-24T17:55:21.0647440+02:00"
         },
         {
             "isPlanted": true,
@@ -74,19 +85,8 @@
             "numStagesWatered": 0,
             "itemAssetName": "Sitrus berry",
             "soilIndex": 1,
-            "slotIndex": 2,
-            "lastLogin": "2026-11-23T11:55:52.4564010+02:00"
-        },
-        {
-            "isPlanted": true,
-            "currentStageNeedsWater": false,
-            "currentStageProgress": 4,
-            "minutesSinceLastStage": 0.0,
-            "numStagesWatered": 0,
-            "itemAssetName": "Sitrus berry",
-            "soilIndex": 1,
             "slotIndex": 3,
-            "lastLogin": "2026-11-23T11:55:52.4564130+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0647530+02:00"
         },
         {
             "isPlanted": true,
@@ -97,7 +97,7 @@
             "itemAssetName": "Kelpsy berry",
             "soilIndex": 2,
             "slotIndex": 0,
-            "lastLogin": "2026-11-23T11:55:52.4564260+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0647650+02:00"
         },
         {
             "isPlanted": true,
@@ -108,7 +108,7 @@
             "itemAssetName": "Kelpsy berry",
             "soilIndex": 2,
             "slotIndex": 1,
-            "lastLogin": "2026-11-23T11:55:52.4564350+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0647740+02:00"
         },
         {
             "isPlanted": true,
@@ -119,7 +119,7 @@
             "itemAssetName": "Kelpsy berry",
             "soilIndex": 2,
             "slotIndex": 2,
-            "lastLogin": "2026-11-23T11:55:52.4564440+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0647830+02:00"
         },
         {
             "isPlanted": true,
@@ -130,7 +130,7 @@
             "itemAssetName": "Kelpsy berry",
             "soilIndex": 2,
             "slotIndex": 3,
-            "lastLogin": "2026-11-23T11:55:52.4564560+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0648010+02:00"
         },
         {
             "isPlanted": true,
@@ -141,7 +141,7 @@
             "itemAssetName": "Tamato berry",
             "soilIndex": 3,
             "slotIndex": 0,
-            "lastLogin": "2026-11-23T11:55:52.4564680+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0648130+02:00"
         },
         {
             "isPlanted": true,
@@ -152,7 +152,7 @@
             "itemAssetName": "Tamato berry",
             "soilIndex": 3,
             "slotIndex": 1,
-            "lastLogin": "2026-11-23T11:55:52.4564770+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0648220+02:00"
         },
         {
             "isPlanted": true,
@@ -163,7 +163,7 @@
             "itemAssetName": "Tamato berry",
             "soilIndex": 3,
             "slotIndex": 2,
-            "lastLogin": "2026-11-23T11:55:52.4564870+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0648300+02:00"
         },
         {
             "isPlanted": true,
@@ -174,7 +174,7 @@
             "itemAssetName": "Tamato berry",
             "soilIndex": 3,
             "slotIndex": 3,
-            "lastLogin": "2026-11-23T11:55:52.4564980+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0648400+02:00"
         },
         {
             "isPlanted": true,
@@ -185,7 +185,7 @@
             "itemAssetName": "Hondew berry",
             "soilIndex": 4,
             "slotIndex": 0,
-            "lastLogin": "2026-11-23T11:55:52.4565100+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0648510+02:00"
         },
         {
             "isPlanted": true,
@@ -196,7 +196,7 @@
             "itemAssetName": "Hondew berry",
             "soilIndex": 4,
             "slotIndex": 1,
-            "lastLogin": "2026-11-23T11:55:52.4565200+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0648620+02:00"
         },
         {
             "isPlanted": true,
@@ -207,7 +207,7 @@
             "itemAssetName": "Hondew berry",
             "soilIndex": 4,
             "slotIndex": 2,
-            "lastLogin": "2026-11-23T11:55:52.4565310+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0648700+02:00"
         },
         {
             "isPlanted": true,
@@ -218,7 +218,7 @@
             "itemAssetName": "Hondew berry",
             "soilIndex": 4,
             "slotIndex": 3,
-            "lastLogin": "2026-11-23T11:55:52.4565410+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0648800+02:00"
         },
         {
             "isPlanted": true,
@@ -229,7 +229,7 @@
             "itemAssetName": "Grepa berry",
             "soilIndex": 5,
             "slotIndex": 0,
-            "lastLogin": "2026-11-23T11:55:52.4565690+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0648920+02:00"
         },
         {
             "isPlanted": true,
@@ -240,7 +240,7 @@
             "itemAssetName": "Grepa berry",
             "soilIndex": 5,
             "slotIndex": 1,
-            "lastLogin": "2026-11-23T11:55:52.4565780+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0649000+02:00"
         },
         {
             "isPlanted": true,
@@ -251,7 +251,7 @@
             "itemAssetName": "Grepa berry",
             "soilIndex": 5,
             "slotIndex": 2,
-            "lastLogin": "2026-11-23T11:55:52.4565900+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0649080+02:00"
         },
         {
             "isPlanted": true,
@@ -262,7 +262,7 @@
             "itemAssetName": "Grepa berry",
             "soilIndex": 5,
             "slotIndex": 3,
-            "lastLogin": "2026-11-23T11:55:52.4566000+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0649170+02:00"
         },
         {
             "isPlanted": true,
@@ -273,7 +273,7 @@
             "itemAssetName": "Qualot berry",
             "soilIndex": 6,
             "slotIndex": 0,
-            "lastLogin": "2026-11-23T11:55:52.4566140+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0649270+02:00"
         },
         {
             "isPlanted": true,
@@ -284,7 +284,7 @@
             "itemAssetName": "Qualot berry",
             "soilIndex": 6,
             "slotIndex": 1,
-            "lastLogin": "2026-11-23T11:55:52.4566220+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0649360+02:00"
         },
         {
             "isPlanted": true,
@@ -295,7 +295,7 @@
             "itemAssetName": "Qualot berry",
             "soilIndex": 6,
             "slotIndex": 2,
-            "lastLogin": "2026-11-23T11:55:52.4566300+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0649440+02:00"
         },
         {
             "isPlanted": true,
@@ -306,7 +306,7 @@
             "itemAssetName": "Qualot berry",
             "soilIndex": 6,
             "slotIndex": 3,
-            "lastLogin": "2026-11-23T11:55:52.4566410+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0649540+02:00"
         },
         {
             "isPlanted": true,
@@ -317,7 +317,7 @@
             "itemAssetName": "Pomeg berry",
             "soilIndex": 7,
             "slotIndex": 0,
-            "lastLogin": "2026-11-23T11:55:52.4566550+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0649660+02:00"
         },
         {
             "isPlanted": true,
@@ -328,7 +328,7 @@
             "itemAssetName": "Pomeg berry",
             "soilIndex": 7,
             "slotIndex": 1,
-            "lastLogin": "2026-11-23T11:55:52.4566660+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0649760+02:00"
         },
         {
             "isPlanted": true,
@@ -339,7 +339,7 @@
             "itemAssetName": "Pomeg berry",
             "soilIndex": 7,
             "slotIndex": 2,
-            "lastLogin": "2026-11-23T11:55:52.4566770+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0649840+02:00"
         },
         {
             "isPlanted": true,
@@ -350,7 +350,7 @@
             "itemAssetName": "Pomeg berry",
             "soilIndex": 7,
             "slotIndex": 3,
-            "lastLogin": "2026-11-23T11:55:52.4566870+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0649930+02:00"
         },
         {
             "isPlanted": true,
@@ -361,7 +361,7 @@
             "itemAssetName": "Aspear berry",
             "soilIndex": 8,
             "slotIndex": 0,
-            "lastLogin": "2026-11-23T11:55:52.4566990+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0650050+02:00"
         },
         {
             "isPlanted": true,
@@ -372,7 +372,7 @@
             "itemAssetName": "Lum berry",
             "soilIndex": 8,
             "slotIndex": 1,
-            "lastLogin": "2026-11-23T11:55:52.4567080+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0650170+02:00"
         },
         {
             "isPlanted": true,
@@ -383,7 +383,7 @@
             "itemAssetName": "Persim berry",
             "soilIndex": 8,
             "slotIndex": 2,
-            "lastLogin": "2026-11-23T11:55:52.4567210+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0650260+02:00"
         },
         {
             "isPlanted": true,
@@ -394,7 +394,7 @@
             "itemAssetName": "Leppa berry",
             "soilIndex": 8,
             "slotIndex": 3,
-            "lastLogin": "2026-11-23T11:55:52.4567310+02:00"
+            "lastLogin": "2026-11-24T17:55:21.0650350+02:00"
         }
     ]
 }

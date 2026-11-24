@@ -9,19 +9,21 @@ public class PokemonStateHandler
 {
     public Pokemon pokemon;
     public int healthPhase;
+
     /// <summary>
     /// Mainly for preventing exp gain in competitions
     /// </summary>
-    public bool canGainExp;
+    public bool preventExpGain;
     /// <summary>
     /// Allows an external source like item usage to decide what happens when a
     /// pokem on evolves [Evolving after rare candy]
     /// </summary>
     public bool handleEvolutionExternally;
+
     /// <summary>
     /// flag for systemic leve-lup, to make specific custom pokemon
     /// </summary>
-    [HideInInspector]public bool canEvolve = true;
+    public bool canEvolve = true;
     
     /// <summary>
     /// [Testing] Notify when exp is gained
@@ -41,7 +43,7 @@ public class PokemonStateHandler
         _dialogueHandler = container.Resolve<DialogueHandler>();
         _battleHandler = container.Resolve<BattleHandler>();
         _pokemonOperationsHandler = container.Resolve<PokemonOperations>();
-        
+
         _battleHandler.OnBattleEnd += ClearBattleState;
         _battleHandler.OnBattleStarted += SetupBattleState;
         return;
@@ -66,6 +68,7 @@ public class PokemonStateHandler
         _dialogueHandler = container.Resolve<DialogueHandler>();
         _battleHandler = container.Resolve<BattleHandler>();
         _pokemonOperationsHandler = container.Resolve<PokemonOperations>();
+     
         pokemon = newPokemon;
         handleEvolutionExternally = externalEvolution;
     }
@@ -167,7 +170,7 @@ public class PokemonStateHandler
     /// <returns></returns>
     public IEnumerator ReceiveExperienceAndDisplay(int amount)
     {
-        if(!canGainExp) yield break;
+        if (preventExpGain) yield break;
         if (pokemon.currentLevel >= 100) yield break;
 
         int remainingExp = Mathf.FloorToInt(pokemon.AccountForExpGainModifier() * amount);

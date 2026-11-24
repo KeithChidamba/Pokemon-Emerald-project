@@ -30,7 +30,7 @@ MonoBehaviour:
     resumeMovementAfterPause: 0
     detectDistance: 4
   - npcData:
-      npcPosition: {x: 62, y: -107, z: 0}
+      npcPosition: {x: 59, y: -107, z: 0}
       npcAnimationData:
         spriteData: {fileID: 11400000, guid: 66c5f3493ab4ed2d9b6add8cd7a06f48, type: 2}
         movementDirections:
@@ -41,4 +41,212 @@ MonoBehaviour:
       npcInteractionMessage: 
     autoDetectPlayer: 1
     resumeMovementAfterPause: 0
-    detectDistance: 4
+    detectDistance: 10
+  - npcData:
+      npcPosition: {x: 60, y: -121, z: 0}
+      npcAnimationData:
+        spriteData: {fileID: 11400000, guid: f7d1263152928bb618a7a923040f3045, type: 2}
+        movementDirections:
+        - direction: 2
+          numTilesToTravel: 1
+        isIdle: 1
+      npcInteraction: {fileID: 0}
+      npcInteractionMessage: 
+    autoDetectPlayer: 0
+    resumeMovementAfterPause: 0
+    detectDistance: 0
+  - npcData:
+      npcPosition: {x: 61, y: -121, z: 0}
+      npcAnimationData:
+        spriteData: {fileID: 11400000, guid: f7d1263152928bb618a7a923040f3045, type: 2}
+        movementDirections:
+        - direction: 2
+          numTilesToTravel: 1
+        isIdle: 1
+      npcInteraction: {fileID: 0}
+      npcInteractionMessage: 
+    autoDetectPlayer: 0
+    resumeMovementAfterPause: 0
+    detectDistance: 0
+  - npcData:
+      npcPosition: {x: 62, y: -121, z: 0}
+      npcAnimationData:
+        spriteData: {fileID: 11400000, guid: f7d1263152928bb618a7a923040f3045, type: 2}
+        movementDirections:
+        - direction: 2
+          numTilesToTravel: 1
+        isIdle: 1
+      npcInteraction: {fileID: 0}
+      npcInteractionMessage: 
+    autoDetectPlayer: 0
+    resumeMovementAfterPause: 0
+    detectDistance: 0
+  - npcData:
+      npcPosition: {x: 63, y: -121, z: 0}
+      npcAnimationData:
+        spriteData: {fileID: 11400000, guid: fa9c5f13013042542ab774fe178f0964, type: 2}
+        movementDirections:
+        - direction: 2
+          numTilesToTravel: 1
+        isIdle: 1
+      npcInteraction: {fileID: 0}
+      npcInteractionMessage: 
+    autoDetectPlayer: 0
+    resumeMovementAfterPause: 0
+    detectDistance: 0
+  - npcData:
+      npcPosition: {x: 64, y: -121, z: 0}
+      npcAnimationData:
+        spriteData: {fileID: 11400000, guid: fa9c5f13013042542ab774fe178f0964, type: 2}
+        movementDirections:
+        - direction: 2
+          numTilesToTravel: 1
+        isIdle: 1
+      npcInteraction: {fileID: 0}
+      npcInteractionMessage: 
+    autoDetectPlayer: 0
+    resumeMovementAfterPause: 0
+    detectDistance: 0
+  - npcData:
+      npcPosition: {x: 65, y: -121, z: 0}
+      npcAnimationData:
+        spriteData: {fileID: 11400000, guid: 5399167829ea2b502b9857b3291771a6, type: 2}
+        movementDirections:
+        - direction: 2
+          numTilesToTravel: 1
+        isIdle: 1
+      npcInteraction: {fileID: 0}
+      npcInteractionMessage: 
+    autoDetectPlayer: 0
+    resumeMovementAfterPause: 0
+    detectDistance: 0
+  - npcData:
+      npcPosition: {x: 66, y: -121, z: 0}
+      npcAnimationData:
+        spriteData: {fileID: 11400000, guid: 5399167829ea2b502b9857b3291771a6, type: 2}
+        movementDirections:
+        - direction: 2
+          numTilesToTravel: 1
+        isIdle: 1
+      npcInteraction: {fileID: 0}
+      npcInteractionMessage: 
+    autoDetectPlayer: 0
+    resumeMovementAfterPause: 0
+    detectDistance: 0
+  - npcData:
+      npcPosition: {x: 67, y: -121, z: 0}
+      npcAnimationData:
+        spriteData: {fileID: 11400000, guid: 9bea254fcb98118c4a5d93967d943c36, type: 2}
+        movementDirections:
+        - direction: 2
+          numTilesToTravel: 1
+        isIdle: 1
+      npcInteraction: {fileID: 0}
+      npcInteractionMessage: 
+    autoDetectPlayer: 0
+    resumeMovementAfterPause: 0
+    detectDistance: 0
+  - npcData:
+      npcPosition: {x: 68, y: -121, z: 0}
+      npcAnimationData:
+        spriteData: {fileID: 11400000, guid: 903dc3fb71c92d3d3b1bd0e1962fca8d, type: 2}
+        movementDirections:
+        - direction: 2
+          numTilesToTravel: 1
+        isIdle: 1
+      npcInteraction: {fileID: 0}
+      npcInteractionMessage: 
+    autoDetectPlayer: 0
+    resumeMovementAfterPause: 0
+    detectDistance: 0
+  - npcData:
+      npcPosition: {x: 61, y: -115, z: 0}
+      npcAnimationData:
+        spriteData: {fileID: 11400000, guid: 0d99b53ea9b32a6faaa4958ee7b17f78, type: 2}
+        movementDirections:
+        - direction: 1
+          numTilesToTravel: 1
+        isIdle: 1
+      npcInteraction: {fileID: 0}
+      npcInteractionMessage: 
+    autoDetectPlayer: 0
+    resumeMovementAfterPause: 0
+    detectDistance: 0
+  - npcData:
+      npcPosition: {x: 62, y: -115, z: 0}
+      npcAnimationData:
+        spriteData: {fileID: 11400000, guid: 0d99b53ea9b32a6faaa4958ee7b17f78, type: 2}
+        movementDirections:
+        - direction: 1
+          numTilesToTravel: 1
+        isIdle: 1
+      npcInteraction: {fileID: 0}
+      npcInteractionMessage: 
+    autoDetectPlayer: 0
+    resumeMovementAfterPause: 0
+    detectDistance: 0
+  - npcData:
+      npcPosition: {x: 63, y: -115, z: 0}
+      npcAnimationData:
+        spriteData: {fileID: 11400000, guid: 0d99b53ea9b32a6faaa4958ee7b17f78, type: 2}
+        movementDirections:
+        - direction: 1
+          numTilesToTravel: 1
+        isIdle: 1
+      npcInteraction: {fileID: 0}
+      npcInteractionMessage: 
+    autoDetectPlayer: 0
+    resumeMovementAfterPause: 0
+    detectDistance: 0
+  - npcData:
+      npcPosition: {x: 64, y: -115, z: 0}
+      npcAnimationData:
+        spriteData: {fileID: 11400000, guid: 0d99b53ea9b32a6faaa4958ee7b17f78, type: 2}
+        movementDirections:
+        - direction: 1
+          numTilesToTravel: 1
+        isIdle: 1
+      npcInteraction: {fileID: 0}
+      npcInteractionMessage: 
+    autoDetectPlayer: 0
+    resumeMovementAfterPause: 0
+    detectDistance: 0
+  - npcData:
+      npcPosition: {x: 65, y: -115, z: 0}
+      npcAnimationData:
+        spriteData: {fileID: 11400000, guid: 0d99b53ea9b32a6faaa4958ee7b17f78, type: 2}
+        movementDirections:
+        - direction: 1
+          numTilesToTravel: 1
+        isIdle: 1
+      npcInteraction: {fileID: 0}
+      npcInteractionMessage: 
+    autoDetectPlayer: 0
+    resumeMovementAfterPause: 0
+    detectDistance: 0
+  - npcData:
+      npcPosition: {x: 66, y: -115, z: 0}
+      npcAnimationData:
+        spriteData: {fileID: 11400000, guid: 0d99b53ea9b32a6faaa4958ee7b17f78, type: 2}
+        movementDirections:
+        - direction: 1
+          numTilesToTravel: 1
+        isIdle: 1
+      npcInteraction: {fileID: 0}
+      npcInteractionMessage: 
+    autoDetectPlayer: 0
+    resumeMovementAfterPause: 0
+    detectDistance: 0
+  - npcData:
+      npcPosition: {x: 67, y: -115, z: 0}
+      npcAnimationData:
+        spriteData: {fileID: 11400000, guid: 0d99b53ea9b32a6faaa4958ee7b17f78, type: 2}
+        movementDirections:
+        - direction: 1
+          numTilesToTravel: 1
+        isIdle: 1
+      npcInteraction: {fileID: 0}
+      npcInteractionMessage: 
+    autoDetectPlayer: 0
+    resumeMovementAfterPause: 0
+    detectDistance: 0

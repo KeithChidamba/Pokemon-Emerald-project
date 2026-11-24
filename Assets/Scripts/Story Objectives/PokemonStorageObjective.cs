@@ -74,7 +74,7 @@ public class PokemonStorageObjective : StoryObjective
     {
         if (spawnPokemonInPc)
         {
-            _gameUiHandler.AllowMenuAccessibility();
+            _gameUiHandler.AllowMenuAccessibility(MenuRestrictionEvent.StoryObjective);
         }
         
         var overworldStateHandler = serviceContainer.Resolve<OverworldState>(); 

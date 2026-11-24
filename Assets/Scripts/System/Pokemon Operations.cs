@@ -611,8 +611,9 @@ public class PokemonOperations : MonoBehaviour,IInjectable
         
         var expForRequiredLevel = CalculateExpForLevel(pokemonData.pokemonLevel, newPokemon.expGroup);
         var newState = new PokemonStateHandler(_container,newPokemon,false)
-        {
-            canEvolve = false//prevent evolution from artificial exp
+        { 
+            //prevent evolution from artificial exp
+            canEvolve = false
         };
         yield return newState.ReceiveExperienceOutsideBattle(expForRequiredLevel,false);
         newPokemon.hp = newPokemon.maxHp;

@@ -129,7 +129,7 @@ public class OverworldActionsHandler : MonoBehaviour,IInjectable
         {
             pokemonBitingPole = true;
             _dialogueHandler.DisplayDetails("Oh!, a Bite!, Press Z");
-            yield return new WaitForSeconds((2 * (random / 10f)) + 2f);
+            yield return new WaitForSeconds((2 * (random / 10f)) + 3.5f);
             if (pokemonBitingPole)
             {
                 _dialogueHandler.DisplayDetails("It got away");

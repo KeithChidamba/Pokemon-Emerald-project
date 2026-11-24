@@ -256,8 +256,9 @@ public class BattleParticipant : MonoBehaviour,IInjectable
             yield return DistributeExp();
             
             foreach (var enemy in currentEnemies)
-                if(enemy.isActive)
-                    GiveEVs(enemy);
+            {
+                if (enemy.isActive) GiveEVs(enemy);
+            }
 
             if (!_battleHandler.isTrainerBattle)
             {
