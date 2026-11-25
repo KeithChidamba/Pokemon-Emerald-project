@@ -126,10 +126,6 @@ public class Pokemon : ScriptableObject
         return types.Any(type=>type.typeEnum == typeName);
     }
 
-    public void GetEvolutions(Pokemon copy)
-    {
-        
-    }
     public Evolution GetCurrentEvolution()
     {
         if(splitEvolution)
@@ -324,15 +320,16 @@ public class Pokemon : ScriptableObject
         expGroup = evo.expGroup;
         expYield = evo.expYield;
         catchRate = evo.catchRate;
-        baseHp=evo.baseHp;
-        baseAttack=evo.baseAttack;
-        baseDefense=evo.baseDefense;
-        baseSpecialAttack=evo.baseSpecialAttack;
-        baseSpecialDefense=evo.baseSpecialDefense;
+        baseHp = evo.baseHp;
+        baseAttack = evo.baseAttack;
+        baseDefense = evo.baseDefense;
+        baseSpecialAttack = evo.baseSpecialAttack;
+        baseSpecialDefense = evo.baseSpecialDefense;
         baseSpeed = evo.baseSpeed;
         requiresFriendshipEvolution = evo.requiresFriendshipEvolution;
         requiresEvolutionStone = evo.requiresEvolutionStone;
         friendshipEvolutionRequirement = evo.friendshipEvolutionRequirement;
-        currentEvolutionLineIndex++;
+        
+        if(currentEvolutionLineIndex < EvolutionCount-1) currentEvolutionLineIndex++;
     }
 }

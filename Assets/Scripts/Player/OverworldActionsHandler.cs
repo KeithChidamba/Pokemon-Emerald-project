@@ -13,6 +13,7 @@ public class OverworldActionsHandler : MonoBehaviour,IInjectable
     public Item equippedSpecialItem;
     private bool _canUseEquippedItem;
     private Equipable _currentEquippedItem;
+    
     public event Action<Equipable> OnItemEquipped;
     public event Action<Equipable> OnItemUnequipped;
     public event Action OnActionComplete;
@@ -46,7 +47,6 @@ public class OverworldActionsHandler : MonoBehaviour,IInjectable
 
     public void EquipItem(Item item)
     {
-        if (item is null) return;//there was no item equipped in save data
         equippedSpecialItem = item;
         _currentEquippedItem = equippedSpecialItem.GetDynamicModule<EquipableItemInfo>().equipableItem;
         OnItemEquipped?.Invoke(_currentEquippedItem);

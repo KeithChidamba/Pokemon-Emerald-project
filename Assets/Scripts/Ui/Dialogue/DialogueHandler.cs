@@ -447,6 +447,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
             {
                 StopCoroutine(_typingRoutine);
             }
+           
             _inputStateHandler.AddDialoguePlaceHolderState();
             _typingRoutine = StartCoroutine(TypeText(currentInteraction));
         }

@@ -75,9 +75,9 @@ public class TestRegistry
         // new WeatherDamageTest(),
         //  new OnFieldDamageModificationTest(),
         // // Move Based Tests
-        //  new SpecificMoveDamageTest(),
-        //  new SemiInvulnerableSingleBattleTest(),
-        //  new SemiInvulnerableDoubleBattleTest(),
+         //new SpecificMoveDamageTest(),
+        // new SemiInvulnerableSingleBattleTest(),
+        // new SemiInvulnerableDoubleBattleTest(),
         // new IdentifyTargetMoveTest(),
         // new MultiTargetDamageTest(),
         //  new CreateBarrierMoveTest(),

@@ -150,7 +150,9 @@ public class GameLoadingHandler : MonoBehaviour,IInjectable
         yield return Utility.FadeImage(loadingScreen,Color.white,0.85f);
         yield return new WaitForSeconds(gameStartDelay);
         
-        _overworldActions.EquipItem(_playerBagHandler.SearchForItem(playerData.equippedItemName));
+        var equippedItem = _playerBagHandler.SearchForItem(playerData.equippedItemName);
+        if(equippedItem is not null)_overworldActions.EquipItem(equippedItem);
+        
         _dialogueHandler.EndDialogue();
         OnGameStarted?.Invoke();
         

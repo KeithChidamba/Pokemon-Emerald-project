@@ -37,9 +37,9 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
     public bool storageView;
 
     public BagUsage currentBagUsage;
-
-    public Item itemRestriction;
-    public bool restrictingSell;
+    
+    public ItemRestriction itemUsageRestriction = new();
+    public ItemRestriction sellRestriction = new();
     
     public GameObject sellingItemUI;
     public Text sellQuantityText;
@@ -123,13 +123,10 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
     {
         var itemToSell = currentCategoryOfItems[topIndex + selectedItemIndex];
         
-        if (restrictingSell)
+        if (sellRestriction.ItemRestricted(itemToSell))
         {
-            if(itemToSell.itemName != itemRestriction.itemName)
-            {
-                _dialogueHandler.DisplayDetails("You can't sell that right now!");
-                return;
-            }
+            _dialogueHandler.DisplayDetails("You can't sell that right now!");
+            return;
         }
         
         OnItemSold?.Invoke(itemToSell);
@@ -145,6 +142,7 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
         return;
         void SellItem()
         {
+            _dialogueHandler.EndDialogue();
             currentBagUsage = BagUsage.SellingView;
             _gameUIHandler.ValidateBagView();
         }
@@ -348,11 +346,19 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
          {
              return;
          }
+         
+         if (itemUsageRestriction.ItemRestricted(itemToUse))
+         {
+             _dialogueHandler.DisplayDetails("You can't use that right now!");
+             return;
+         }
+         
          if (itemToUse.isHeldItem)
          {
              _dialogueHandler.DisplayDetails("Can't use that");
              return;
          }
+         
          if (_battleHandler.BattleInProgress)
          {
              if (!itemToUse.canBeUsedInBattle)
@@ -365,7 +371,7 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
          {
              if (!itemToUse.canBeUsedInOverworld) 
              {
-                 _dialogueHandler.DisplayDetails("Can't use that right now");
+                 _dialogueHandler.DisplayDetails("Can't use that right now!");
                  return;//special items for events
              }
          }
@@ -378,7 +384,6 @@ public class PlayerBagHandler : MonoBehaviour,IInjectable
          else
          {
              _itemHandler.UseItem(itemToUse, null);
-             SoundManager.Play(UiId.UseItem);
          }
          return;
          void AllowItemUsage(int memberIndex)

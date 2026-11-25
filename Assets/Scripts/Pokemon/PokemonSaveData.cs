@@ -113,7 +113,7 @@ public class PokemonSaveData
    public void LoadUniqueData(Pokemon newPokemon)
    {
        var pokemonDirectory = DirectoryHandler.GetDirectory(AssetDirectory.Pokemon);
-       if (currentEvolutionLineIndex > 0)
+       if (evolutionName == pokemonName)
        {
            var evo = Resources.Load<Evolution>($"{pokemonDirectory}{basePokemonName}/{evolutionName}");
            newPokemon.types = evo.types;

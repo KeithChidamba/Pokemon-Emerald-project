@@ -25,13 +25,11 @@ public class MarketUiObjective : StoryObjective
         switch(marketObjectiveType)
         {
             case MarketObjectiveType.SellItem:
-                _playerBag.restrictingSell = true;
-                _playerBag.itemRestriction = itemForObjective;
+                _playerBag.sellRestriction.SetRestriction(itemForObjective);
                 _playerBag.OnItemSold += ClearStateAfterItemObjective; 
                 break;
             case MarketObjectiveType.BuyItem: 
-                _pokeMartHandler.restrictingBuy = true;
-                _pokeMartHandler.itemRestriction = itemForObjective;
+                _pokeMartHandler.itemRestriction.SetRestriction(itemForObjective);
                 _pokeMartHandler.OnItemBought += ClearStateAfterItemObjective;
                 break;
         }
@@ -42,13 +40,11 @@ public class MarketUiObjective : StoryObjective
         switch(marketObjectiveType)
         {
             case MarketObjectiveType.SellItem:
-                _playerBag.restrictingSell = false;
-                _playerBag.itemRestriction = null;
+                _playerBag.sellRestriction.RemoveRestriction();
                 _playerBag.OnItemSold -= ClearStateAfterItemObjective; 
                 break;
             case MarketObjectiveType.BuyItem: 
-                _pokeMartHandler.restrictingBuy = false;
-                _pokeMartHandler.itemRestriction = null;
+                _pokeMartHandler.itemRestriction.RemoveRestriction();
                 _pokeMartHandler.OnItemBought -= ClearStateAfterItemObjective;
                 break;
         }

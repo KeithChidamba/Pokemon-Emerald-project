@@ -135,6 +135,10 @@ public class NpcLogic : MonoBehaviour
             {
                 movementHandler.OnMovementEnded -= _runDialogueInteraction;
                 _dialogueHandler.StartInteraction(npcInteractable.interaction);
+                if (npcInteractable.interaction.GetDynamicModule<BattleTriggerInfo>() is null)
+                {
+                    _gameUiHandler.AllowMenuAccessibility(MenuRestrictionEvent.Battle);
+                }
             };
             movementHandler.OnMovementEnded += _runDialogueInteraction;
             movementHandler.MoveToSpecific(movementHandler.GetCurrentDirection(),distance-1);
@@ -143,6 +147,10 @@ public class NpcLogic : MonoBehaviour
         {
             movementHandler.StopMovement(false);
             _dialogueHandler.StartInteraction(npcInteractable.interaction);
+            if (npcInteractable.interaction.GetDynamicModule<BattleTriggerInfo>() is null)
+            {
+                _gameUiHandler.AllowMenuAccessibility(MenuRestrictionEvent.Battle);
+            }
         }
     }
 

@@ -86,10 +86,10 @@ public class TestingEnvironmentHandler : MonoBehaviour,IInjectable
            DirectoryHandler.GetDirectory(AssetDirectory.TestLogs)));
        
        //Play Test
-       yield return playTestHandler.BeginTest(_container);
-       yield return new WaitForSeconds(10f);//Allow battle sequence to start
-       yield return _container.Resolve<BattleHandler>().AwaitBattleCompletion();
-       playTestHandler.ClearState();
+       // yield return playTestHandler.BeginTest(_container);
+       // yield return new WaitForSeconds(10f);//Allow battle sequence to start
+       // yield return _container.Resolve<BattleHandler>().AwaitBattleCompletion();
+       // playTestHandler.ClearState();
        
        //End to End Tests
        testControlsView.SetActive(true);

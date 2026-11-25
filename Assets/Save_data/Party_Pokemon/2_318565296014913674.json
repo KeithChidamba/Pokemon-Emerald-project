@@ -1,0 +1,60 @@
+{
+    "basePokemonName": "Treecko",
+    "pokemonName": "Treecko",
+    "nickName": "Treecko",
+    "pokemonDisplayName": "Treecko",
+    "captureInformation": {
+        "areaName": "Open Garden",
+        "levelCaptured": 5
+    },
+    "pokemonID": 318565296014913674,
+    "personalityValue": 356749174,
+    "isShiny": false,
+    "hasGender": true,
+    "gender": 2,
+    "hp": 19.0,
+    "maxHp": 19.0,
+    "attack": 9.0,
+    "defense": 10.0,
+    "specialAttack": 11.0,
+    "specialDefense": 10.0,
+    "speed": 13.0,
+    "hpIv": 3.0,
+    "attackIv": 1.0,
+    "defenseIv": 31.0,
+    "specialAttackIv": 7.0,
+    "specialDefenseIv": 7.0,
+    "speedIv": 25.0,
+    "hpEv": 0.0,
+    "attackEv": 0.0,
+    "defenseEv": 0.0,
+    "specialAttackEv": 0.0,
+    "specialDefenseEv": 0.0,
+    "speedEv": 0.0,
+    "currentLevel": 5,
+    "currentExpAmount": 97,
+    "currentLevelExpAmount": 97,
+    "nextLevelExpAmount": 135,
+    "friendshipLevel": 119,
+    "hasTrainer": true,
+    "splitEvolutionValue": 0,
+    "statusEffect": 0,
+    "pokeballName": "Pokeball",
+    "currentEvolutionLineIndex": 0,
+    "hasItem": false,
+    "abilityName": "Overgrow",
+    "natureName": "Quirky",
+    "moveData": [
+        {
+            "moveName": "leer",
+            "powerPoints": 30,
+            "maxPowerpoints": 30
+        },
+        {
+            "moveName": "pound",
+            "powerPoints": 35,
+            "maxPowerpoints": 35
+        }
+    ],
+    "evolutionName": "Grovyle"
+}

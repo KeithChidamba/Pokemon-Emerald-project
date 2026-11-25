@@ -1,0 +1,14 @@
+{
+    "playerName": "EKQ",
+    "trainerID": 64404,
+    "secretID": 14989,
+    "playerMoney": 4250,
+    "numBadges": 0,
+    "playerPosition": {
+        "x": 47.0,
+        "y": -67.0,
+        "z": 0.0
+    },
+    "location": 2,
+    "equippedItemName": "Bike"
+}

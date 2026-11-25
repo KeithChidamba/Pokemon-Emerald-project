@@ -13,16 +13,8 @@
             "quantity": 1
         },
         {
-            "itemAssetName": "Sitrus berry",
-            "quantity": 2
-        },
-        {
             "itemAssetName": "Bike",
             "quantity": 1
-        },
-        {
-            "itemAssetName": "Rare Candy",
-            "quantity": 4
         }
     ]
 }

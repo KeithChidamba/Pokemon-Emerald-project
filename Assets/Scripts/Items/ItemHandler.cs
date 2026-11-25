@@ -18,6 +18,7 @@ public class ItemHandler : MonoBehaviour,IInjectable
     /// </summary>
     public event Action<Item,bool> OnItemUsed;
     private Action scheduledInputStateRemoval;
+    public ItemRestriction equipRestriction = new();
     
     private PokemonDetailsHandler _pokemonDetailsHandler;
     private MoveSequenceHandler _moveUsageHandler;
@@ -131,7 +132,10 @@ public class ItemHandler : MonoBehaviour,IInjectable
             
             case ItemType.Pokeball: UsePokeball(itemInUse); break;
             
-            case ItemType.Special: EquipItem(itemInUse); break;
+            case ItemType.Special: 
+                EquipItem(itemInUse); 
+                OnItemUsed -= CompleteItemUsage;//Doesn't use this
+                break;
         //party use
             case ItemType.LearnableMove:
                 StartCoroutine(HandleMoveLearning(itemInUse,selectedPokemon)); break;
@@ -219,6 +223,11 @@ public class ItemHandler : MonoBehaviour,IInjectable
         if (_overworldActions.IsEquipped(item:itemInUse))
         {
             _overworldActions.UnequipItem(itemInUse);
+            return;
+        }
+        if (equipRestriction.ItemRestricted(itemInUse))
+        {
+            _dialogueHandler.DisplayDetails("You can't equip that right now!");
             return;
         }
         _overworldActions.EquipItem(itemInUse);
