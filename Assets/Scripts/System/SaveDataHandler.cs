@@ -31,7 +31,9 @@ public class SaveDataHandler : MonoBehaviour, IInjectable
     public event Action OnVirtualFsCreated;
     private bool _virtualFileStructureReady;
     private bool _virtualDirectoriesCleared;
-
+    private bool _downloadFinished;
+    private bool _downloadSucceeded;
+    
     private DialogueHandler _dialogueHandler;
     private InputStateHandler _inputStateHandler;
     private AreaManager _areaHandler;
@@ -180,16 +182,18 @@ public class SaveDataHandler : MonoBehaviour, IInjectable
         _virtualFileStructureReady = true;
         OnVirtualFsCreated?.Invoke();
     }
-
-    public void OnDownloadComplete() //js notification
-    {
-        _dialogueHandler.DisplayDetails("Save data downloaded successfully!");
-    }
-
+    
 //js notifications
+
+    public void OnDownloadComplete()
+    {
+        _downloadSucceeded = true;
+        _downloadFinished = true;
+    }
     public void OnDownloadFailed()
     {
-        _dialogueHandler.DisplayDetails("Download failed, check the browser console");
+        _downloadSucceeded = false; 
+        _downloadFinished = true;
     }
 
     public void OnUploadFailed()
@@ -578,7 +582,15 @@ public class SaveDataHandler : MonoBehaviour, IInjectable
         
         if (Application.platform == RuntimePlatform.WebGLPlayer)
         {
+            _downloadFinished = false;
             DownloadZipAndStoreLocally();
+
+            float timeout = Time.realtimeSinceStartup + 20f;
+            yield return new WaitUntil(() => _downloadFinished || Time.realtimeSinceStartup > timeout);
+
+            _dialogueHandler.DisplayDetails(
+                _downloadSucceeded ? "Save data downloaded successfully!" : "Download failed, check the browser console",
+                false);
         }
         else
         {
@@ -592,8 +604,9 @@ public class SaveDataHandler : MonoBehaviour, IInjectable
             EraseTemporarySaveData();
             _dialogueHandler.DisplayDetails("Game saved", false);
         }
-
-        yield return new WaitForSecondsRealtime(1f);
+        
+        yield return _dialogueHandler.WaitForDialogueCompletion();
+        yield return new WaitForSecondsRealtime(0.5f);
         _dialogueHandler.EndDialogue();
         _inputStateHandler.ResetSpecificUi(InputStateName.PlaceHolder);
     }

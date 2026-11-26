@@ -292,6 +292,7 @@ public class DialogueHandler : MonoBehaviour,IInjectable
         {
             StopCoroutine(_typingRoutine);
         }
+        _inputStateHandler.ResetSpecificUi(InputStateName.DialoguePlaceHolder);
         OnDialogueEnded?.Invoke(currentInteractable?.interaction);
         currentInteractable = null;
     }
